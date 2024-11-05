@@ -4,7 +4,7 @@ import SwiftUI
 import Styleguide
 
 @main
-struct BankingApp: App {
+struct EventBookApp: App {
     let store: StoreOf<AppReducer>
     
     init() {

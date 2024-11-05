@@ -1,0 +1,203 @@
+openapi: 3.1.0
+info:
+  title: EventBook API
+  description: API documentation for the EventBook application.
+  version: '1.0.0'
+servers:
+  - url: https://api.eventbook.pp.ua
+    description: Production server
+
+paths:
+  /signup:
+    post:
+      operationId: createUserAccount
+      summary: Create a new user account
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupRequest'
+      responses:
+        '201':
+          description: User successfully signed up
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignupResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /login:
+    post:
+      operationId: authenticateUser
+      summary: Log in an existing user
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '201':
+          description: User successfully logged in
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /me:
+    get:
+      operationId: getCurrentUser
+      summary: Retrieve current user profile
+      tags:
+        - Users
+      responses:
+        '200':
+          description: Current user profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    SignupRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: user@example.com
+        password:
+          type: string
+          format: password
+          example: strongPassword123
+      required:
+        - email
+        - password
+
+    SignupResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          description: JWT access token
+          example: eyJhbGciOiJIUzI1NiIsIn...
+        user:
+          $ref: '#/components/schemas/UserDTO'
+      required:
+        - accessToken
+        - user
+
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: user@example.com
+        password:
+          type: string
+          format: password
+          example: secretPassword123
+      required:
+        - email
+        - password
+
+    LoginResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          description: JWT access token
+          example: eyJhbGciOiJIUzI1NiIsIn...
+        user:
+          $ref: '#/components/schemas/UserDTO'
+      required:
+        - accessToken
+        - user
+
+    UserDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the user
+          example: 66c6fab4f13bf5134c167e8b
+        email:
+          type: string
+          format: email
+          description: Email address of the user
+          example: user@example.com
+      required:
+        - id
+        - email
+
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: entity-not-found
+          enum:
+            - internal
+            - no-access-token
+            - invalid-access-token
+            - expired-access-token
+            - entity-not-found
+            - incorrect-password
+            - email-not-unique
+        message:
+          type: string
+          description: Detailed error message
+          example: Entity not found
+        details:
+          type: object
+          description: Additional details about the error
+          example:
+            entity: User
+      required:
+        - code
+        - message

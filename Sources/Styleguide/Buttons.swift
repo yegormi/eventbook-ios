@@ -24,13 +24,13 @@ public struct PrimaryButtonStyle: ButtonStyle {
         configuration
             .label
             .frame(maxWidth: size == .fullWidth ? .infinity : nil)
-            .font(.titleMedium)
-            .foregroundStyle(Color.white)
+            .font(.titleRegular)
+            .foregroundStyle(Color.black)
             .padding(.vertical, size.verticalPadding)
             .padding(.horizontal, size.horizontalPadding)
             .background(
-                RoundedRectangle(cornerRadius: 100)
-                    .fill(isEnabled ? Color.blue : Color.blue.opacity(0.2))
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(isEnabled ? Color.purplePrimary : Color.purplePrimary.opacity(0.4))
             )
             .scaleEffect(configuration.isPressed ? 0.95 : 1)
             .animation(.spring, value: configuration.isPressed)
@@ -45,4 +45,28 @@ extension ButtonStyle where Self == PrimaryButtonStyle {
     
     /// Default primary button style (dynamic)
     public static var primary: PrimaryButtonStyle { .primary(size: .small) }
+}
+
+
+public struct ServiceButtonStyle: ButtonStyle {
+    public func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .padding(.horizontal, 24)
+            .padding(.vertical, 12)
+            .font(.system(size: 17))
+            .frame(maxWidth: .infinity)
+            .background(
+                RoundedRectangle(cornerRadius: 10)
+                    .inset(by: 1)
+                    .fill(Color.textFieldBackground)
+                    .shadow(radius: 1)
+            )
+            .scaleEffect(configuration.isPressed ? 0.95 : 1)
+            .animation(.spring, value: configuration.isPressed)
+            .brightness(configuration.isPressed ? -0.05 : 0)
+    }
+}
+
+extension ButtonStyle where Self == ServiceButtonStyle {
+    public static var service: ServiceButtonStyle { .init() }
 }

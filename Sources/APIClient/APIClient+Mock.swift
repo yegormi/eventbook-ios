@@ -1,9 +1,9 @@
 import SharedModels
 
 public extension APIClient {
-    static var mock = Self(
-        fetchBalance: { .mock },
-        fetchCards: { .mock },
-        fetchTransactions: { [.mock1, .mock2] }
+    static let mock = Self(
+        signup: { _ in .mock },
+        login: { _ in .mock },
+        getCurrentUser: { .mock }
     )
 }

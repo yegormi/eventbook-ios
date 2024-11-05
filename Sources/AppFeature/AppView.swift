@@ -1,6 +1,8 @@
 import ComposableArchitecture
 import SwiftUI
 import TabsFeature
+import SplashFeature
+import AuthFeature
 
 public struct AppView: View {
     let store: StoreOf<AppReducer>
@@ -12,9 +14,12 @@ public struct AppView: View {
     public var body: some View {
         Group {
             switch self.store.destination {
-            case .loading:
-                ProgressView()
-                    .scaleEffect(1.5)
+            case .splash:
+                SplashScreen()
+            case .auth:
+                if let store = self.store.scope(state: \.destination.auth, action: \.destination.auth) {
+                    AuthView(store: store)
+                }
             case .tabs:
                 if let store = self.store.scope(state: \.destination.tabs, action: \.destination.tabs) {
                     TabsView(store: store)
@@ -22,6 +27,7 @@ public struct AppView: View {
                 
             }
         }
+        .animation(.smooth, value: self.store.destination)
         .task { await self.store.send(.task).finish() }
     }
         

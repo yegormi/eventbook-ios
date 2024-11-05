@@ -8,4 +8,7 @@ extension Color {
     public static let neutral400 = Color(.neutral500)
     public static let red500 = Color(.red500)
     public static let green500 = Color(.green500)
+    
+    public static let purplePrimary = Color(.purplePrimary)
+    public static let textFieldBackground = Color(.textFieldBackground)
 }

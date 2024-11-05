@@ -3,7 +3,7 @@ import Foundation
 import XCTestDynamicOverlay
 
 extension APIClient: TestDependencyKey {
-    public static var testValue = Self()
+    public static let testValue = Self()
 
-    public static var previewValue: APIClient = .mock
+    public static let previewValue: APIClient = .mock
 }

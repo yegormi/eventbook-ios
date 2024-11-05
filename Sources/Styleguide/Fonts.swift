@@ -21,6 +21,10 @@ public extension Font {
         .system(size: 15, weight: .semibold)
     }
     
+    static var titleRegular: Self {
+        .system(size: 14, weight: .semibold)
+    }
+    
     static var titleMedium: Self {
         .system(size: 16, weight: .semibold)
     }

@@ -1,29 +1,50 @@
 import APIClient
 import Dependencies
-import DependenciesMacros
 import Foundation
+import Helpers
+import OpenAPIRuntime
+import OpenAPIURLSession
 import SharedModels
+import XCTestDynamicOverlay
+
+private func throwingUnderlyingError<T>(_ closure: () async throws -> T) async throws -> T {
+    do {
+        return try await closure()
+    } catch let error as ClientError {
+        throw error.underlyingError
+    }
+}
 
 extension APIClient: DependencyKey {
     public static var liveValue: Self {
-        @Dependency(\.continuousClock) var clock
+        let client = Client(
+            serverURL: try! Servers.Server1.url(), // swiftlint:disable:this force_try
+            configuration: Configuration(
+                dateTranscoder: .iso8601WithFractions
+            ),
+            transport: URLSessionTransport(),
+            middlewares: [
+                ErrorMiddleware(),
+                AuthenticationMiddleware(),
+            ]
+        )
 
-        let client = DataService.shared
-
-        return APIClient(
-            fetchBalance: {
-                try await clock.sleep(for: .seconds(1))
-                return try await client.loadMockData(filename: "balance", type: AppBalance.self)
+        return Self(
+            signup: { @Sendable request in
+                try await throwingUnderlyingError {
+                    try await client.createUserAccount(body: .json(request.toAPI())).created.body.json.toDomain()
+                }
             },
-            fetchCards: {
-                try await clock.sleep(for: .seconds(2))
-                return try await client.loadMockData(filename: "cards", type: AppCards.self)
+            login: { @Sendable request in
+                try await throwingUnderlyingError {
+                    try await client.authenticateUser(body: .json(request.toAPI())).created.body.json.toDomain()
+                }
             },
-            fetchTransactions: {
-                try await clock.sleep(for: .seconds(3))
-                return try await client.loadMockData(filename: "transactions", type: [CardTransaction].self)
+            getCurrentUser: {
+                try await throwingUnderlyingError {
+                    try await client.getCurrentUser().ok.body.json.toDomain()
+                }
             }
         )
-        
     }
 }
