@@ -90,10 +90,12 @@ public struct AuthFeature: Reducer, Sendable {
                 case let .success(response):
                     do {
                         try self.session.authenticate(response.user.toDomain())
-                        guard let token = response.credential?.accessToken else { throw MissingAccessTokenError() }
-                        try self.session.setCurrentAuthenticationToken(token)
+                        Task { @MainActor in
+                            let token = try await response.user.getIDToken()
+                            try self.session.setCurrentAuthenticationToken(token)
+                        }
                     } catch {
-                        logger.error("Failed to save the authenticate the user, error: \(error)")
+                        logger.error("Failed to authenticate the user, error: \(error)")
                     }
 
                     return .send(.delegate(.authSuccessful))

@@ -27,12 +27,10 @@ public extension SignupResponse {
 }
 
 public struct LoginRequest: Codable, Sendable {
-    public let email: String
-    public let password: String
+    public let idToken: String
 
-    public init(email: String, password: String) {
-        self.email = email
-        self.password = password
+    public init(idToken: String) {
+        self.idToken = idToken
     }
 }
 

@@ -6,192 +6,151 @@ info:
 servers:
   - url: https://api.eventbook.pp.ua
     description: Production server
-
 paths:
   /signup:
     post:
-      operationId: createUserAccount
-      summary: Create a new user account
+      operationId: signup
+      summary: Sign up
       tags:
-        - Users
+        - user
+      parameters: []
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SignupRequest'
+              $ref: '#/components/schemas/SignupRequestDto'
       responses:
         '201':
-          description: User successfully signed up
+          description: ''
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SignupResponse'
+                $ref: '#/components/schemas/SignupResponseDto'
         '400':
-          description: Bad request
+          description: ''
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/ApiErrorDto'
         '401':
-          description: Unauthorized
+          description: ''
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
+                $ref: '#/components/schemas/ApiErrorDto'
   /login:
     post:
-      operationId: authenticateUser
-      summary: Log in an existing user
+      operationId: login
+      summary: Log in
       tags:
-        - Users
+        - user
+      parameters: []
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoginRequest'
+              $ref: '#/components/schemas/LoginRequestDto'
       responses:
         '201':
-          description: User successfully logged in
+          description: ''
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LoginResponse'
+                $ref: '#/components/schemas/LoginResponseDto'
         '400':
-          description: Bad request
+          description: ''
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/ApiErrorDto'
         '401':
-          description: Unauthorized
+          description: ''
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
+                $ref: '#/components/schemas/ApiErrorDto'
   /me:
     get:
-      operationId: getCurrentUser
-      summary: Retrieve current user profile
+      operationId: getMe
+      summary: Get the current user
       tags:
-        - Users
+        - user
+      parameters: []
       responses:
         '200':
-          description: Current user profile
+          description: ''
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserDTO'
+                $ref: '#/components/schemas/UserDto'
         '401':
-          description: Unauthorized
+          description: ''
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/ApiErrorDto'
       security:
-        - bearerAuth: []
+        - bearer: []
 
 components:
   securitySchemes:
-    bearerAuth:
-      type: http
+    bearer:
       scheme: bearer
       bearerFormat: JWT
-
+      type: http
   schemas:
-    SignupRequest:
+    SignupRequestDto:
       type: object
       properties:
         email:
           type: string
-          format: email
-          example: user@example.com
         password:
           type: string
-          format: password
-          example: strongPassword123
       required:
         - email
         - password
-
-    SignupResponse:
-      type: object
-      properties:
-        accessToken:
-          type: string
-          description: JWT access token
-          example: eyJhbGciOiJIUzI1NiIsIn...
-        user:
-          $ref: '#/components/schemas/UserDTO'
-      required:
-        - accessToken
-        - user
-
-    LoginRequest:
-      type: object
-      properties:
-        email:
-          type: string
-          format: email
-          example: user@example.com
-        password:
-          type: string
-          format: password
-          example: secretPassword123
-      required:
-        - email
-        - password
-
-    LoginResponse:
-      type: object
-      properties:
-        accessToken:
-          type: string
-          description: JWT access token
-          example: eyJhbGciOiJIUzI1NiIsIn...
-        user:
-          $ref: '#/components/schemas/UserDTO'
-      required:
-        - accessToken
-        - user
-
-    UserDTO:
+    UserDto:
       type: object
       properties:
         id:
           type: string
-          description: Unique identifier for the user
           example: 66c6fab4f13bf5134c167e8b
+          description: The id of the user
         email:
           type: string
-          format: email
-          description: Email address of the user
-          example: user@example.com
+          example: John Doe
+          description: The name of the user
       required:
         - id
         - email
-
-    ErrorResponse:
+    SignupResponseDto:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsIn
+        user:
+          $ref: '#/components/schemas/UserDto'
+      required:
+        - accessToken
+        - user
+    ApiErrorDto:
       type: object
       properties:
         code:
           type: string
-          description: Error code
+          description: The error code
           example: entity-not-found
           enum:
             - internal
-            - no-access-token
-            - invalid-access-token
-            - expired-access-token
+            - unauthorized
             - entity-not-found
-            - incorrect-password
             - email-not-unique
         message:
           type: string
-          description: Detailed error message
+          description: A human-readable message describing the error
           example: Entity not found
         details:
           type: object
@@ -199,5 +158,23 @@ components:
           example:
             entity: User
       required:
-        - code
         - message
+    LoginRequestDto:
+      type: object
+      properties:
+        idToken:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsIn
+      required:
+        - idToken
+    LoginResponseDto:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsIn
+        user:
+          $ref: '#/components/schemas/UserDto'
+      required:
+        - accessToken
+        - user

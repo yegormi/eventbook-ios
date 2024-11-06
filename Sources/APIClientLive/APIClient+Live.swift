@@ -32,17 +32,17 @@ extension APIClient: DependencyKey {
         return Self(
             signup: { @Sendable request in
                 try await throwingUnderlyingError {
-                    try await client.createUserAccount(body: .json(request.toAPI())).created.body.json.toDomain()
+                    try await client.signup(body: .json(request.toAPI())).created.body.json.toDomain()
                 }
             },
             login: { @Sendable request in
                 try await throwingUnderlyingError {
-                    try await client.authenticateUser(body: .json(request.toAPI())).created.body.json.toDomain()
+                    try await client.login(body: .json(request.toAPI())).created.body.json.toDomain()
                 }
             },
             getCurrentUser: {
                 try await throwingUnderlyingError {
-                    try await client.getCurrentUser().ok.body.json.toDomain()
+                    try await client.getMe().ok.body.json.toDomain()
                 }
             }
         )

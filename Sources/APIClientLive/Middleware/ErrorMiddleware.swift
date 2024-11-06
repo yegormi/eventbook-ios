@@ -31,7 +31,7 @@ struct ErrorMiddleware: ClientMiddleware {
         }
 
         let errorResponse = try await decoder.decode(
-            Components.Schemas.ErrorResponse.self,
+            Components.Schemas.ApiErrorDto.self,
             from: Data(collecting: body, upTo: .max)
         )
 

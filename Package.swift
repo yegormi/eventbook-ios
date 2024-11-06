@@ -104,6 +104,7 @@ let package = Package(
             name: "KeychainClient",
             dependencies: [
                 .product(name: "Dependencies", package: "swift-dependencies"),
+                .product(name: "Tagged", package: "swift-tagged"),
             ]
         ),
         .target(
