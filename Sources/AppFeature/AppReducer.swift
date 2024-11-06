@@ -26,7 +26,7 @@ public struct AppReducer: Reducer, Sendable {
     public enum Destination {
         @ReducerCaseIgnored
         case splash
-        case auth(Auth)
+        case auth(AuthFeature)
         case tabs(Tabs)
     }
 
@@ -61,12 +61,12 @@ public struct AppReducer: Reducer, Sendable {
                             logger.info("Logged in successfully!")
                             await send(.changeToDestination(.tabs(Tabs.State())))
                         } else {
-                            await send(.changeToDestination(.auth(Auth.State())))
+                            await send(.changeToDestination(.auth(AuthFeature.State())))
                             logger.info("Did not find a stored authentication token, showing login screen.")
                         }
                     } catch {
                         logger.warning("An error occurred while trying to sign the user in: \(error)")
-                        await send(.changeToDestination(.auth(Auth.State())))
+                        await send(.changeToDestination(.auth(AuthFeature.State())))
                         try self.session.logout()
                     }
 
@@ -74,7 +74,7 @@ public struct AppReducer: Reducer, Sendable {
 
                     // Logout
                     for await user in self.session.currentUsers() where user == nil {
-                        await send(.changeToDestination(.auth(Auth.State())))
+                        await send(.changeToDestination(.auth(AuthFeature.State())))
                     }
                 }
             }

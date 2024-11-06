@@ -52,11 +52,19 @@ public extension LoginResponse {
     }
 }
 
+struct MissingEmailError: Error {}
+
 public struct User: Codable, Sendable {
     public let id: String
     public let email: String
 
     public init(id: String, email: String) {
+        self.id = id
+        self.email = email
+    }
+
+    public init(id: String, email: String?) throws {
+        guard let email else { throw MissingEmailError() }
         self.id = id
         self.email = email
     }

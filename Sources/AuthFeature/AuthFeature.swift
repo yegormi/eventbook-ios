@@ -1,5 +1,7 @@
 import APIClient
 import ComposableArchitecture
+@preconcurrency import FirebaseAuth
+import FirebaseCore
 import Foundation
 import Helpers
 import KeychainClient
@@ -8,9 +10,10 @@ import SessionClient
 import SharedModels
 
 private let logger = Logger(subsystem: "AuthenticationFeature", category: "Auth")
+private struct MissingAccessTokenError: Error {}
 
 @Reducer
-public struct Auth: Reducer, Sendable {
+public struct AuthFeature: Reducer, Sendable {
     @ObservableState
     public struct State: Equatable, Sendable {
         public init() {}
@@ -40,16 +43,15 @@ public struct Auth: Reducer, Sendable {
         case view(View)
 
         public enum Delegate {
-            case loginSuccessful
+            case authSuccessful
         }
 
         public enum Internal {
-            case loginResponse(TaskResult<LoginResponse>)
-            case signupResponse(TaskResult<SignupResponse>)
+            case authResponse(Result<AuthDataResult, Error>)
         }
 
         public enum View: BindableAction {
-            case binding(BindingAction<Auth.State>)
+            case binding(BindingAction<AuthFeature.State>)
             case toggleButtonTapped
             case loginButtonTapped
             case signupButtonTapped
@@ -81,38 +83,20 @@ public struct Auth: Reducer, Sendable {
             case .destination:
                 return .none
 
-            case let .internal(.loginResponse(result)):
+            case let .internal(.authResponse(result)):
                 state.isLoading = false
 
                 switch result {
-                case let .success(loginResponse):
-                    self.session.authenticate(loginResponse.user)
+                case let .success(response):
                     do {
-                        try self.session.setCurrentAuthenticationToken(loginResponse.accessToken)
+                        try self.session.authenticate(response.user.toDomain())
+                        guard let token = response.credential?.accessToken else { throw MissingAccessTokenError() }
+                        try self.session.setCurrentAuthenticationToken(token)
                     } catch {
-                        logger.error("Failed to save the authentication token to the keychain, error: \(error)")
+                        logger.error("Failed to save the authenticate the user, error: \(error)")
                     }
 
-                    return .send(.delegate(.loginSuccessful))
-
-                case let .failure(error):
-                    state.destination = .alert(.failedToAuth(error: error))
-                    return .none
-                }
-
-            case let .internal(.signupResponse(result)):
-                state.isLoading = false
-
-                switch result {
-                case let .success(signupResponse):
-                    self.session.authenticate(signupResponse.user)
-                    do {
-                        try self.session.setCurrentAuthenticationToken(signupResponse.accessToken)
-                    } catch {
-                        logger.error("Failed to save the authentication token to the keychain, error: \(error)")
-                    }
-
-                    return .send(.delegate(.loginSuccessful))
+                    return .send(.delegate(.authSuccessful))
 
                 case let .failure(error):
                     state.destination = .alert(.failedToAuth(error: error))
@@ -150,9 +134,10 @@ public struct Auth: Reducer, Sendable {
         state.isLoading = true
 
         return .run { [state] send in
-            await send(.internal(.loginResponse(TaskResult {
-                try await self.api.login(
-                    LoginRequest(email: state.email, password: state.password)
+            await send(.internal(.authResponse(Result {
+                try await Auth.auth().signIn(
+                    withEmail: state.email,
+                    password: state.password
                 )
             })))
         }
@@ -163,9 +148,10 @@ public struct Auth: Reducer, Sendable {
         state.isLoading = true
 
         return .run { [state] send in
-            await send(.internal(.signupResponse(TaskResult {
-                try await self.api.signup(
-                    SignupRequest(email: state.email, password: state.password)
+            await send(.internal(.authResponse(Result {
+                try await Auth.auth().createUser(
+                    withEmail: state.email,
+                    password: state.password
                 )
             })))
         }

@@ -74,6 +74,8 @@ let package = Package(
             dependencies: [
                 "APIClient",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+                .product(name: "FirebaseCore", package: "firebase-ios-sdk"),
+                .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
                 "Helpers",
                 "Styleguide",
                 "SharedModels",

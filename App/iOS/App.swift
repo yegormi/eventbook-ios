@@ -1,7 +1,7 @@
 import AppFeature
 import ComposableArchitecture
-import FirebaseCore
 import FirebaseAuth
+import FirebaseCore
 import Styleguide
 import SwiftUI
 
@@ -22,7 +22,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
 @main
 struct EventBookApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    
+
     let store = Store(initialState: AppReducer.State()) {
         AppReducer()
             ._printChanges()
