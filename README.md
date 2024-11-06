@@ -1,6 +1,23 @@
 # 🌟 EventBook
 
+![Swift](https://img.shields.io/badge/Swift-6.0-orange.svg)
+![Platform](https://img.shields.io/badge/Platform-iOS-blue.svg)
+![License](https://img.shields.io/badge/License-MIT-brightgreen.svg)
+
 A powerful, user-friendly iOS app for organizing, tracking, and managing events. EventBook provides an intuitive interface for creating and attending events, helping users stay connected and informed.
+
+## Table of Contents
+
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Usage](#usage)
+- [Screenshots](#screenshots)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
 
 ## Features
 
@@ -47,7 +64,6 @@ A powerful, user-friendly iOS app for organizing, tracking, and managing events.
 | Home Screen | Event Details | Explore |
 |-------------|---------------|---------|
 | ![Home](https://path-to-image.png) | ![Details](https://path-to-image.png) | ![Explore](https://path-to-image.png) |
-
 
 ## Contributing
 
