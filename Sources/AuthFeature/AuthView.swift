@@ -53,6 +53,7 @@ public struct AuthView: View {
                 }
                 .buttonStyle(.primary(size: .fullWidth))
                 .disabled(!self.store.isFormValid || self.store.isLoading)
+                .animation(.smooth, value: self.store.isFormValid)
 
                 HStack(spacing: 5) {
                     Group {
