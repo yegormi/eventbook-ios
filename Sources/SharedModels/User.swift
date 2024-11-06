@@ -52,7 +52,7 @@ public extension LoginResponse {
 
 struct MissingEmailError: Error {}
 
-public struct User: Codable, Sendable {
+public struct User: Codable, Sendable, Equatable {
     public let id: String
     public let email: String
 

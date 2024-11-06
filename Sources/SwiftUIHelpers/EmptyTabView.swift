@@ -13,6 +13,5 @@ public struct EmptyTabView: View {
                 .font(.labelLarge)
                 .foregroundStyle(Color.neutral400)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
