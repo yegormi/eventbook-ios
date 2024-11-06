@@ -12,8 +12,8 @@ public struct KeychainClient: Sendable {
     }
 
     public func get(_ key: KeychainKey) throws -> String? {
-        try self.get(key).map {
-            String(decoding: $0, as: UTF8.self)
+        try self.get(key).flatMap {
+            String(data: $0, encoding: .utf8)
         }
     }
 }
