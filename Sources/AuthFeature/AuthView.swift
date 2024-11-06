@@ -39,7 +39,11 @@ public struct AuthView: View {
                 }
                 
                 Button {
-                    send(.loginButtonTapped)
+                    if self.store.authType == .signIn {
+                        send(.loginButtonTapped)
+                    } else {
+                        send(.signupButtonTapped)
+                    }
                 } label: {
                     if self.store.isLoading {
                         ProgressView()

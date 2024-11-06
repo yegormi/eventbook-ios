@@ -19,9 +19,18 @@ public struct Auth: Reducer, Sendable {
         var email = ""
         var password = ""
         var confirmPassword = ""
-        var isFormValid = false
         var isLoading = false
         @Presents var destination: Destination.State?
+        
+        var isFormValid: Bool {
+            guard self.email.isValidEmail else { return false }
+            
+            if self.authType == .signIn {
+                return !self.password.isEmpty
+            } else {
+                return !self.password.isEmpty && self.password == self.confirmPassword
+            }
+        }
     }
 
     public enum Action: ViewAction {
@@ -36,12 +45,15 @@ public struct Auth: Reducer, Sendable {
 
         public enum Internal {
             case loginResponse(TaskResult<LoginResponse>)
+            case signupResponse(TaskResult<SignupResponse>)
         }
 
         public enum View: BindableAction {
             case binding(BindingAction<Auth.State>)
-            case loginButtonTapped
             case toggleButtonTapped
+            case loginButtonTapped
+            case signupButtonTapped
+            case authServiceButtonTapped(AuthServiceType)
         }
     }
 
@@ -87,27 +99,53 @@ public struct Auth: Reducer, Sendable {
                     state.destination = .alert(.failedToAuth(error: error))
                     return .none
                 }
+                
+            case let .internal(.signupResponse(result)):
+                state.isLoading = false
 
-            case .view(.binding(\.email)), .view(.binding(\.password)):
-                state.isFormValid = state.email.isValidEmail && !state.password.isEmpty
+                switch result {
+                case let .success(signupResponse):
+                    self.session.authenticate(signupResponse.user)
+                    do {
+                        try self.session.setCurrentAuthenticationToken(signupResponse.accessToken)
+                    } catch {
+                        logger.error("Failed to save the authentication token to the keychain, error: \(error)")
+                    }
 
-                return .none
+                    return .send(.delegate(.loginSuccessful))
+
+                case let .failure(error):
+                    state.destination = .alert(.failedToAuth(error: error))
+                    return .none
+                }
 
             case .view(.binding):
                 return .none
-
-            case .view(.loginButtonTapped):
-                return self.login(state: &state)
                 
             case .view(.toggleButtonTapped):
                 state.authType.toggle()
+                state.confirmPassword = ""
                 return .none
+
+            case .view(.loginButtonTapped):
+                return self.login(&state)
+                
+            case .view(.signupButtonTapped):
+                return self.signup(&state)
+                
+            case let .view(.authServiceButtonTapped(service)):
+                switch service {
+                case .google:
+                    return self.googleAuth(&state)
+                case .facebook:
+                    return self.facebookAuth(&state)
+                }
             }
         }
         .ifLet(\.$destination, action: \.destination)
     }
 
-    private func login(state: inout State) -> Effect<Action> {
+    private func login(_ state: inout State) -> Effect<Action> {
         guard state.isFormValid, !state.isLoading else { return .none }
         state.isLoading = true
         
@@ -118,6 +156,27 @@ public struct Auth: Reducer, Sendable {
                 )
             })))
         }
+    }
+    
+    private func signup(_ state: inout State) -> Effect<Action> {
+        guard state.isFormValid, !state.isLoading else { return .none }
+        state.isLoading = true
+        
+        return .run { [state] send in
+            await send(.internal(.signupResponse(TaskResult {
+                try await self.api.signup(
+                    SignupRequest(email: state.email, password: state.password)
+                )
+            })))
+        }
+    }
+    
+    private func googleAuth(_ state: inout State) -> Effect<Action> {
+        return .none
+    }
+    
+    private func facebookAuth(_ state: inout State) -> Effect<Action> {
+        return .none
     }
 }
 
