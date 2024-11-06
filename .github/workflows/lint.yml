@@ -1,0 +1,33 @@
+name: "🍏 Code Linting"
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+    paths:
+      - "**/*.swift"
+  pull_request:
+    branches:
+      - develop
+      - main
+    paths:
+      - "**/*.swift"
+
+jobs:
+  lint:
+    name: Code Linting
+    runs-on: macos-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v3
+      - name: "Install SwiftLint"
+        run: brew install swiftlint
+      - name: "Run SwiftLint"
+        run: swiftlint --strict .
+      - name: "Run SwiftFormat"
+        run: swiftformat --lint --quiet --reporter github-actions-log .
+      - name: "Report job status"
+        id: output-status
+        if: always()
+        run: echo "status=${{ job.status }}" >> $GITHUB_OUTPUT
