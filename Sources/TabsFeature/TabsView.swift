@@ -12,7 +12,7 @@ public struct TabsView: View {
 
         // Configure tab bar layout
         let appearance = UITabBarAppearance()
-        appearance.backgroundColor = .white
+        appearance.backgroundColor = .systemBackground
         appearance.shadowImage = UIColor(Color.black.opacity(0.3)).image(size: CGSize(width: 1.0, height: 0.3))
         appearance.shadowColor = nil
 
@@ -26,8 +26,8 @@ public struct TabsView: View {
                 HomeView(
                     store: self.store.scope(state: \.home, action: \.home)
                 )
-                .background(Color.appBackground)
-                .navigationTitle("Money")
+                .background(Color(uiColor: UIColor.systemBackground))
+                .navigationTitle("Home")
                 .toolbarTitleDisplayMode(.large)
             }
             .tag(Tabs.State.Tab.home)
@@ -36,36 +36,36 @@ public struct TabsView: View {
             }
 
             NavigationStack {
-                TransactionsView(
-                    store: self.store.scope(state: \.transactions, action: \.transactions)
+                ExploreView(
+                    store: self.store.scope(state: \.explore, action: \.explore)
                 )
-                .background(Color.appBackground)
-                .navigationTitle("Transactions")
+                .background(Color(uiColor: UIColor.systemBackground))
+                .navigationTitle("Explore")
                 .toolbarTitleDisplayMode(.large)
             }
-            .tag(Tabs.State.Tab.transactions)
+            .tag(Tabs.State.Tab.explore)
             .tabItem {
-                Label("Transactions", image: .transactionsTab)
+                Label("Explore", image: .exploreTab)
             }
 
             NavigationStack {
-                CardsView(
-                    store: self.store.scope(state: \.cards, action: \.cards)
+                FavoritesView(
+                    store: self.store.scope(state: \.favorites, action: \.favorites)
                 )
-                .background(Color.appBackground)
-                .navigationTitle("My Cards")
+                .background(Color(uiColor: UIColor.systemBackground))
+                .navigationTitle("Favorites")
                 .toolbarTitleDisplayMode(.large)
             }
-            .tag(Tabs.State.Tab.cards)
+            .tag(Tabs.State.Tab.favorites)
             .tabItem {
-                Label("My Cards", image: .cardsTab)
+                Label("Favorites", image: .favoritesTab)
             }
 
             NavigationStack {
                 AccountView(
                     store: self.store.scope(state: \.account, action: \.account)
                 )
-                .background(Color.appBackground)
+                .background(Color(uiColor: UIColor.systemBackground))
                 .navigationTitle("Account")
                 .toolbarTitleDisplayMode(.large)
             }

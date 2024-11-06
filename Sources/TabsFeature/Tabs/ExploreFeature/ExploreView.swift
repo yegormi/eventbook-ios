@@ -4,11 +4,11 @@ import Styleguide
 import SwiftUI
 import SwiftUIHelpers
 
-@ViewAction(for: Transactions.self)
-public struct TransactionsView: View {
-    @Bindable public var store: StoreOf<Transactions>
+@ViewAction(for: Explore.self)
+public struct ExploreView: View {
+    @Bindable public var store: StoreOf<Explore>
 
-    public init(store: StoreOf<Transactions>) {
+    public init(store: StoreOf<Explore>) {
         self.store = store
     }
 
@@ -23,7 +23,7 @@ public struct TransactionsView: View {
 }
 
 #Preview {
-    TransactionsView(store: Store(initialState: Transactions.State()) {
-        Transactions()
+    ExploreView(store: Store(initialState: Explore.State()) {
+        Explore()
     })
 }

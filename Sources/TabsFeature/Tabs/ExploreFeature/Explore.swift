@@ -2,7 +2,7 @@ import ComposableArchitecture
 import Foundation
 
 @Reducer
-public struct Transactions: Reducer {
+public struct Explore: Reducer {
     @ObservableState
     public struct State: Equatable {
         @Presents var destination: Destination.State?
@@ -21,7 +21,7 @@ public struct Transactions: Reducer {
         public enum Internal: Equatable {}
 
         public enum View: Equatable, BindableAction {
-            case binding(BindingAction<Transactions.State>)
+            case binding(BindingAction<Explore.State>)
             case onAppear
         }
     }
