@@ -8,24 +8,24 @@ public struct Tabs: Reducer {
     public struct State: Equatable {
         var tab = Tab.home
         var home = Home.State()
-        var transactions = Transactions.State()
-        var cards = Cards.State()
+        var explore = Explore.State()
+        var favorites = Favorites.State()
         var account = Account.State()
 
         public init() {}
 
         public enum Tab: Equatable {
             case home
-            case transactions
-            case cards
+            case explore
+            case favorites
             case account
         }
     }
 
     public enum Action: ViewAction {
         case home(Home.Action)
-        case transactions(Transactions.Action)
-        case cards(Cards.Action)
+        case explore(Explore.Action)
+        case favorites(Favorites.Action)
         case account(Account.Action)
 
         case view(View)
@@ -44,12 +44,12 @@ public struct Tabs: Reducer {
             Home()
         }
 
-        Scope(state: \.transactions, action: \.transactions) {
-            Transactions()
+        Scope(state: \.explore, action: \.explore) {
+            Explore()
         }
 
-        Scope(state: \.cards, action: \.cards) {
-            Cards()
+        Scope(state: \.favorites, action: \.favorites) {
+            Favorites()
         }
 
         Scope(state: \.account, action: \.account) {
@@ -61,10 +61,10 @@ public struct Tabs: Reducer {
             case .home:
                 .none
 
-            case .transactions:
+            case .explore:
                 .none
 
-            case .cards:
+            case .favorites:
                 .none
 
             case .account:

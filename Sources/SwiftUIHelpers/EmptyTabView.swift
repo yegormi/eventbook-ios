@@ -7,6 +7,8 @@ public struct EmptyTabView: View {
     public var body: some View {
         VStack(spacing: 8) {
             Image(.appLogo)
+                .resizable()
+                .frame(maxWidth: 200, maxHeight: 200)
             Text("Coming soon")
                 .font(.labelLarge)
                 .foregroundStyle(Color.neutral400)

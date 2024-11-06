@@ -1,7 +1,6 @@
 import SwiftUI
 
 public extension Color {
-    static let appBackground = Color(.appBackground)
     static let neutral900 = Color(.neutral900)
     static let neutral800 = Color(.neutral800)
     static let neutral500 = Color(.neutral500)
