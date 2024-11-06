@@ -16,11 +16,9 @@ public struct Account: Reducer {
         case `internal`(Internal)
         case view(View)
 
-        public enum Delegate: Equatable {
-        }
+        public enum Delegate: Equatable {}
 
-        public enum Internal: Equatable {
-        }
+        public enum Internal: Equatable {}
 
         public enum View: Equatable, BindableAction {
             case binding(BindingAction<Account.State>)
@@ -29,30 +27,29 @@ public struct Account: Reducer {
     }
 
     @Reducer(state: .equatable)
-    public enum Destination {
-    }
+    public enum Destination {}
 
     public init() {}
 
     public var body: some ReducerOf<Self> {
         BindingReducer(action: \.view)
 
-        Reduce { state, action in
+        Reduce { _, action in
             switch action {
             case .delegate:
-                return .none
+                .none
 
             case .destination:
-                return .none
+                .none
 
             case .internal:
-                return .none
+                .none
 
             case .view(.binding):
-                return .none
+                .none
 
             case .view(.onAppear):
-                return .none
+                .none
             }
         }
         .ifLet(\.$destination, action: \.destination)

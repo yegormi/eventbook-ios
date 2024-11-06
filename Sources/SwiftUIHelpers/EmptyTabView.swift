@@ -1,9 +1,9 @@
-import SwiftUI
 import Styleguide
+import SwiftUI
 
 public struct EmptyTabView: View {
     public init() {}
-    
+
     public var body: some View {
         VStack(spacing: 8) {
             Image(.appLogo)

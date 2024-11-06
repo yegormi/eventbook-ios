@@ -17,8 +17,7 @@ public struct Home: Reducer, Sendable {
 
         public enum Delegate {}
 
-        public enum Internal {
-        }
+        public enum Internal {}
 
         public enum View: BindableAction {
             case binding(BindingAction<Home.State>)
@@ -28,7 +27,7 @@ public struct Home: Reducer, Sendable {
     }
 
     @Dependency(\.apiClient) var api
-    
+
     @Dependency(\.uuid) var uuid
 
     public init() {}
@@ -36,22 +35,22 @@ public struct Home: Reducer, Sendable {
     public var body: some ReducerOf<Self> {
         BindingReducer(action: \.view)
 
-        Reduce { state, action in
+        Reduce { _, action in
             switch action {
             case .delegate:
-                return .none
-                
+                .none
+
             case .internal:
-                return .none
+                .none
 
             case .view(.binding):
-                return .none
+                .none
 
             case .view(.onFirstAppear):
-                return .none
+                .none
 
             case .view(.onAppear):
-                return .none
+                .none
             }
         }
     }

@@ -1,10 +1,3 @@
-//
-//  AuthType.swift
-//  SmartWaste
-//
-//  Created by Yegor Myropoltsev on 06.11.2023.
-//
-
 import Foundation
 
 enum AuthType {
@@ -13,9 +6,9 @@ enum AuthType {
     var title: String {
         switch self {
         case .signIn:
-            return "Log in"
+            "Log in"
         case .signUp:
-            return "Sign up"
+            "Sign up"
         }
     }
 

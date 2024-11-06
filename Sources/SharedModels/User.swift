@@ -20,8 +20,8 @@ public struct SignupResponse: Codable, Sendable {
     }
 }
 
-extension SignupResponse {
-    public static var mock: Self {
+public extension SignupResponse {
+    static var mock: Self {
         .init(accessToken: "accessToken", user: .mock)
     }
 }

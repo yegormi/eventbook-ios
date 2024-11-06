@@ -9,7 +9,7 @@ public struct TabsView: View {
 
     public init(store: StoreOf<Tabs>) {
         self.store = store
-        
+
         // Configure tab bar layout
         let appearance = UITabBarAppearance()
         appearance.backgroundColor = .white

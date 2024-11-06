@@ -14,7 +14,6 @@ extension SignupRequest {
     }
 }
 
-
 extension Components.Schemas.LoginResponse {
     func toDomain() -> LoginResponse {
         .init(accessToken: self.accessToken, user: self.user.toDomain())
@@ -26,7 +25,6 @@ extension LoginRequest {
         .init(email: self.email, password: self.password)
     }
 }
-
 
 extension Components.Schemas.UserDTO {
     func toDomain() -> User {

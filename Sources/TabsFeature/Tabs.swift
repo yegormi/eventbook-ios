@@ -1,6 +1,6 @@
 import ComposableArchitecture
-import SwiftUI
 import HomeFeature
+import SwiftUI
 
 @Reducer
 public struct Tabs: Reducer {
@@ -34,7 +34,7 @@ public struct Tabs: Reducer {
             case binding(BindingAction<State>)
         }
     }
-    
+
     public init() {}
 
     public var body: some ReducerOf<Self> {
@@ -56,22 +56,22 @@ public struct Tabs: Reducer {
             Account()
         }
 
-        Reduce { state, action in
+        Reduce { _, action in
             switch action {
             case .home:
-                return .none
+                .none
 
             case .transactions:
-                return .none
+                .none
 
             case .cards:
-                return .none
-                
+                .none
+
             case .account:
-                return .none
+                .none
 
             case .view:
-                return .none
+                .none
             }
         }
     }

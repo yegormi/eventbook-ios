@@ -1,11 +1,11 @@
 import APIClient
 import ComposableArchitecture
 import Foundation
-import OSLog
-import SharedModels
-import KeychainClient
-import SessionClient
 import Helpers
+import KeychainClient
+import OSLog
+import SessionClient
+import SharedModels
 
 private let logger = Logger(subsystem: "AuthenticationFeature", category: "Auth")
 
@@ -21,10 +21,10 @@ public struct Auth: Reducer, Sendable {
         var confirmPassword = ""
         var isLoading = false
         @Presents var destination: Destination.State?
-        
+
         var isFormValid: Bool {
             guard self.email.isValidEmail else { return false }
-            
+
             if self.authType == .signIn {
                 return !self.password.isEmpty
             } else {
@@ -99,7 +99,7 @@ public struct Auth: Reducer, Sendable {
                     state.destination = .alert(.failedToAuth(error: error))
                     return .none
                 }
-                
+
             case let .internal(.signupResponse(result)):
                 state.isLoading = false
 
@@ -121,7 +121,7 @@ public struct Auth: Reducer, Sendable {
 
             case .view(.binding):
                 return .none
-                
+
             case .view(.toggleButtonTapped):
                 state.authType.toggle()
                 state.confirmPassword = ""
@@ -129,10 +129,10 @@ public struct Auth: Reducer, Sendable {
 
             case .view(.loginButtonTapped):
                 return self.login(&state)
-                
+
             case .view(.signupButtonTapped):
                 return self.signup(&state)
-                
+
             case let .view(.authServiceButtonTapped(service)):
                 switch service {
                 case .google:
@@ -148,7 +148,7 @@ public struct Auth: Reducer, Sendable {
     private func login(_ state: inout State) -> Effect<Action> {
         guard state.isFormValid, !state.isLoading else { return .none }
         state.isLoading = true
-        
+
         return .run { [state] send in
             await send(.internal(.loginResponse(TaskResult {
                 try await self.api.login(
@@ -157,11 +157,11 @@ public struct Auth: Reducer, Sendable {
             })))
         }
     }
-    
+
     private func signup(_ state: inout State) -> Effect<Action> {
         guard state.isFormValid, !state.isLoading else { return .none }
         state.isLoading = true
-        
+
         return .run { [state] send in
             await send(.internal(.signupResponse(TaskResult {
                 try await self.api.signup(
@@ -170,13 +170,13 @@ public struct Auth: Reducer, Sendable {
             })))
         }
     }
-    
-    private func googleAuth(_ state: inout State) -> Effect<Action> {
-        return .none
+
+    private func googleAuth(_: inout State) -> Effect<Action> {
+        .none
     }
-    
-    private func facebookAuth(_ state: inout State) -> Effect<Action> {
-        return .none
+
+    private func facebookAuth(_: inout State) -> Effect<Action> {
+        .none
     }
 }
 

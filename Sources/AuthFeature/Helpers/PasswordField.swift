@@ -1,20 +1,13 @@
-//
-//  PasswordField.swift
-//  SmartWaste
-//
-//  Created by Yegor Myropoltsev on 05.11.2023.
-//
-
 import SwiftUI
 
 struct PasswordField: View {
     let label: LocalizedStringKey
     @Binding var text: String
 
-    @State private var showText: Bool = false
+    @State private var showText = false
     @FocusState private var focus: Focus?
     @Environment(\.scenePhase) private var scenePhase
-    
+
     init(_ label: LocalizedStringKey, text: Binding<String>) {
         self.label = label
         self._text = text
@@ -22,36 +15,36 @@ struct PasswordField: View {
 
     var body: some View {
         ZStack {
-            SecureField(label, text: $text)
-                .focused($focus, equals: .secure)
-                .opacity(showText ? 0 : 1)
-            TextField(label, text: $text)
-                .focused($focus, equals: .text)
-                .opacity(showText ? 1 : 0)
+            SecureField(self.label, text: self.$text)
+                .focused(self.$focus, equals: .secure)
+                .opacity(self.showText ? 0 : 1)
+            TextField(self.label, text: self.$text)
+                .focused(self.$focus, equals: .text)
+                .opacity(self.showText ? 1 : 0)
         }
         .overlay(alignment: .trailing) {
             Button {
-                showText.toggle()
+                self.showText.toggle()
             } label: {
-                Image(systemName: showText ? "eye.slash.fill" : "eye.fill")
+                Image(systemName: self.showText ? "eye.slash.fill" : "eye.fill")
                     .frame(width: 50, height: 50)
                     .fixedSize(horizontal: false, vertical: true)
             }
             .accentColor(.secondary)
         }
-        .onChange(of: focus) { old, new in
+        .onChange(of: self.focus) { _, new in
             if new != nil {
-                focus = showText ? .text : .secure
+                self.focus = self.showText ? .text : .secure
             }
         }
-        .onChange(of: scenePhase) { old, new in
+        .onChange(of: self.scenePhase) { _, new in
             if new != .active {
-                showText = false
+                self.showText = false
             }
         }
-        .onChange(of: showText) { old, new in
-            if focus != nil {
-                focus = new ? .text : .secure
+        .onChange(of: self.showText) { _, new in
+            if self.focus != nil {
+                self.focus = new ? .text : .secure
             }
         }
     }

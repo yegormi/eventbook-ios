@@ -2,7 +2,7 @@ import SwiftUI
 
 public struct SplashScreen: View {
     public init() {}
-    
+
     public var body: some View {
         GeometryReader { geometry in
             Image(.launchScreen)

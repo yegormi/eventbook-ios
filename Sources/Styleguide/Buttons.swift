@@ -4,11 +4,11 @@ public struct PrimaryButtonStyle: ButtonStyle {
     public enum Size {
         case small
         case fullWidth
-        
+
         var verticalPadding: CGFloat {
-            return 14
+            14
         }
-        
+
         var horizontalPadding: CGFloat {
             switch self {
             case .small: 32
@@ -16,21 +16,21 @@ public struct PrimaryButtonStyle: ButtonStyle {
             }
         }
     }
-    
+
     @Environment(\.isEnabled) var isEnabled
     let size: Size
-    
+
     public func makeBody(configuration: Configuration) -> some View {
         configuration
             .label
-            .frame(maxWidth: size == .fullWidth ? .infinity : nil)
+            .frame(maxWidth: self.size == .fullWidth ? .infinity : nil)
             .font(.titleRegular)
             .foregroundStyle(Color.black)
-            .padding(.vertical, size.verticalPadding)
-            .padding(.horizontal, size.horizontalPadding)
+            .padding(.vertical, self.size.verticalPadding)
+            .padding(.horizontal, self.size.horizontalPadding)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(isEnabled ? Color.purplePrimary : Color.purplePrimary.opacity(0.4))
+                    .fill(self.isEnabled ? Color.purplePrimary : Color.purplePrimary.opacity(0.4))
             )
             .scaleEffect(configuration.isPressed ? 0.95 : 1)
             .animation(.spring, value: configuration.isPressed)
@@ -38,15 +38,14 @@ public struct PrimaryButtonStyle: ButtonStyle {
     }
 }
 
-extension ButtonStyle where Self == PrimaryButtonStyle {
-    public static func primary(size: PrimaryButtonStyle.Size) -> PrimaryButtonStyle {
+public extension ButtonStyle where Self == PrimaryButtonStyle {
+    static func primary(size: PrimaryButtonStyle.Size) -> PrimaryButtonStyle {
         .init(size: size)
     }
-    
-    /// Default primary button style (dynamic)
-    public static var primary: PrimaryButtonStyle { .primary(size: .small) }
-}
 
+    /// Default primary button style (dynamic)
+    static var primary: PrimaryButtonStyle { .primary(size: .small) }
+}
 
 public struct ServiceButtonStyle: ButtonStyle {
     public func makeBody(configuration: Configuration) -> some View {
@@ -67,6 +66,6 @@ public struct ServiceButtonStyle: ButtonStyle {
     }
 }
 
-extension ButtonStyle where Self == ServiceButtonStyle {
-    public static var service: ServiceButtonStyle { .init() }
+public extension ButtonStyle where Self == ServiceButtonStyle {
+    static var service: ServiceButtonStyle { .init() }
 }

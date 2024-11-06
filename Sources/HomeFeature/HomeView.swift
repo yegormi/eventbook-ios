@@ -14,16 +14,14 @@ public struct HomeView: View {
     }
 
     public var body: some View {
-        ScrollView {
-            
-        }
-        .contentMargins(.horizontal, 16, for: .scrollContent)
-        .onFirstAppear {
-            send(.onFirstAppear)
-        }
-        .onAppear {
-            send(.onAppear)
-        }
+        ScrollView {}
+            .contentMargins(.horizontal, 16, for: .scrollContent)
+            .onFirstAppear {
+                send(.onFirstAppear)
+            }
+            .onAppear {
+                send(.onAppear)
+            }
     }
 }
 

@@ -11,7 +11,8 @@
 --wrapconditions before-first
 --funcattributes prev-line
 --typeattributes prev-line
---varattributes same-line
+--storedvarattrs same-line
+--computedvarattrs same-line
 --marktypes never
 --redundanttype inferred
 --maxwidth 130

@@ -7,11 +7,11 @@ import SwiftUIHelpers
 @ViewAction(for: Transactions.self)
 public struct TransactionsView: View {
     @Bindable public var store: StoreOf<Transactions>
-    
+
     public init(store: StoreOf<Transactions>) {
         self.store = store
     }
-    
+
     public var body: some View {
         VStack {
             EmptyTabView()
@@ -21,7 +21,6 @@ public struct TransactionsView: View {
         }
     }
 }
-
 
 #Preview {
     TransactionsView(store: Store(initialState: Transactions.State()) {

@@ -1,14 +1,14 @@
 import SwiftUI
 
-extension Color {
-    public static let appBackground = Color(.appBackground)
-    public static let neutral900 = Color(.neutral900)
-    public static let neutral800 = Color(.neutral800)
-    public static let neutral500 = Color(.neutral500)
-    public static let neutral400 = Color(.neutral500)
-    public static let red500 = Color(.red500)
-    public static let green500 = Color(.green500)
-    
-    public static let purplePrimary = Color(.purplePrimary)
-    public static let textFieldBackground = Color(.textFieldBackground)
+public extension Color {
+    static let appBackground = Color(.appBackground)
+    static let neutral900 = Color(.neutral900)
+    static let neutral800 = Color(.neutral800)
+    static let neutral500 = Color(.neutral500)
+    static let neutral400 = Color(.neutral500)
+    static let red500 = Color(.red500)
+    static let green500 = Color(.green500)
+
+    static let purplePrimary = Color(.purplePrimary)
+    static let textFieldBackground = Color(.textFieldBackground)
 }
