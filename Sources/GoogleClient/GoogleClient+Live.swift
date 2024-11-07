@@ -1,7 +1,6 @@
 import Dependencies
 import DependenciesMacros
 import Foundation
-import GoogleClient
 import GoogleSignIn
 import Helpers
 import UIKit
