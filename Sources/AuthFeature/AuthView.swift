@@ -58,7 +58,7 @@ public struct AuthView: View {
                     Group {
                         Text(self.store.authType == .signIn ? "Don't have an account?" : "Already have an account?")
                         Text(self.store.authType == .signIn ? "Sign up" : "Log in")
-                            .foregroundStyle(Color.purplePrimary)
+                            .foregroundStyle(Color.purple300)
                             .onTapGesture {
                                 send(.toggleButtonTapped)
                             }

@@ -25,12 +25,12 @@ public struct PrimaryButtonStyle: ButtonStyle {
             .label
             .frame(maxWidth: self.size == .fullWidth ? .infinity : nil)
             .font(.titleRegular)
-            .foregroundStyle(Color.black)
+            .foregroundStyle(self.isEnabled ? Color.neutral50 : Color.neutral500)
             .padding(.vertical, self.size.verticalPadding)
             .padding(.horizontal, self.size.horizontalPadding)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(self.isEnabled ? Color.purplePrimary : Color.purplePrimary.opacity(0.4))
+                    .fill(self.isEnabled ? Color.purple300 : Color.neutral200)
             )
             .scaleEffect(configuration.isPressed ? 0.95 : 1)
             .animation(.spring, value: configuration.isPressed)
@@ -68,4 +68,35 @@ public struct ServiceButtonStyle: ButtonStyle {
 
 public extension ButtonStyle where Self == ServiceButtonStyle {
     static var service: ServiceButtonStyle { .init() }
+}
+
+struct ButtonStylesPreview_Previews: PreviewProvider {
+    static var previews: some View {
+        VStack(spacing: 20) {
+            // Primary Button - Full Width
+            Button("Primary Full Width") {}
+                .buttonStyle(.primary(size: .fullWidth))
+
+            // Primary Button - Small
+            Button("Primary Small") {}
+                .buttonStyle(.primary(size: .small))
+
+            // Primary Button - Disabled
+            Button("Primary Disabled") {}
+                .buttonStyle(.primary(size: .small))
+                .disabled(true)
+
+            Divider().padding(.vertical, 20)
+
+            // Service Button - Enabled
+            Button("Service Button") {}
+                .buttonStyle(.service)
+
+            // Service Button - Disabled
+            Button("Service Disabled") {}
+                .buttonStyle(.service)
+                .disabled(true)
+        }
+        .padding()
+    }
 }
