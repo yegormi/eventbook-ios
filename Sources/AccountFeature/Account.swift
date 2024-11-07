@@ -1,6 +1,7 @@
 import ComposableArchitecture
 import Foundation
 import OSLog
+import SessionClient
 import SharedModels
 
 private let logger = Logger(subsystem: "AccountFeature", category: "Account")

@@ -7,6 +7,7 @@ let package = Package(
     name: "eventbook-ios",
     platforms: [.iOS(.v17)],
     products: [
+        .library(name: "AccountFeature", targets: ["AccountFeature"]),
         .library(name: "APIClient", targets: ["APIClient"]),
         .library(name: "APIClientLive", targets: ["APIClientLive"]),
         .library(name: "AppFeature", targets: ["AppFeature"]),
@@ -33,6 +34,15 @@ let package = Package(
         .package(url: "https://github.com/pointfreeco/swift-tagged", from: "0.10.0"),
     ],
     targets: [
+        .target(
+            name: "AccountFeature",
+            dependencies: [
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+                "SessionClient",
+                "SharedModels",
+                "SwiftUIHelpers",
+            ]
+        ),
         .target(
             name: "APIClient",
             dependencies: [
@@ -154,6 +164,7 @@ let package = Package(
         .target(
             name: "TabsFeature",
             dependencies: [
+                "AccountFeature",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 "Helpers",
                 "HomeFeature",
