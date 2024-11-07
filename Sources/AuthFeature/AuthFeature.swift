@@ -3,6 +3,8 @@ import ComposableArchitecture
 @preconcurrency import FirebaseAuth
 import FirebaseCore
 import Foundation
+import GoogleClient
+import GoogleSignIn
 import Helpers
 import KeychainClient
 import OSLog
@@ -48,6 +50,7 @@ public struct AuthFeature: Reducer, Sendable {
 
         public enum Internal {
             case authResponse(Result<AuthDataResult, Error>)
+            case googleResponse(Result<GoogleUser, Error>)
         }
 
         public enum View: BindableAction {
@@ -70,6 +73,8 @@ public struct AuthFeature: Reducer, Sendable {
 
     @Dependency(\.dismiss) var dismiss
 
+    @Dependency(\.authGoogle) var authGoogle
+
     public init() {}
 
     public var body: some ReducerOf<Self> {
@@ -89,7 +94,7 @@ public struct AuthFeature: Reducer, Sendable {
                 switch result {
                 case let .success(response):
                     do {
-                        try self.session.authenticate(response.user.toDomain())
+                        try self.session.authenticate(response.toUser())
                         _ = Task { @MainActor in
                             let token = try await response.user.getIDToken()
                             try self.session.setCurrentAuthenticationToken(token)
@@ -99,6 +104,25 @@ public struct AuthFeature: Reducer, Sendable {
                     }
 
                     return .send(.delegate(.authSuccessful))
+
+                case let .failure(error):
+                    state.destination = .alert(.failedToAuth(error: error))
+                    return .none
+                }
+
+            case let .internal(.googleResponse(result)):
+                switch result {
+                case let .success(user):
+                    let credential = GoogleAuthProvider.credential(
+                        withIDToken: user.idToken,
+                        accessToken: user.accessToken
+                    )
+
+                    return .run { send in
+                        await send(.internal(.authResponse(Result {
+                            try await Auth.auth().signIn(with: credential)
+                        })))
+                    }
 
                 case let .failure(error):
                     state.destination = .alert(.failedToAuth(error: error))
@@ -160,7 +184,11 @@ public struct AuthFeature: Reducer, Sendable {
     }
 
     private func googleAuth(_: inout State) -> Effect<Action> {
-        .none
+        .run { send in
+            await send(.internal(.googleResponse(Result {
+                try await self.authGoogle.authenticate()
+            })))
+        }
     }
 
     private func facebookAuth(_: inout State) -> Effect<Action> {

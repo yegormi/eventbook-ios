@@ -2,6 +2,7 @@ import AppFeature
 import ComposableArchitecture
 import FirebaseAuth
 import FirebaseCore
+import GoogleSignIn
 import Styleguide
 import SwiftUI
 
@@ -12,10 +13,22 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
     ) -> Bool {
         FirebaseApp.configure()
 
+        guard let clientID = FirebaseApp.app()?.options.clientID else { return true }
+        let config = GIDConfiguration(clientID: clientID)
+        GIDSignIn.sharedInstance.configuration = config
+
         // Override apple's buggy alerts tintColor not taking effect.
         UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor.accent
 
         return true
+    }
+
+    func application(
+        _: UIApplication,
+        open url: URL,
+        options _: [UIApplication.OpenURLOptionsKey: Any] = [:]
+    ) -> Bool {
+        GIDSignIn.sharedInstance.handle(url)
     }
 }
 

@@ -78,11 +78,11 @@ public struct AuthView: View {
 
                 VStack(spacing: 16) {
                     ServiceButton(authService: .google) {
-                        send(.loginButtonTapped)
+                        send(.authServiceButtonTapped(.google))
                     }
 
                     ServiceButton(authService: .facebook) {
-                        send(.loginButtonTapped)
+                        send(.authServiceButtonTapped(.facebook))
                     }
                 }
             }
