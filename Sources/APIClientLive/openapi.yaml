@@ -1,11 +1,4 @@
 openapi: 3.1.0
-info:
-  title: EventBook API
-  description: API documentation for the EventBook application.
-  version: '1.0.0'
-servers:
-  - url: https://api.eventbook.pp.ua
-    description: Production server
 paths:
   /signup:
     post:
@@ -93,7 +86,14 @@ paths:
                 $ref: '#/components/schemas/ApiErrorDto'
       security:
         - bearer: []
-
+info:
+  title: EventBook API
+  description: REST API for EventBook
+  version: '1.0'
+  contact: {}
+tags: []
+servers:
+  - url: https://api.eventbook.pp.ua
 components:
   securitySchemes:
     bearer:
