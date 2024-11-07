@@ -3,8 +3,13 @@ import FirebaseCore
 import Foundation
 import SharedModels
 
-extension FirebaseAuth.User {
-    func toDomain() throws -> SharedModels.User {
-        try User(id: self.uid, email: self.email)
+extension FirebaseAuth.AuthDataResult {
+    func toUser() throws -> SharedModels.User {
+        try User(
+            id: self.user.uid,
+            email: self.additionalUserInfo?.profile?["email"] as? String,
+            fullName: self.user.displayName,
+            photoURL: self.user.photoURL
+        )
     }
 }

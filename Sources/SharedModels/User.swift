@@ -55,21 +55,41 @@ struct MissingEmailError: Error {}
 public struct User: Codable, Sendable, Equatable {
     public let id: String
     public let email: String
+    public let fullName: String?
+    public let photoURL: URL?
 
-    public init(id: String, email: String) {
+    public init(
+        id: String,
+        email: String,
+        fullName: String? = nil,
+        photoURL: URL? = nil
+    ) {
         self.id = id
         self.email = email
+        self.fullName = fullName
+        self.photoURL = photoURL
     }
 
-    public init(id: String, email: String?) throws {
-        guard let email else { throw MissingEmailError() }
+    public init(
+        id: String,
+        email: String? = nil,
+        fullName: String? = nil,
+        photoURL: URL? = nil
+    )
+        throws
+    {
+        guard let email else {
+            throw MissingEmailError()
+        }
         self.id = id
         self.email = email
+        self.fullName = fullName
+        self.photoURL = photoURL
     }
 }
 
 public extension User {
     static var mock: Self {
-        .init(id: "id", email: "email")
+        .init(id: "id", email: "email", fullName: "fullName")
     }
 }
