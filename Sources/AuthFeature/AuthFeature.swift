@@ -90,7 +90,7 @@ public struct AuthFeature: Reducer, Sendable {
                 case let .success(response):
                     do {
                         try self.session.authenticate(response.user.toDomain())
-                        Task { @MainActor in
+                        _ = Task { @MainActor in
                             let token = try await response.user.getIDToken()
                             try self.session.setCurrentAuthenticationToken(token)
                         }
