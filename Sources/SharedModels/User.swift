@@ -27,12 +27,10 @@ public extension SignupResponse {
 }
 
 public struct LoginRequest: Codable, Sendable {
-    public let email: String
-    public let password: String
+    public let idToken: String
 
-    public init(email: String, password: String) {
-        self.email = email
-        self.password = password
+    public init(idToken: String) {
+        self.idToken = idToken
     }
 }
 
@@ -52,11 +50,19 @@ public extension LoginResponse {
     }
 }
 
-public struct User: Codable, Sendable {
+struct MissingEmailError: Error {}
+
+public struct User: Codable, Sendable, Equatable {
     public let id: String
     public let email: String
 
     public init(id: String, email: String) {
+        self.id = id
+        self.email = email
+    }
+
+    public init(id: String, email: String?) throws {
+        guard let email else { throw MissingEmailError() }
         self.id = id
         self.email = email
     }

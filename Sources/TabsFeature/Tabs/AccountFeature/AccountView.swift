@@ -13,12 +13,20 @@ public struct AccountView: View {
     }
 
     public var body: some View {
-        VStack {
+        VStack(spacing: 30) {
             EmptyTabView()
+
+            Button("Logout") {
+                send(.logoutButtonTapped)
+            }
+            .buttonStyle(.primary(size: .small))
         }
         .onAppear {
             send(.onAppear)
         }
+        .alert(
+            store: self.store.scope(state: \.$destination.alert, action: \.destination.alert)
+        )
     }
 }
 

@@ -2,6 +2,7 @@ import AuthFeature
 import ComposableArchitecture
 import Dependencies
 import OSLog
+import SharedModels
 import SplashFeature
 import TabsFeature
 
@@ -26,7 +27,7 @@ public struct AppReducer: Reducer, Sendable {
     public enum Destination {
         @ReducerCaseIgnored
         case splash
-        case auth(Auth)
+        case auth(AuthFeature)
         case tabs(Tabs)
     }
 
@@ -43,6 +44,10 @@ public struct AppReducer: Reducer, Sendable {
 
         Reduce { state, action in
             switch action {
+            case .destination(.auth(.delegate(.authSuccessful))):
+                state.destination = .tabs(Tabs.State())
+                return .none
+
             case .destination:
                 return .none
 
@@ -56,25 +61,23 @@ public struct AppReducer: Reducer, Sendable {
                         if let storedAuthToken = try self.session.currentAuthenticationToken() {
                             logger.info("Found authentication token in keychain, attempting to login...")
                             try self.session.setCurrentAuthenticationToken(storedAuthToken)
-                            let currentUser = try await self.api.getCurrentUser()
-                            self.session.authenticate(currentUser)
+                            let response = try await self.api.login(LoginRequest(idToken: storedAuthToken))
+                            self.session.authenticate(response.user)
                             logger.info("Logged in successfully!")
                             await send(.changeToDestination(.tabs(Tabs.State())))
                         } else {
-                            await send(.changeToDestination(.auth(Auth.State())))
+                            await send(.changeToDestination(.auth(AuthFeature.State())))
                             logger.info("Did not find a stored authentication token, showing login screen.")
                         }
                     } catch {
                         logger.warning("An error occurred while trying to sign the user in: \(error)")
-                        await send(.changeToDestination(.auth(Auth.State())))
+                        await send(.changeToDestination(.auth(AuthFeature.State())))
                         try self.session.logout()
                     }
 
-                    await send(.changeToDestination(.tabs(Tabs.State())))
-
                     // Logout
                     for await user in self.session.currentUsers() where user == nil {
-                        await send(.changeToDestination(.auth(Auth.State())))
+                        await send(.changeToDestination(.auth(AuthFeature.State())))
                     }
                 }
             }

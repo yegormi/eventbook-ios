@@ -25,6 +25,7 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-openapi-generator", from: "1.4.0"),
         .package(url: "https://github.com/apple/swift-openapi-runtime", from: "1.6.0"),
         .package(url: "https://github.com/apple/swift-openapi-urlsession", from: "1.0.2"),
+        .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "11.4.0"),
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "1.15.2"),
         .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.4.1"),
         .package(url: "https://github.com/pointfreeco/swift-tagged", from: "0.10.0"),
@@ -73,6 +74,8 @@ let package = Package(
             dependencies: [
                 "APIClient",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+                .product(name: "FirebaseCore", package: "firebase-ios-sdk"),
+                .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
                 "Helpers",
                 "Styleguide",
                 "SharedModels",
@@ -101,6 +104,7 @@ let package = Package(
             name: "KeychainClient",
             dependencies: [
                 .product(name: "Dependencies", package: "swift-dependencies"),
+                .product(name: "Tagged", package: "swift-tagged"),
             ]
         ),
         .target(

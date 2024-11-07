@@ -3,11 +3,11 @@ import Foundation
 import Styleguide
 import SwiftUI
 
-@ViewAction(for: Auth.self)
+@ViewAction(for: AuthFeature.self)
 public struct AuthView: View {
-    @Bindable public var store: StoreOf<Auth>
+    @Bindable public var store: StoreOf<AuthFeature>
 
-    public init(store: StoreOf<Auth>) {
+    public init(store: StoreOf<AuthFeature>) {
         self.store = store
     }
 
@@ -53,13 +53,12 @@ public struct AuthView: View {
                 }
                 .buttonStyle(.primary(size: .fullWidth))
                 .disabled(!self.store.isFormValid || self.store.isLoading)
-                .animation(.smooth, value: self.store.isFormValid)
 
                 HStack(spacing: 5) {
                     Group {
                         Text(self.store.authType == .signIn ? "Don't have an account?" : "Already have an account?")
                         Text(self.store.authType == .signIn ? "Sign up" : "Log in")
-                            .foregroundStyle(Color.purplePrimary)
+                            .foregroundStyle(Color.purple300)
                             .onTapGesture {
                                 send(.toggleButtonTapped)
                             }
