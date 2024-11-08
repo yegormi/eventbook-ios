@@ -5,8 +5,15 @@ import GoogleSignIn
 import Helpers
 import UIKit
 
-private enum GoogleAuthError: Error {
+private enum GoogleAuthError: LocalizedError {
     case tokenUnavailable
+
+    var errorDescription: String? {
+        switch self {
+        case .tokenUnavailable:
+            "Token is currently unavailable. Please try again later."
+        }
+    }
 }
 
 extension GoogleClient: DependencyKey {
@@ -34,3 +41,5 @@ extension GoogleClient: DependencyKey {
         }
     )
 }
+
+extension GIDSignInResult: @unchecked Sendable {}
