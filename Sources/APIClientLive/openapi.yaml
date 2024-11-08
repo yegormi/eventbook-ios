@@ -1,11 +1,11 @@
-openapi: 3.1.0
+openapi: 3.0.0
 paths:
   /signup:
     post:
       operationId: signup
       summary: Sign up
       tags:
-        - user
+        - auth
       parameters: []
       requestBody:
         required: true
@@ -37,7 +37,7 @@ paths:
       operationId: login
       summary: Log in
       tags:
-        - user
+        - auth
       parameters: []
       requestBody:
         required: true
@@ -86,6 +86,23 @@ paths:
                 $ref: '#/components/schemas/ApiErrorDto'
       security:
         - bearer: []
+    delete:
+      operationId: deleteMe
+      summary: Delete the current user
+      tags:
+        - user
+      parameters: []
+      responses:
+        '200':
+          description: ''
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+      security:
+        - bearer: []
 info:
   title: EventBook API
   description: REST API for EventBook
@@ -106,6 +123,7 @@ components:
       properties:
         email:
           type: string
+          format: email
         password:
           type: string
       required:
@@ -120,11 +138,31 @@ components:
           description: The id of the user
         email:
           type: string
+          example: johndoe@example.com
+          format: email
+          description: The email of the user
+          nullable: true
+        fullName:
+          type: string
           example: John Doe
-          description: The name of the user
+          description: The full name of the user
+          nullable: true
+        phoneNumber:
+          type: string
+          example: '+1234567890'
+          description: The phone number of the user
+          nullable: true
+        avatar:
+          type: string
+          example: https://example.com/avatar.jpg
+          description: The avatar URL of the user
+          nullable: true
       required:
         - id
         - email
+        - fullName
+        - phoneNumber
+        - avatar
     SignupResponseDto:
       type: object
       properties:
