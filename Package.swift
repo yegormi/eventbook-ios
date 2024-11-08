@@ -11,6 +11,7 @@ let package = Package(
         .library(name: "APIClient", targets: ["APIClient"]),
         .library(name: "APIClientLive", targets: ["APIClientLive"]),
         .library(name: "AppFeature", targets: ["AppFeature"]),
+        .library(name: "FacebookClient", targets: ["FacebookClient"]),
         .library(name: "GoogleClient", targets: ["GoogleClient"]),
         .library(name: "AuthFeature", targets: ["AuthFeature"]),
         .library(name: "Helpers", targets: ["Helpers"]),
@@ -93,9 +94,21 @@ let package = Package(
             ]
         ),
         .target(
+            name: "FacebookClient",
+            dependencies: [
+                .product(name: "Dependencies", package: "swift-dependencies"),
+                .product(name: "DependenciesMacros", package: "swift-dependencies"),
+                .product(name: "FacebookCore", package: "facebook-ios-sdk"),
+                .product(name: "FacebookLogin", package: "facebook-ios-sdk"),
+                "Helpers",
+                "SharedModels"
+            ]
+        ),
+        .target(
             name: "AuthFeature",
             dependencies: [
                 "APIClient",
+                "FacebookClient",
                 "GoogleClient",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 .product(name: "FirebaseCore", package: "firebase-ios-sdk"),

@@ -20,6 +20,10 @@
 	<string>4d6859f05c1bd9bdb1a228e4d047e4f3</string>
 	<key>FacebookDisplayName</key>
 	<string>Eventer</string>
+    <key>FacebookAutoLogAppEventsEnabled</key>
+    <string>TRUE</string>
+    <key>FacebookAdvertiserIDCollectionEnabled</key>
+    <string>TRUE</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>

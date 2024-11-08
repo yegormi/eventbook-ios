@@ -1,5 +1,6 @@
 import APIClient
 import ComposableArchitecture
+import FacebookClient
 @preconcurrency import FirebaseAuth
 import FirebaseCore
 import Foundation
@@ -51,6 +52,7 @@ public struct AuthFeature: Reducer, Sendable {
         public enum Internal {
             case authResponse(Result<AuthDataResult, Error>)
             case googleResponse(Result<GoogleUser, Error>)
+            case facebookResponse(Result<String, Error>)
         }
 
         public enum View: BindableAction {
@@ -73,7 +75,9 @@ public struct AuthFeature: Reducer, Sendable {
 
     @Dependency(\.dismiss) var dismiss
 
-    @Dependency(\.authGoogle) var authGoogle
+    @Dependency(\.authGoogle) var google
+
+    @Dependency(\.authFacebook) var facebook
 
     public init() {}
 
@@ -124,8 +128,22 @@ public struct AuthFeature: Reducer, Sendable {
                         })))
                     }
 
-                case let .failure(error):
-                    state.destination = .alert(.failedToAuth(error: error))
+                case .failure:
+                    return .none
+                }
+
+            case let .internal(.facebookResponse(result)):
+                switch result {
+                case let .success(idToken):
+                    let credential = FacebookAuthProvider.credential(withAccessToken: idToken)
+
+                    return .run { send in
+                        await send(.internal(.authResponse(Result {
+                            try await Auth.auth().signIn(with: credential)
+                        })))
+                    }
+
+                case .failure:
                     return .none
                 }
 
@@ -146,9 +164,17 @@ public struct AuthFeature: Reducer, Sendable {
             case let .view(.authServiceButtonTapped(service)):
                 switch service {
                 case .google:
-                    return self.googleAuth(&state)
+                    return .run { send in
+                        await send(.internal(.googleResponse(Result {
+                            try await self.google.authenticate()
+                        })))
+                    }
                 case .facebook:
-                    return self.facebookAuth(&state)
+                    return .run { send in
+                        await send(.internal(.facebookResponse(Result {
+                            try await self.facebook.authenticate()
+                        })))
+                    }
                 }
             }
         }
@@ -181,18 +207,6 @@ public struct AuthFeature: Reducer, Sendable {
                 )
             })))
         }
-    }
-
-    private func googleAuth(_: inout State) -> Effect<Action> {
-        .run { send in
-            await send(.internal(.googleResponse(Result {
-                try await self.authGoogle.authenticate()
-            })))
-        }
-    }
-
-    private func facebookAuth(_: inout State) -> Effect<Action> {
-        .none
     }
 }
 
