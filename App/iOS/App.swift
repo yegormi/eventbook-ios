@@ -1,5 +1,6 @@
 import AppFeature
 import ComposableArchitecture
+import FacebookCore
 import FirebaseAuth
 import FirebaseCore
 import GoogleSignIn
@@ -8,9 +9,14 @@ import SwiftUI
 
 final class AppDelegate: NSObject, UIApplicationDelegate {
     func application(
-        _: UIApplication,
-        didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]? = nil
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
+        ApplicationDelegate.shared.application(
+            application,
+            didFinishLaunchingWithOptions: launchOptions
+        )
+
         FirebaseApp.configure()
 
         guard let clientID = FirebaseApp.app()?.options.clientID else { return true }
@@ -23,12 +29,17 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         return true
     }
 
-    func application(
-        _: UIApplication,
-        open url: URL,
-        options _: [UIApplication.OpenURLOptionsKey: Any] = [:]
-    ) -> Bool {
-        GIDSignIn.sharedInstance.handle(url)
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
+        let facebookHandle = ApplicationDelegate.shared.application(
+            app,
+            open: url,
+            sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
+            annotation: options[UIApplication.OpenURLOptionsKey.annotation]
+        )
+
+        let googleHandle = GIDSignIn.sharedInstance.handle(url)
+
+        return facebookHandle || googleHandle
     }
 }
 
