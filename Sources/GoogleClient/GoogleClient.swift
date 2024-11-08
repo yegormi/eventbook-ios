@@ -5,7 +5,7 @@ import SharedModels
 
 @DependencyClient
 public struct GoogleClient: Sendable {
-    public var authenticate: @Sendable () async throws -> GoogleUser
+    public var authenticate: @Sendable @MainActor () async throws -> GoogleUser
     public var restorePreviousSignIn: @Sendable () async throws -> GoogleUser
     public var signOut: @Sendable () async throws -> Void
 }
