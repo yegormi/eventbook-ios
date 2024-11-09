@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8C596C2E2CDF997100A9E196 /* AppTrackingTransparency.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C596C2D2CDF997100A9E196 /* AppTrackingTransparency.framework */; };
 		8C6F32622CDE4C6C00C0394B /* FacebookCore in Frameworks */ = {isa = PBXBuildFile; productRef = 8C6F32612CDE4C6C00C0394B /* FacebookCore */; };
 		8C6F32642CDE4C6C00C0394B /* FacebookLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 8C6F32632CDE4C6C00C0394B /* FacebookLogin */; };
 		8C9F82942CDBC66500097A22 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 8C9F82932CDBC66500097A22 /* FirebaseAuth */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8C596C2D2CDF997100A9E196 /* AppTrackingTransparency.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppTrackingTransparency.framework; path = System/Library/Frameworks/AppTrackingTransparency.framework; sourceTree = SDKROOT; };
 		8C6A65002CD93652004F42E5 /* EventBook.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EventBook.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C7BE9BF2CDD3AC30043EF98 /* EventBook-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "EventBook-Info.plist"; sourceTree = "<group>"; };
 		EEA021482B9E4C210098989F /* eventbook-ios */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "eventbook-ios"; path = ..; sourceTree = "<group>"; };
@@ -35,6 +37,7 @@
 				8C6F32642CDE4C6C00C0394B /* FacebookLogin in Frameworks */,
 				8CFBEFA42CDD3B6D00E15AF8 /* GoogleSignIn in Frameworks */,
 				EEA0214B2B9E67200098989F /* AppFeature in Frameworks */,
+				8C596C2E2CDF997100A9E196 /* AppTrackingTransparency.framework in Frameworks */,
 				8C6F32622CDE4C6C00C0394B /* FacebookCore in Frameworks */,
 				8C9F82942CDBC66500097A22 /* FirebaseAuth in Frameworks */,
 				8CFBEFA62CDD3B6D00E15AF8 /* GoogleSignInSwift in Frameworks */,
@@ -60,6 +63,7 @@
 		EEA021492B9E67200098989F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8C596C2D2CDF997100A9E196 /* AppTrackingTransparency.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -288,6 +292,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "EventBook-Info.plist";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "Allow tracking to personalize your experience and show relevant content. Your data is protected as per our Privacy Policy.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -321,6 +326,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "EventBook-Info.plist";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "Allow tracking to personalize your experience and show relevant content. Your data is protected as per our Privacy Policy.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

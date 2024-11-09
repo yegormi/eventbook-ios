@@ -84,30 +84,11 @@ let package = Package(
             ]
         ),
         .target(
-            name: "GoogleClient",
-            dependencies: [
-                .product(name: "Dependencies", package: "swift-dependencies"),
-                .product(name: "DependenciesMacros", package: "swift-dependencies"),
-                .product(name: "GoogleSignIn", package: "GoogleSignIn-iOS"),
-                "Helpers",
-                "SharedModels"
-            ]
-        ),
-        .target(
-            name: "FacebookClient",
-            dependencies: [
-                .product(name: "Dependencies", package: "swift-dependencies"),
-                .product(name: "DependenciesMacros", package: "swift-dependencies"),
-                .product(name: "FacebookCore", package: "facebook-ios-sdk"),
-                .product(name: "FacebookLogin", package: "facebook-ios-sdk"),
-                "Helpers",
-                "SharedModels"
-            ]
-        ),
-        .target(
             name: "AuthFeature",
             dependencies: [
                 "APIClient",
+                .product(name: "FacebookCore", package: "facebook-ios-sdk"),
+                .product(name: "FacebookLogin", package: "facebook-ios-sdk"),
                 "FacebookClient",
                 "GoogleClient",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
@@ -121,6 +102,27 @@ let package = Package(
                 "SessionClient",
             ],
             resources: [.process("Resources")]
+        ),
+        .target(
+            name: "FacebookClient",
+            dependencies: [
+                .product(name: "Dependencies", package: "swift-dependencies"),
+                .product(name: "DependenciesMacros", package: "swift-dependencies"),
+                .product(name: "FacebookCore", package: "facebook-ios-sdk"),
+                .product(name: "FacebookLogin", package: "facebook-ios-sdk"),
+                "Helpers",
+                "SharedModels"
+            ]
+        ),
+        .target(
+            name: "GoogleClient",
+            dependencies: [
+                .product(name: "Dependencies", package: "swift-dependencies"),
+                .product(name: "DependenciesMacros", package: "swift-dependencies"),
+                .product(name: "GoogleSignIn", package: "GoogleSignIn-iOS"),
+                "Helpers",
+                "SharedModels"
+            ]
         ),
         .target(
             name: "Helpers",

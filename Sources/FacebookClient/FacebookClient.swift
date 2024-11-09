@@ -4,15 +4,13 @@ import SharedModels
 
 @DependencyClient
 public struct FacebookClient: Sendable {
-    public var authenticate: @Sendable () async throws -> String
-    public var restorePreviousSignIn: @Sendable () async throws -> String
+    public var authenticate: @Sendable @MainActor () async throws -> String
     public var signOut: @Sendable () async throws -> Void
 }
 
 public extension FacebookClient {
     static let mock = FacebookClient(
-        authenticate: { "idToken" },
-        restorePreviousSignIn: { "idToken" },
+        authenticate: { "accessToken" },
         signOut: {}
     )
 }

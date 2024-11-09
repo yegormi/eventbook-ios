@@ -1,6 +1,8 @@
 import APIClient
 import ComposableArchitecture
 import FacebookClient
+import FacebookCore
+import FacebookLogin
 @preconcurrency import FirebaseAuth
 import FirebaseCore
 import Foundation
@@ -128,14 +130,15 @@ public struct AuthFeature: Reducer, Sendable {
                         })))
                     }
 
-                case .failure:
+                case let .failure(error):
+                    state.destination = .alert(.failedToAuth(error: error))
                     return .none
                 }
 
             case let .internal(.facebookResponse(result)):
                 switch result {
-                case let .success(idToken):
-                    let credential = FacebookAuthProvider.credential(withAccessToken: idToken)
+                case let .success(accessToken):
+                    let credential = FacebookAuthProvider.credential(withAccessToken: accessToken)
 
                     return .run { send in
                         await send(.internal(.authResponse(Result {
@@ -143,7 +146,8 @@ public struct AuthFeature: Reducer, Sendable {
                         })))
                     }
 
-                case .failure:
+                case let .failure(error):
+                    state.destination = .alert(.failedToAuth(error: error))
                     return .none
                 }
 
