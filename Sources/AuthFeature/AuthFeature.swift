@@ -95,7 +95,7 @@ public struct AuthFeature: Reducer, Sendable {
                 return .none
 
             case let .internal(.authResponse(result)):
-                state.isLoading = false
+                defer { state.isLoading = false }
 
                 switch result {
                 case let .success(response):
@@ -121,8 +121,6 @@ public struct AuthFeature: Reducer, Sendable {
                 }
 
             case let .internal(.googleResponse(result)):
-                state.isLoading = false
-
                 switch result {
                 case let .success(user):
                     let credential = GoogleAuthProvider.credential(
@@ -137,6 +135,7 @@ public struct AuthFeature: Reducer, Sendable {
                     }
 
                 case let .failure(error):
+                    state.isLoading = false
                     if let googleError = error as? GIDSignInError, googleError.code != .canceled {
                         state.destination = .alert(.failedToAuth(error: error))
                     }
@@ -144,8 +143,6 @@ public struct AuthFeature: Reducer, Sendable {
                 }
 
             case let .internal(.facebookResponse(result)):
-                state.isLoading = false
-
                 switch result {
                 case let .success(accessToken):
                     let credential = FacebookAuthProvider.credential(withAccessToken: accessToken)
@@ -157,6 +154,7 @@ public struct AuthFeature: Reducer, Sendable {
                     }
 
                 case let .failure(error):
+                    state.isLoading = false
                     if let fbError = error as? FacebookAuthError, fbError != .canceled {
                         state.destination = .alert(.failedToAuth(error: error))
                     }
