@@ -11,6 +11,7 @@ let package = Package(
         .library(name: "APIClient", targets: ["APIClient"]),
         .library(name: "APIClientLive", targets: ["APIClientLive"]),
         .library(name: "AppFeature", targets: ["AppFeature"]),
+        .library(name: "FacebookClient", targets: ["FacebookClient"]),
         .library(name: "GoogleClient", targets: ["GoogleClient"]),
         .library(name: "AuthFeature", targets: ["AuthFeature"]),
         .library(name: "Helpers", targets: ["Helpers"]),
@@ -27,6 +28,7 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-openapi-generator", from: "1.4.0"),
         .package(url: "https://github.com/apple/swift-openapi-runtime", from: "1.6.0"),
         .package(url: "https://github.com/apple/swift-openapi-urlsession", from: "1.0.2"),
+        .package(url: "https://github.com/facebook/facebook-ios-sdk", from: "17.4.0"),
         .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "11.4.0"),
         .package(url: "https://github.com/google/GoogleSignIn-iOS", from: "8.0.0"),
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "1.15.2"),
@@ -82,6 +84,38 @@ let package = Package(
             ]
         ),
         .target(
+            name: "AuthFeature",
+            dependencies: [
+                "APIClient",
+                .product(name: "FacebookCore", package: "facebook-ios-sdk"),
+                .product(name: "FacebookLogin", package: "facebook-ios-sdk"),
+                "FacebookClient",
+                "GoogleClient",
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+                .product(name: "FirebaseCore", package: "firebase-ios-sdk"),
+                .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
+                .product(name: "GoogleSignIn", package: "GoogleSignIn-iOS"),
+                "Helpers",
+                "KeychainClient",
+                "Styleguide",
+                "SharedModels",
+                "SwiftUIHelpers",
+                "SessionClient",
+            ],
+            resources: [.process("Resources")]
+        ),
+        .target(
+            name: "FacebookClient",
+            dependencies: [
+                .product(name: "Dependencies", package: "swift-dependencies"),
+                .product(name: "DependenciesMacros", package: "swift-dependencies"),
+                .product(name: "FacebookCore", package: "facebook-ios-sdk"),
+                .product(name: "FacebookLogin", package: "facebook-ios-sdk"),
+                "Helpers",
+                "SharedModels"
+            ]
+        ),
+        .target(
             name: "GoogleClient",
             dependencies: [
                 .product(name: "Dependencies", package: "swift-dependencies"),
@@ -90,23 +124,6 @@ let package = Package(
                 "Helpers",
                 "SharedModels"
             ]
-        ),
-        .target(
-            name: "AuthFeature",
-            dependencies: [
-                "APIClient",
-                "GoogleClient",
-                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-                .product(name: "FirebaseCore", package: "firebase-ios-sdk"),
-                .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
-                .product(name: "GoogleSignIn", package: "GoogleSignIn-iOS"),
-                "Helpers",
-                "Styleguide",
-                "SharedModels",
-                "KeychainClient",
-                "SessionClient",
-            ],
-            resources: [.process("Resources")]
         ),
         .target(
             name: "Helpers",

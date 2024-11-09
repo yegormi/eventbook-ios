@@ -2,6 +2,7 @@ import ComposableArchitecture
 import Foundation
 import Styleguide
 import SwiftUI
+import SwiftUIHelpers
 
 @ViewAction(for: AuthFeature.self)
 public struct AuthView: View {
@@ -45,11 +46,7 @@ public struct AuthView: View {
                         send(.signupButtonTapped)
                     }
                 } label: {
-                    if self.store.isLoading {
-                        ProgressView()
-                    } else {
-                        Text(self.store.authType.title)
-                    }
+                    Text(self.store.authType.title)
                 }
                 .buttonStyle(.primary(size: .fullWidth))
                 .disabled(!self.store.isFormValid || self.store.isLoading)
@@ -89,6 +86,7 @@ public struct AuthView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(30)
+        .isLoading(self.store.isLoading)
         .alert(self.$store.scope(state: \.destination?.alert, action: \.destination.alert))
     }
 }
