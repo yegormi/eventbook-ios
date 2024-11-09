@@ -26,6 +26,7 @@ extension APIClient: DependencyKey {
             middlewares: [
                 ErrorMiddleware(),
                 AuthenticationMiddleware(),
+                LoggingMiddleware(),
             ]
         )
 

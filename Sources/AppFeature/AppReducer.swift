@@ -58,16 +58,17 @@ public struct AppReducer: Reducer, Sendable {
             case .task:
                 return .run { send in
                     do {
-                        if let storedAuthToken = try self.session.currentAuthenticationToken() {
-                            logger.info("Found authentication token in keychain, attempting to login...")
-                            try self.session.setCurrentAuthenticationToken(storedAuthToken)
-                            let response = try await self.api.login(LoginRequest(idToken: storedAuthToken))
+                        if let storedIDToken = try self.session.currentIDToken() {
+                            logger.info("Found ID token in keychain, attempting to login...")
+                            try self.session.setCurrentIDToken(storedIDToken)
+                            let response = try await self.api.login(LoginRequest(idToken: storedIDToken))
+                            try self.session.setCurrentAccessToken(response.accessToken)
                             self.session.authenticate(response.user)
                             logger.info("Logged in successfully!")
                             await send(.changeToDestination(.tabs(Tabs.State())))
                         } else {
                             await send(.changeToDestination(.auth(AuthFeature.State())))
-                            logger.info("Did not find a stored authentication token, showing login screen.")
+                            logger.info("Did not find a stored ID token, showing login screen.")
                         }
                     } catch {
                         logger.warning("An error occurred while trying to sign the user in: \(error)")

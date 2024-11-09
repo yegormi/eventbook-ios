@@ -74,7 +74,6 @@ struct EventBookApp: App {
 
     let store = Store(initialState: AppReducer.State()) {
         AppReducer()
-//            ._printChanges()
     }
 
     var body: some Scene {

@@ -21,8 +21,8 @@ struct AuthenticationMiddleware: ClientMiddleware {
     {
         @Dependency(\.session) var session
         var request = request
-        if let token = try session.currentAuthenticationToken() {
-            request.headerFields[.authorization] = "\(token)"
+        if let token = try session.currentAccessToken() {
+            request.headerFields[.authorization] = "Bearer \(token)"
         }
         return try await next(request, body, baseURL)
     }

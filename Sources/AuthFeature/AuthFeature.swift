@@ -99,18 +99,22 @@ public struct AuthFeature: Reducer, Sendable {
 
                 switch result {
                 case let .success(response):
-                    do {
-                        try self.session.authenticate(response.toUser())
-                        _ = Task { @MainActor in
+                    return .run { send in
+                        do {
                             let token = try await response.user.getIDToken()
-                            try self.session.setCurrentAuthenticationToken(token)
+                            let response = try await self.api.login(LoginRequest(idToken: token))
+                            logger.info("Logged in the user successfully!")
+
+                            self.session.authenticate(response.user)
+                            try self.session.setCurrentIDToken(token)
+                            try self.session.setCurrentAccessToken(response.accessToken)
+
+                            logger.info("Authenticated the user locally!")
+                            await send(.delegate(.authSuccessful))
+                        } catch {
+                            logger.error("Failed to authenticate the user, error: \(error)")
                         }
-                    } catch {
-                        logger.error("Failed to authenticate the user, error: \(error)")
                     }
-
-                    return .send(.delegate(.authSuccessful))
-
                 case let .failure(error):
                     state.destination = .alert(.failedToAuth(error: error))
                     return .none

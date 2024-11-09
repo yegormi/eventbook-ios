@@ -7,7 +7,8 @@ extension SessionClient: DependencyKey {
     public static var liveValue: SessionClient {
         struct Storage {
             var currentUser: User?
-            var currentAuthenticationToken: String?
+            var currentIDToken: String?
+            var currentAccessToken: String?
         }
 
         let storage = LockIsolated(Storage())
@@ -20,15 +21,30 @@ extension SessionClient: DependencyKey {
                 storage.withValue { $0.currentUser = user }
                 subject.send(user)
             },
-            setCurrentAuthenticationToken: { token in
-                storage.withValue { $0.currentAuthenticationToken = token }
-                try keychain.set(.appAuthenticationToken, to: token)
+            setCurrentAccessToken: { token in
+                storage.withValue { $0.currentAccessToken = token }
+                try keychain.set(.appAccessToken, to: token)
             },
-            currentAuthenticationToken: {
-                guard let token = storage.value.currentAuthenticationToken else {
-                    let savedToken: String? = try keychain.get(.appAuthenticationToken)
+            setCurrentIDToken: { token in
+                storage.withValue { $0.currentIDToken = token }
+                try keychain.set(.appIDToken, to: token)
+            },
+            currentAccessToken: {
+                guard let token = storage.value.currentAccessToken else {
+                    let savedToken: String? = try keychain.get(.appAccessToken)
                     if let savedToken {
-                        storage.withValue { $0.currentAuthenticationToken = savedToken }
+                        storage.withValue { $0.currentAccessToken = savedToken }
+                    }
+                    return savedToken
+                }
+
+                return token
+            },
+            currentIDToken: {
+                guard let token = storage.value.currentIDToken else {
+                    let savedToken: String? = try keychain.get(.appIDToken)
+                    if let savedToken {
+                        storage.withValue { $0.currentIDToken = savedToken }
                     }
                     return savedToken
                 }
@@ -41,11 +57,13 @@ extension SessionClient: DependencyKey {
             },
             logout: {
                 storage.withValue {
-                    $0.currentAuthenticationToken = nil
+                    $0.currentIDToken = nil
+                    $0.currentAccessToken = nil
                     $0.currentUser = nil
                 }
                 subject.send(nil)
-                try keychain.delete(.appAuthenticationToken)
+                try keychain.delete(.appIDToken)
+                try keychain.delete(.appAccessToken)
             }
         )
     }
