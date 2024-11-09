@@ -14,6 +14,7 @@ public struct Account: Reducer, Sendable {
         @Presents var destination: Destination.State?
 
         var user: User
+        var isLoading = false
 
         public init() {
             @Dependency(\.session) var session
@@ -29,7 +30,10 @@ public struct Account: Reducer, Sendable {
 
         public enum Delegate: Equatable {}
 
-        public enum Internal: Equatable {}
+        public enum Internal {
+            case logoutResult(Result<Void, Error>)
+            case deleteResponse(Result<Void, Error>)
+        }
 
         public enum View: Equatable, BindableAction {
             case binding(BindingAction<Account.State>)
@@ -42,6 +46,7 @@ public struct Account: Reducer, Sendable {
     @Reducer(state: .equatable, action: .equatable)
     public enum Destination {
         case alert(AlertState<Alert>)
+        case plainAlert(AlertState<Never>)
 
         public enum Alert: Equatable, Sendable {
             case logoutTapped
@@ -64,28 +69,33 @@ public struct Account: Reducer, Sendable {
                 return .none
 
             case .destination(.presented(.alert(.logoutTapped))):
-                return .run { _ in
-                    do {
-                        try self.session.logout()
-                    } catch {
-                        logger.warning("Failed to log out, error: \(error)")
-                    }
-                }
+                return self.logout(&state)
 
             case .destination(.presented(.alert(.deleteTapped))):
-                return .run { _ in
-                    do {
-                        try await self.api.deleteCurrentUser()
-                        try self.session.logout()
-                    } catch {
-                        logger.warning("Failed to delete the account, error: \(error)")
-                    }
-                }
+                return self.deleteAccount(&state)
 
             case .destination:
                 return .none
 
-            case .internal:
+            case let .internal(.logoutResult(result)):
+                state.isLoading = false
+
+                if case let .failure(error) = result {
+                    logger.warning("Failed to log out, error: \(error)")
+                    state.destination = .plainAlert(.failed(error))
+                }
+                return .none
+
+            case let .internal(.deleteResponse(result)):
+                state.isLoading = false
+
+                switch result {
+                case .success:
+                    return self.logout(&state)
+                case let .failure(error):
+                    logger.warning("Failed to delete the account, error: \(error)")
+                    state.destination = .plainAlert(.failed(error))
+                }
                 return .none
 
             case .view(.binding):
@@ -104,6 +114,28 @@ public struct Account: Reducer, Sendable {
             }
         }
         .ifLet(\.$destination, action: \.destination)
+    }
+
+    private func logout(_ state: inout State) -> Effect<Action> {
+        guard !state.isLoading else { return .none }
+        state.isLoading = true
+
+        return .run { send in
+            await send(.internal(.logoutResult(Result {
+                try self.session.logout()
+            })))
+        }
+    }
+
+    private func deleteAccount(_ state: inout State) -> Effect<Action> {
+        guard !state.isLoading else { return .none }
+        state.isLoading = true
+
+        return .run { send in
+            await send(.internal(.deleteResponse(Result {
+                try await self.api.deleteCurrentUser()
+            })))
+        }
     }
 }
 
@@ -134,5 +166,19 @@ extension AlertState where Action == Account.Destination.Alert {
         }
     } message: {
         TextState("Are you sure you want to delete your account? This action cannot be undone.")
+    }
+}
+
+extension AlertState where Action == Never {
+    static func failed(_ error: any Error) -> Self {
+        Self {
+            TextState("Failed to perform action")
+        } actions: {
+            ButtonState(role: .cancel) {
+                TextState("OK")
+            }
+        } message: {
+            TextState(error.localizedDescription)
+        }
     }
 }

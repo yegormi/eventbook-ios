@@ -37,8 +37,12 @@ public struct AccountView: View {
         .onAppear {
             send(.onAppear)
         }
+        .isLoading(self.store.isLoading)
         .alert(
             store: self.store.scope(state: \.$destination.alert, action: \.destination.alert)
+        )
+        .alert(
+            store: self.store.scope(state: \.$destination.plainAlert, action: \.destination.plainAlert)
         )
     }
 
