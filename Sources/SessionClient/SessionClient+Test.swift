@@ -4,8 +4,10 @@ import XCTestDynamicOverlay
 extension SessionClient: TestDependencyKey {
     public static let mock = Self(
         authenticate: { _ in },
-        setCurrentAuthenticationToken: { _ in },
-        currentAuthenticationToken: { nil },
+        setCurrentAccessToken: { _ in },
+        setCurrentIDToken: { _ in },
+        currentAccessToken: { nil },
+        currentIDToken: { nil },
         currentUser: { .mock },
         currentUsers: { .never },
         logout: {}

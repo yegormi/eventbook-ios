@@ -6,8 +6,10 @@ import SwiftUI
 @DependencyClient
 public struct SessionClient: Sendable {
     public var authenticate: @Sendable (User) -> Void
-    public var setCurrentAuthenticationToken: @Sendable (String) throws -> Void
-    public var currentAuthenticationToken: @Sendable () throws -> String?
+    public var setCurrentAccessToken: @Sendable (String) throws -> Void
+    public var setCurrentIDToken: @Sendable (String) throws -> Void
+    public var currentAccessToken: @Sendable () throws -> String?
+    public var currentIDToken: @Sendable () throws -> String?
     public var currentUser: @Sendable () -> User?
     public var currentUsers: @Sendable () -> AsyncStream<User?> = { .never }
     public var logout: @Sendable () throws -> Void

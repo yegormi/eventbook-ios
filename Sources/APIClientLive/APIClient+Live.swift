@@ -26,18 +26,36 @@ extension APIClient: DependencyKey {
             middlewares: [
                 ErrorMiddleware(),
                 AuthenticationMiddleware(),
+                LoggingMiddleware(),
             ]
         )
 
         return Self(
             signup: { @Sendable request in
                 try await throwingUnderlyingError {
-                    try await client.signup(body: .json(request.toAPI())).created.body.json.toDomain()
+                    try await client.signup(
+                        body: .json(request.toAPI())
+                    )
+                    .created
+                    .body
+                    .json
+                    .toDomain()
                 }
             },
             login: { @Sendable request in
                 try await throwingUnderlyingError {
-                    try await client.login(body: .json(request.toAPI())).created.body.json.toDomain()
+                    try await client.login(
+                        body: .json(request.toAPI())
+                    )
+                    .created
+                    .body
+                    .json
+                    .toDomain()
+                }
+            },
+            deleteCurrentUser: {
+                try await throwingUnderlyingError {
+                    _ = try await client.deleteMe().ok
                 }
             },
             getCurrentUser: {

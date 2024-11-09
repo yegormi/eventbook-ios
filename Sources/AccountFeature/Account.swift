@@ -1,3 +1,4 @@
+import APIClient
 import ComposableArchitecture
 import Foundation
 import OSLog
@@ -34,6 +35,7 @@ public struct Account: Reducer, Sendable {
             case binding(BindingAction<Account.State>)
             case onAppear
             case logoutButtonTapped
+            case deleteButtonTapped
         }
     }
 
@@ -46,6 +48,8 @@ public struct Account: Reducer, Sendable {
             case deleteTapped
         }
     }
+
+    @Dependency(\.apiClient) var api
 
     @Dependency(\.session) var session
 
@@ -68,6 +72,16 @@ public struct Account: Reducer, Sendable {
                     }
                 }
 
+            case .destination(.presented(.alert(.deleteTapped))):
+                return .run { _ in
+                    do {
+                        try await self.api.deleteCurrentUser()
+                        try self.session.logout()
+                    } catch {
+                        logger.warning("Failed to delete the account, error: \(error)")
+                    }
+                }
+
             case .destination:
                 return .none
 
@@ -82,6 +96,10 @@ public struct Account: Reducer, Sendable {
 
             case .view(.logoutButtonTapped):
                 state.destination = .alert(.logoutAccount)
+                return .none
+
+            case .view(.deleteButtonTapped):
+                state.destination = .alert(.deleteAccount)
                 return .none
             }
         }

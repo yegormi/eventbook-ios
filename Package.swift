@@ -39,6 +39,7 @@ let package = Package(
         .target(
             name: "AccountFeature",
             dependencies: [
+                "APIClientLive",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 "SessionClient",
                 "SharedModels",

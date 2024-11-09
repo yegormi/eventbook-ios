@@ -15,17 +15,25 @@ public struct AccountView: View {
 
     public var body: some View {
         ScrollView {
-            VStack(spacing: 24) {
+            VStack(spacing: 30) {
                 self.avatarCell(for: self.store.user)
 
-                Button("Logout") {
-                    send(.logoutButtonTapped)
+                VStack(spacing: 20) {
+                    Button("Logout") {
+                        send(.logoutButtonTapped)
+                    }
+                    .buttonStyle(.primary(size: .fullWidth))
+
+                    Button("Delete account") {
+                        send(.deleteButtonTapped)
+                    }
+                    .foregroundStyle(Color.red)
+                    .font(.labelMedium)
                 }
-                .buttonStyle(.primary(size: .small))
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .contentMargins(.horizontal, 16, for: .scrollContent)
+        .contentMargins(.all, 16, for: .scrollContent)
         .onAppear {
             send(.onAppear)
         }
