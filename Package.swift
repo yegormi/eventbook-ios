@@ -96,9 +96,10 @@ let package = Package(
                 .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
                 .product(name: "GoogleSignIn", package: "GoogleSignIn-iOS"),
                 "Helpers",
+                "KeychainClient",
                 "Styleguide",
                 "SharedModels",
-                "KeychainClient",
+                "SwiftUIHelpers",
                 "SessionClient",
             ],
             resources: [.process("Resources")]

@@ -6,7 +6,7 @@ import Foundation
 import Helpers
 import UIKit
 
-private enum FacebookAuthError: Error {
+public enum FacebookAuthError: Error {
     case canceled
     case noToken
 }
