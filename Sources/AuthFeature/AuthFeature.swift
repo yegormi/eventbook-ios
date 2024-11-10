@@ -30,14 +30,13 @@ public struct AuthFeature: Reducer, Sendable {
         var isLoading = false
         @Presents var destination: Destination.State?
 
+        /// Checks if the form inputs are valid based on the authentication type:
+        /// - Requires a valid email format and non-empty password.
+        /// - For `.signIn`, only email and password are required.
+        /// - Otherwise, `password` must match `confirmPassword`.
         var isFormValid: Bool {
-            guard self.email.isValidEmail else { return false }
-
-            if self.authType == .signIn {
-                return !self.password.isEmpty
-            } else {
-                return !self.password.isEmpty && self.password == self.confirmPassword
-            }
+            guard self.email.isValidEmail, !self.password.isEmpty else { return false }
+            return self.authType == .signIn || self.password == self.confirmPassword
         }
     }
 
