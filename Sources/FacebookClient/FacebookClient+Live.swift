@@ -27,7 +27,7 @@ extension FacebookClient: DependencyKey {
         let facebook = LoginManager()
 
         return FacebookClient(
-            authenticate: {
+            authenticate: { @MainActor in
                 let rootViewController = try UIViewController.getRootViewController()
                 let permissions: [String] = ["public_profile", "email"]
 

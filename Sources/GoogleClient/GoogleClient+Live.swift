@@ -18,7 +18,7 @@ private enum GoogleAuthError: LocalizedError {
 
 extension GoogleClient: DependencyKey {
     public static let liveValue = GoogleClient(
-        authenticate: {
+        authenticate: { @MainActor in
             let rootViewController = try UIViewController.getRootViewController()
             let scopes = [
                 "https://www.googleapis.com/auth/profile.emails.read",

@@ -4,7 +4,7 @@ import SharedModels
 
 @DependencyClient
 public struct FacebookClient: Sendable {
-    public var authenticate: @Sendable @MainActor () async throws -> String
+    public var authenticate: @Sendable () async throws -> String
     public var signOut: @Sendable () async throws -> Void
 }
 

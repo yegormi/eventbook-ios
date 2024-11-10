@@ -3,7 +3,6 @@ import UIKit
 private struct NoViewControllerError: Error {}
 
 public extension UIViewController {
-    @MainActor
     static func getRootViewController() throws -> UIViewController {
         let scenes = UIApplication.shared.connectedScenes
         let windowScenes = scenes.first as? UIWindowScene
