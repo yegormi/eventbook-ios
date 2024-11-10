@@ -17,9 +17,9 @@ extension SessionClient: DependencyKey {
         let subject = PassthroughSubject<User?, Never>()
 
         @Dependency(\.keychain) var keychain
-                
+
         @Dependency(\.authGoogle) var google
-        
+
         @Dependency(\.authFacebook) var facebook
 
         return Self(
