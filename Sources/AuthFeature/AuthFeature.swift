@@ -52,7 +52,8 @@ public struct AuthFeature: Reducer, Sendable {
         }
 
         public enum Internal {
-            case authResponse(Result<AuthDataResult, Error>)
+            case firebaseResponse(Result<AuthDataResult, Error>)
+            case loginResponse(Result<LoginResponse, Error>)
             case googleResponse(Result<GoogleUser, Error>)
             case facebookResponse(Result<String, Error>)
         }
@@ -94,68 +95,88 @@ public struct AuthFeature: Reducer, Sendable {
             case .destination:
                 return .none
 
-            case let .internal(.authResponse(result)):
-                defer { state.isLoading = false }
+            case let .internal(.firebaseResponse(result)):
+                state.isLoading = false
 
                 switch result {
                 case let .success(response):
+                    state.isLoading = true
+
                     return .run { send in
-                        do {
+                        await send(.internal(.loginResponse(Result {
                             let token = try await response.user.getIDToken()
-                            let response = try await self.api.login(LoginRequest(idToken: token))
-                            logger.info("Logged in the user successfully!")
-
-                            self.session.authenticate(response.user)
                             try self.session.setCurrentIDToken(token)
-                            try self.session.setCurrentAccessToken(response.accessToken)
-
-                            logger.info("Authenticated the user locally!")
-                            await send(.delegate(.authSuccessful))
-                        } catch {
-                            logger.error("Failed to authenticate the user, error: \(error)")
-                        }
+                            return try await self.api.login(LoginRequest(idToken: token))
+                        })))
                     }
                 case let .failure(error):
+                    logger.error("Failed to authenticate with Firebase, error: \(error)")
+                    state.destination = .alert(.failedToAuth(error: error))
+                    return .none
+                }
+
+            case let .internal(.loginResponse(result)):
+                state.isLoading = false
+
+                switch result {
+                case let .success(response):
+                    do {
+                        try self.session.setCurrentAccessToken(response.accessToken)
+                    } catch {
+                        logger.error("Failed to save access token to the keychain, error: \(error)")
+                    }
+                    self.session.authenticate(response.user)
+                    logger.info("Authenticated the user session locally!")
+                    return .send(.delegate(.authSuccessful))
+
+                case let .failure(error):
+                    logger.error("Failed to login, error: \(error)")
                     state.destination = .alert(.failedToAuth(error: error))
                     return .none
                 }
 
             case let .internal(.googleResponse(result)):
+                state.isLoading = false
+
                 switch result {
                 case let .success(user):
                     let credential = GoogleAuthProvider.credential(
                         withIDToken: user.idToken,
                         accessToken: user.accessToken
                     )
+                    state.isLoading = true
 
                     return .run { send in
-                        await send(.internal(.authResponse(Result {
+                        await send(.internal(.firebaseResponse(Result {
                             try await Auth.auth().signIn(with: credential)
                         })))
                     }
 
                 case let .failure(error):
-                    state.isLoading = false
-                    if let googleError = error as? GIDSignInError, googleError.code != .canceled {
+                    logger.error("Failed to authenticate with Google, error: \(error)")
+                    if !error.isUserCancelled {
                         state.destination = .alert(.failedToAuth(error: error))
                     }
                     return .none
                 }
 
             case let .internal(.facebookResponse(result)):
+                state.isLoading = false
+
                 switch result {
                 case let .success(accessToken):
                     let credential = FacebookAuthProvider.credential(withAccessToken: accessToken)
+                    state.isLoading = true
 
                     return .run { send in
-                        await send(.internal(.authResponse(Result {
+                        await send(.internal(.firebaseResponse(Result {
                             try await Auth.auth().signIn(with: credential)
                         })))
                     }
 
                 case let .failure(error):
-                    state.isLoading = false
-                    if let fbError = error as? FacebookAuthError, fbError != .canceled {
+                    logger.error("Failed to authenticate with Facebook: \(error)")
+                    if !error.isUserCancelled {
                         state.destination = .alert(.failedToAuth(error: error))
                     }
                     return .none
@@ -176,6 +197,7 @@ public struct AuthFeature: Reducer, Sendable {
                 return self.signup(&state)
 
             case let .view(.authServiceButtonTapped(service)):
+                guard !state.isLoading else { return .none }
                 state.isLoading = true
 
                 switch service {
@@ -202,7 +224,7 @@ public struct AuthFeature: Reducer, Sendable {
         state.isLoading = true
 
         return .run { [state] send in
-            await send(.internal(.authResponse(Result {
+            await send(.internal(.firebaseResponse(Result {
                 try await Auth.auth().signIn(
                     withEmail: state.email,
                     password: state.password
@@ -216,7 +238,7 @@ public struct AuthFeature: Reducer, Sendable {
         state.isLoading = true
 
         return .run { [state] send in
-            await send(.internal(.authResponse(Result {
+            await send(.internal(.firebaseResponse(Result {
                 try await Auth.auth().createUser(
                     withEmail: state.email,
                     password: state.password
@@ -237,5 +259,13 @@ extension AlertState where Action == Never {
         } message: {
             TextState(error.localizedDescription)
         }
+    }
+}
+
+extension Error {
+    var isUserCancelled: Bool {
+        if let googleError = self as? GIDSignInError, googleError.code == .canceled { return true }
+        if let fbError = self as? FacebookAuthError, fbError == .canceled { return true }
+        return false
     }
 }
