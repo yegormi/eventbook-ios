@@ -1,5 +1,7 @@
 @preconcurrency import Combine
 import Dependencies
+import FacebookClient
+import GoogleClient
 import KeychainClient
 import SharedModels
 
@@ -15,6 +17,10 @@ extension SessionClient: DependencyKey {
         let subject = PassthroughSubject<User?, Never>()
 
         @Dependency(\.keychain) var keychain
+                
+        @Dependency(\.authGoogle) var google
+        
+        @Dependency(\.authFacebook) var facebook
 
         return Self(
             authenticate: { user in
@@ -60,6 +66,10 @@ extension SessionClient: DependencyKey {
                     $0.currentIDToken = nil
                     $0.currentAccessToken = nil
                     $0.currentUser = nil
+                }
+                Task {
+                    try? await facebook.signOut()
+                    try? await google.signOut()
                 }
                 subject.send(nil)
                 try keychain.delete(.appIDToken)
