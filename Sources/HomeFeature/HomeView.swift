@@ -1,7 +1,7 @@
 import ComposableArchitecture
 import Foundation
-import Helpers
 import Styleguide
+import SwiftHelpers
 import SwiftUI
 import SwiftUIHelpers
 

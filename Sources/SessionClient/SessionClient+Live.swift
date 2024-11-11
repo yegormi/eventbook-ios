@@ -4,12 +4,12 @@ import FacebookClient
 import GoogleClient
 import KeychainClient
 import SharedModels
+import SupabaseSwiftClient
 
 extension SessionClient: DependencyKey {
     public static var liveValue: SessionClient {
         struct Storage {
             var currentUser: User?
-            var currentIDToken: String?
             var currentAccessToken: String?
         }
 
@@ -17,10 +17,9 @@ extension SessionClient: DependencyKey {
         let subject = PassthroughSubject<User?, Never>()
 
         @Dependency(\.keychain) var keychain
-
         @Dependency(\.authGoogle) var google
-
         @Dependency(\.authFacebook) var facebook
+        @Dependency(\.supabaseClient) var supabase
 
         return Self(
             authenticate: { user in
@@ -30,10 +29,6 @@ extension SessionClient: DependencyKey {
             setCurrentAccessToken: { token in
                 storage.withValue { $0.currentAccessToken = token }
                 try keychain.set(.appAccessToken, to: token)
-            },
-            setCurrentIDToken: { token in
-                storage.withValue { $0.currentIDToken = token }
-                try keychain.set(.appIDToken, to: token)
             },
             currentAccessToken: {
                 guard let token = storage.value.currentAccessToken else {
@@ -46,33 +41,21 @@ extension SessionClient: DependencyKey {
 
                 return token
             },
-            currentIDToken: {
-                guard let token = storage.value.currentIDToken else {
-                    let savedToken: String? = try keychain.get(.appIDToken)
-                    if let savedToken {
-                        storage.withValue { $0.currentIDToken = savedToken }
-                    }
-                    return savedToken
-                }
-
-                return token
-            },
             currentUser: { storage.value.currentUser },
             currentUsers: {
                 subject.values.eraseToStream()
             },
             logout: {
                 storage.withValue {
-                    $0.currentIDToken = nil
                     $0.currentAccessToken = nil
                     $0.currentUser = nil
                 }
                 Task {
                     try? await facebook.signOut()
                     try? await google.signOut()
+                    try? await supabase.signOut()
                 }
                 subject.send(nil)
-                try keychain.delete(.appIDToken)
                 try keychain.delete(.appAccessToken)
             }
         )

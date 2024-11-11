@@ -2,7 +2,7 @@ import Dependencies
 import DependenciesMacros
 import Foundation
 import GoogleSignIn
-import Helpers
+import SwiftHelpers
 import UIKit
 
 private enum GoogleAuthError: LocalizedError {
@@ -20,16 +20,7 @@ extension GoogleClient: DependencyKey {
     public static let liveValue = GoogleClient(
         authenticate: { @MainActor in
             let rootViewController = try UIViewController.getRootViewController()
-            let scopes = [
-                "https://www.googleapis.com/auth/profile.emails.read",
-                "https://www.googleapis.com/auth/userinfo.email",
-                "https://www.googleapis.com/auth/userinfo.profile",
-            ]
-            let result = try await GIDSignIn.sharedInstance.signIn(
-                withPresenting: rootViewController,
-                hint: nil,
-                additionalScopes: scopes
-            )
+            let result = try await GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController)
             return try result.user.toDomain()
         },
         restorePreviousSignIn: {

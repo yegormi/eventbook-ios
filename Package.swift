@@ -14,13 +14,13 @@ let package = Package(
         .library(name: "FacebookClient", targets: ["FacebookClient"]),
         .library(name: "GoogleClient", targets: ["GoogleClient"]),
         .library(name: "AuthFeature", targets: ["AuthFeature"]),
-        .library(name: "Helpers", targets: ["Helpers"]),
         .library(name: "HomeFeature", targets: ["HomeFeature"]),
         .library(name: "KeychainClient", targets: ["KeychainClient"]),
         .library(name: "SessionClient", targets: ["SessionClient"]),
         .library(name: "SharedModels", targets: ["SharedModels"]),
         .library(name: "SplashFeature", targets: ["SplashFeature"]),
         .library(name: "Styleguide", targets: ["Styleguide"]),
+        .library(name: "SwiftHelpers", targets: ["SwiftHelpers"]),
         .library(name: "SwiftUIHelpers", targets: ["SwiftUIHelpers"]),
         .library(name: "TabsFeature", targets: ["TabsFeature"]),
     ],
@@ -28,12 +28,12 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-openapi-generator", from: "1.4.0"),
         .package(url: "https://github.com/apple/swift-openapi-runtime", from: "1.6.0"),
         .package(url: "https://github.com/apple/swift-openapi-urlsession", from: "1.0.2"),
-        .package(url: "https://github.com/facebook/facebook-ios-sdk", from: "17.4.0"),
-        .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "11.4.0"),
+        .package(url: "https://github.com/facebook/facebook-ios-sdk", branch: "releases/v17.4.0"),
         .package(url: "https://github.com/google/GoogleSignIn-iOS", from: "8.0.0"),
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "1.15.2"),
         .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.4.1"),
         .package(url: "https://github.com/pointfreeco/swift-tagged", from: "0.10.0"),
+        .package(url: "https://github.com/supabase/supabase-swift", from: "2.21.0"),
     ],
     targets: [
         .target(
@@ -94,15 +94,15 @@ let package = Package(
                 "FacebookClient",
                 "GoogleClient",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-                .product(name: "FirebaseCore", package: "firebase-ios-sdk"),
-                .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
                 .product(name: "GoogleSignIn", package: "GoogleSignIn-iOS"),
-                "Helpers",
                 "KeychainClient",
                 "Styleguide",
                 "SharedModels",
+                "SwiftHelpers",
                 "SwiftUIHelpers",
                 "SessionClient",
+                .product(name: "Supabase", package: "supabase-swift"),
+                "SupabaseSwiftClient",
             ],
             resources: [.process("Resources")]
         ),
@@ -113,7 +113,7 @@ let package = Package(
                 .product(name: "DependenciesMacros", package: "swift-dependencies"),
                 .product(name: "FacebookCore", package: "facebook-ios-sdk"),
                 .product(name: "FacebookLogin", package: "facebook-ios-sdk"),
-                "Helpers",
+                "SwiftHelpers",
                 "SharedModels"
             ]
         ),
@@ -123,12 +123,12 @@ let package = Package(
                 .product(name: "Dependencies", package: "swift-dependencies"),
                 .product(name: "DependenciesMacros", package: "swift-dependencies"),
                 .product(name: "GoogleSignIn", package: "GoogleSignIn-iOS"),
-                "Helpers",
+                "SwiftHelpers",
                 "SharedModels"
             ]
         ),
         .target(
-            name: "Helpers",
+            name: "SwiftHelpers",
             dependencies: []
         ),
         .target(
@@ -136,7 +136,7 @@ let package = Package(
             dependencies: [
                 "APIClientLive",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-                "Helpers",
+                "SwiftHelpers",
                 "SharedModels",
                 "Styleguide",
                 "SwiftUIHelpers"
@@ -159,6 +159,7 @@ let package = Package(
                 "GoogleClient",
                 "KeychainClient",
                 "SharedModels",
+                "SupabaseSwiftClient",
             ]
         ),
         .target(
@@ -176,6 +177,16 @@ let package = Package(
             resources: [.process("Resources")]
         ),
         .target(
+            name: "SupabaseSwiftClient",
+            dependencies: [
+                .product(name: "Dependencies", package: "swift-dependencies"),
+                .product(name: "DependenciesMacros", package: "swift-dependencies"),
+                "SwiftHelpers",
+                "SharedModels",
+                .product(name: "Supabase", package: "supabase-swift"),
+            ]
+        ),
+        .target(
             name: "SwiftUIHelpers",
             dependencies: [
                 "Styleguide",
@@ -187,7 +198,7 @@ let package = Package(
             dependencies: [
                 "AccountFeature",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-                "Helpers",
+                "SwiftHelpers",
                 "HomeFeature",
                 "Styleguide",
                 "SwiftUIHelpers"

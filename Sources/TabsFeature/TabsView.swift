@@ -1,8 +1,8 @@
 import AccountFeature
 import ComposableArchitecture
-import Helpers
 import HomeFeature
 import Styleguide
+import SwiftHelpers
 import SwiftUI
 
 public struct TabsView: View {

@@ -1,10 +1,10 @@
 import APIClient
 import Dependencies
 import Foundation
-import Helpers
 import OpenAPIRuntime
 import OpenAPIURLSession
 import SharedModels
+import SwiftHelpers
 import XCTestDynamicOverlay
 
 private func throwingUnderlyingError<T>(_ closure: () async throws -> T) async throws -> T {
@@ -31,36 +31,14 @@ extension APIClient: DependencyKey {
         )
 
         return Self(
-            signup: { @Sendable request in
+            getCurrentUser: {
                 try await throwingUnderlyingError {
-                    try await client.signup(
-                        body: .json(request.toAPI())
-                    )
-                    .created
-                    .body
-                    .json
-                    .toDomain()
-                }
-            },
-            login: { @Sendable request in
-                try await throwingUnderlyingError {
-                    try await client.login(
-                        body: .json(request.toAPI())
-                    )
-                    .created
-                    .body
-                    .json
-                    .toDomain()
+                    try await client.getMe().ok.body.json.toDomain()
                 }
             },
             deleteCurrentUser: {
                 try await throwingUnderlyingError {
-                    _ = try await client.deleteMe().ok
-                }
-            },
-            getCurrentUser: {
-                try await throwingUnderlyingError {
-                    try await client.getMe().ok.body.json.toDomain()
+                    _ = try await client.deleteMe().noContent
                 }
             }
         )
