@@ -1,14 +1,14 @@
 import SwiftUI
 
-public struct ServiceButton: View {
-    private let authService: AuthServiceType
+public struct ProviderButton: View {
+    private let type: AuthServiceType
     private let action: () -> Void
 
     public init(
-        authService: AuthServiceType,
+        of type: AuthServiceType,
         action: @escaping () -> Void
     ) {
-        self.authService = authService
+        self.type = type
         self.action = action
     }
 
@@ -17,11 +17,11 @@ public struct ServiceButton: View {
             self.action()
         } label: {
             HStack {
-                self.authService.icon
+                self.type.icon
                     .frame(width: 20, height: 20)
                     .fixedSize()
                 Spacer()
-                Text("Continue with " + self.authService.title)
+                Text("Continue with " + self.type.title)
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundStyle(Color.primary)
                 Spacer()
@@ -47,9 +47,9 @@ public enum AuthServiceType {
     public var icon: Image {
         switch self {
         case .google:
-            .init(.google)
+            Image(.google)
         case .facebook:
-            .init(.facebook)
+            Image(.facebook)
         }
     }
 }

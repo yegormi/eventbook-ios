@@ -15,9 +15,15 @@ public struct AuthView: View {
     public var body: some View {
         ScrollView {
             VStack(spacing: 30) {
-                Text("🌟 EventBook")
-                    .font(.system(size: 20))
-                    .bold()
+                HStack(spacing: 0) {
+                    Image(.appLogo)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(maxWidth: 50)
+                    Text("EventBook")
+                        .font(.system(size: 20))
+                        .bold()
+                }
 
                 Text(self.store.authType.title)
                     .font(.system(size: 36))
@@ -55,7 +61,7 @@ public struct AuthView: View {
                     Group {
                         Text(self.store.authType == .signIn ? "Don't have an account?" : "Already have an account?")
                         Text(self.store.authType == .signIn ? "Sign up" : "Log in")
-                            .foregroundStyle(Color.purple300)
+                            .foregroundStyle(Color.purple400)
                             .onTapGesture {
                                 send(.toggleButtonTapped)
                             }
@@ -74,12 +80,12 @@ public struct AuthView: View {
                 }
 
                 VStack(spacing: 16) {
-                    ServiceButton(authService: .google) {
-                        send(.authServiceButtonTapped(.google))
+                    ProviderButton(of: .google) {
+                        send(.providerButtonTapped(.google))
                     }
 
-                    ServiceButton(authService: .facebook) {
-                        send(.authServiceButtonTapped(.facebook))
+                    ProviderButton(of: .facebook) {
+                        send(.providerButtonTapped(.facebook))
                     }
                 }
             }

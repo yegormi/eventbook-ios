@@ -54,7 +54,7 @@ public extension ButtonStyle where Self == PrimaryButtonStyle {
     static var primary: PrimaryButtonStyle { .primary(size: .small) }
 }
 
-public struct ServiceButtonStyle: ButtonStyle {
+public struct ProviderButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) var isEnabled
     @Environment(\.colorScheme) var colorScheme
 
@@ -81,8 +81,8 @@ public struct ServiceButtonStyle: ButtonStyle {
     }
 }
 
-public extension ButtonStyle where Self == ServiceButtonStyle {
-    static var service: ServiceButtonStyle { .init() }
+public extension ButtonStyle where Self == ProviderButtonStyle {
+    static var service: ProviderButtonStyle { .init() }
 }
 
 struct ButtonStylesPreview_Previews: PreviewProvider {

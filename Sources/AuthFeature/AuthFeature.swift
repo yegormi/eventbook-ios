@@ -67,7 +67,7 @@ public struct AuthFeature: Reducer, Sendable {
             case toggleButtonTapped
             case loginButtonTapped
             case signupButtonTapped
-            case authServiceButtonTapped(AuthServiceType)
+            case providerButtonTapped(AuthServiceType)
         }
     }
 
@@ -195,7 +195,7 @@ public struct AuthFeature: Reducer, Sendable {
             case .view(.signupButtonTapped):
                 return self.signup(&state)
 
-            case let .view(.authServiceButtonTapped(service)):
+            case let .view(.providerButtonTapped(service)):
                 guard !state.isLoading else { return .none }
                 state.isLoading = true
 
