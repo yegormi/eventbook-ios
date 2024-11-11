@@ -1,69 +1,5 @@
 openapi: 3.0.0
 paths:
-  /signup:
-    post:
-      operationId: signup
-      summary: Sign up
-      tags:
-        - auth
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SignupRequestDto'
-      responses:
-        '201':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SignupResponseDto'
-        '400':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorDto'
-        '401':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorDto'
-  /login:
-    post:
-      operationId: login
-      summary: Log in
-      tags:
-        - auth
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/LoginRequestDto'
-      responses:
-        '201':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LoginResponseDto'
-        '400':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorDto'
-        '401':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorDto'
   /me:
     get:
       operationId: getMe
@@ -93,7 +29,7 @@ paths:
         - user
       parameters: []
       responses:
-        '200':
+        '204':
           description: ''
         '401':
           description: ''
@@ -118,17 +54,6 @@ components:
       bearerFormat: JWT
       type: http
   schemas:
-    SignupRequestDto:
-      type: object
-      properties:
-        email:
-          type: string
-          format: email
-        password:
-          type: string
-      required:
-        - email
-        - password
     UserDto:
       type: object
       properties:
@@ -163,17 +88,6 @@ components:
         - fullName
         - phoneNumber
         - avatar
-    SignupResponseDto:
-      type: object
-      properties:
-        accessToken:
-          type: string
-          example: eyJhbGciOiJIUzI1NiIsIn
-        user:
-          $ref: '#/components/schemas/UserDto'
-      required:
-        - accessToken
-        - user
     ApiErrorDto:
       type: object
       properties:
@@ -197,22 +111,3 @@ components:
             entity: User
       required:
         - message
-    LoginRequestDto:
-      type: object
-      properties:
-        idToken:
-          type: string
-          example: eyJhbGciOiJIUzI1NiIsIn
-      required:
-        - idToken
-    LoginResponseDto:
-      type: object
-      properties:
-        accessToken:
-          type: string
-          example: eyJhbGciOiJIUzI1NiIsIn
-        user:
-          $ref: '#/components/schemas/UserDto'
-      required:
-        - accessToken
-        - user

@@ -2,16 +2,17 @@ import AppFeature
 import AppTrackingTransparency
 import ComposableArchitecture
 import FacebookCore
-import FirebaseAuth
-import FirebaseCore
 import GoogleSignIn
 import OSLog
 import Styleguide
+import Supabase
 import SwiftUI
 
 private let logger = Logger(subsystem: "iOS", category: "App")
 
 final class AppDelegate: NSObject, UIApplicationDelegate {
+    @Dependency(\.supabaseClient) var supabase
+
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
@@ -20,12 +21,6 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
             application,
             didFinishLaunchingWithOptions: launchOptions
         )
-
-        FirebaseApp.configure()
-
-        guard let clientID = FirebaseApp.app()?.options.clientID else { return true }
-        let config = GIDConfiguration(clientID: clientID)
-        GIDSignIn.sharedInstance.configuration = config
 
         // Override apple's buggy alerts tintColor not taking effect.
         UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor.accent
@@ -63,8 +58,9 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         )
 
         let googleHandle = GIDSignIn.sharedInstance.handle(url)
+        let supabaseHandle = self.supabase.handle(url)
 
-        return facebookHandle || googleHandle
+        return facebookHandle || googleHandle || supabaseHandle
     }
 }
 
@@ -74,6 +70,7 @@ struct EventBookApp: App {
 
     let store = Store(initialState: AppReducer.State()) {
         AppReducer()
+//         ._printChanges()
     }
 
     var body: some Scene {

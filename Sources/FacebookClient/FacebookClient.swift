@@ -4,13 +4,13 @@ import SharedModels
 
 @DependencyClient
 public struct FacebookClient: Sendable {
-    public var authenticate: @Sendable () async throws -> String
+    public var authenticate: @Sendable (_ hashedNonce: String) async throws -> String
     public var signOut: @Sendable () async throws -> Void
 }
 
 public extension FacebookClient {
     static let mock = FacebookClient(
-        authenticate: { "accessToken" },
+        authenticate: { _ in "accessToken" },
         signOut: {}
     )
 }

@@ -58,12 +58,11 @@ public struct AppReducer: Reducer, Sendable {
             case .task:
                 return .run { send in
                     do {
-                        if let storedIDToken = try self.session.currentIDToken() {
-                            logger.info("Found ID token in keychain, attempting to login...")
-                            try self.session.setCurrentIDToken(storedIDToken)
-                            let response = try await self.api.login(LoginRequest(idToken: storedIDToken))
-                            try self.session.setCurrentAccessToken(response.accessToken)
-                            self.session.authenticate(response.user)
+                        if let storedAccessToken = try self.session.currentAccessToken() {
+                            logger.info("Found access token in keychain, attempting to login...")
+                            try self.session.setCurrentAccessToken(storedAccessToken)
+                            let user = try await self.api.getCurrentUser()
+                            self.session.authenticate(user)
                             logger.info("Logged in successfully!")
                             await send(.changeToDestination(.tabs(Tabs.State())))
                         } else {
