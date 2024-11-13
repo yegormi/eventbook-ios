@@ -26,7 +26,7 @@ extension APIClient: DependencyKey {
             middlewares: [
                 ErrorMiddleware(),
                 AuthenticationMiddleware(),
-                LoggingMiddleware(),
+                LoggingMiddleware(bodyLoggingConfiguration: .upTo(maxBytes: 1024)),
             ]
         )
 
