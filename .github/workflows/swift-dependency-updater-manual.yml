@@ -21,12 +21,6 @@ jobs:
         with:
           fetch-depth: 0 # Fetch all history for accurate change detection
 
-      # Set up Swift environment
-      - name: Set up Swift
-        uses: SwiftyLab/setup-swift@v1
-        with:
-          swift-version: 'latest' # Use the latest Swift version
-
       # Cache Swift build artifacts to speed up the workflow
       - name: Cache Swift Package Manager artifacts
         uses: actions/cache@v3
