@@ -59,7 +59,7 @@ public struct AuthFeature: Reducer, Sendable {
             case localAuthResponse(Result<Void, Error>)
             case supabaseResponse(Result<Session, Error>)
             case googleResponse(Result<GoogleUser, Error>)
-            case facebookResponse(Result<String, Error>)
+            case facebookResponse(Result<FBAuthenticationToken, Error>)
         }
 
         public enum View: BindableAction {
@@ -131,8 +131,6 @@ public struct AuthFeature: Reducer, Sendable {
                 }
 
             case let .internal(.googleResponse(result)):
-                state.isLoading = false
-
                 switch result {
                 case let .success(user):
                     state.isLoading = true
@@ -157,14 +155,12 @@ public struct AuthFeature: Reducer, Sendable {
                 }
 
             case let .internal(.facebookResponse(result)):
-                state.isLoading = false
-
                 switch result {
-                case let .success(accessToken):
+                case let .success(authenticationToken):
                     state.isLoading = true
                     let credential = OpenIDConnectCredentials(
                         provider: .facebook,
-                        idToken: accessToken,
+                        idToken: authenticationToken.rawValue,
                         nonce: state.rawNonce
                     )
                     return .run { send in
@@ -196,9 +192,6 @@ public struct AuthFeature: Reducer, Sendable {
                 return self.signup(&state)
 
             case let .view(.providerButtonTapped(service)):
-                guard !state.isLoading else { return .none }
-                state.isLoading = true
-
                 switch service {
                 case .google:
                     return .run { send in
@@ -208,7 +201,6 @@ public struct AuthFeature: Reducer, Sendable {
                     }
                 case .facebook:
                     state.regenerateNonce()
-
                     return .run { [state] send in
                         await send(.internal(.facebookResponse(Result {
                             try await self.facebook.authenticate(hashedNonce: sha256(state.rawNonce))

@@ -112,6 +112,7 @@ let package = Package(
                 .product(name: "DependenciesMacros", package: "swift-dependencies"),
                 .product(name: "FacebookCore", package: "facebook-ios-sdk"),
                 .product(name: "FacebookLogin", package: "facebook-ios-sdk"),
+                .product(name: "Tagged", package: "swift-tagged"),
             ]
         ),
         .target(

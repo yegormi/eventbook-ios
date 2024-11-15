@@ -42,7 +42,7 @@ extension FacebookClient: DependencyKey {
                     throw FacebookAuthError.noToken
                 }
 
-                return token
+                return FBAuthenticationToken(rawValue: token)
             },
             signOut: {
                 facebook.logOut()
