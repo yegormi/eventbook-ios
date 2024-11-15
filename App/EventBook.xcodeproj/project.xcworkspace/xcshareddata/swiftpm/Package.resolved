@@ -1,5 +1,5 @@
 {
-  "originHash" : "a5d8eadfd47927edcaa6ad0628f496066482d037d923fbf53f1209c9c159f0a0",
+  "originHash" : "d8cf3f6b173eff03d4bef2b843a067c4cb992751fde365f1e141e4569167ddaa",
   "pins" : [
     {
       "identity" : "app-check",
@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/facebook/facebook-ios-sdk",
       "state" : {
-        "branch" : "releases/v17.4.0",
-        "revision" : "619d1772808425faa010d92293b26eeb9bc1d630"
+        "revision" : "619d1772808425faa010d92293b26eeb9bc1d630",
+        "version" : "17.4.0"
       }
     },
     {
@@ -96,8 +96,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/supabase/supabase-swift",
       "state" : {
-        "revision" : "ed3349a16d66f3823052beb703bb6914fd52f4ee",
-        "version" : "2.22.0"
+        "revision" : "691bde7ca02fb70eed77d4750904fc9be45bd007",
+        "version" : "2.22.1"
       }
     },
     {
@@ -159,8 +159,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-composable-architecture",
       "state" : {
-        "revision" : "56149436a3c3dbf605a89a204aaa904de8ba4580",
-        "version" : "1.15.2"
+        "revision" : "69247baf7be2fd6f5820192caef0082d01849cd0",
+        "version" : "1.16.1"
       }
     },
     {
@@ -195,8 +195,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-dependencies",
       "state" : {
-        "revision" : "0fc0255e780bf742abeef29dec80924f5f0ae7b9",
-        "version" : "1.4.1"
+        "revision" : "96eecd47660e8307877acb8c41cc5295ba7350a7",
+        "version" : "1.5.2"
       }
     },
     {
