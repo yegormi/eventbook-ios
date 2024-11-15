@@ -1,0 +1,64 @@
+name: Swift Dependency Updater Manual
+
+on:
+  schedule:
+    - cron: '0 15 * * 5' # Run every Friday at 15:00 UTC
+  workflow_dispatch: # Allows manual trigger
+
+permissions:
+  contents: write # Needed to push changes and create PRs
+  pull-requests: write
+
+jobs:
+  update_dependencies:
+    name: Update Swift Dependencies
+    runs-on: macos-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for accurate change detection
+
+      # Set up Swift environment
+      - name: Set up Swift
+        uses: SwiftyLab/setup-swift@v1
+        with:
+          swift-version: 'latest' # Use the latest Swift version
+
+      # Cache Swift build artifacts to speed up the workflow
+      - name: Cache Swift Package Manager artifacts
+        uses: actions/cache@v3
+        with:
+          path: .build
+          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
+
+      # Update dependencies using Swift Package Manager
+      - name: Update Dependencies
+        run: swift package update
+
+      # Commit and push changes if any dependencies were updated
+      - name: Commit and Push Changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git diff --quiet && echo "No dependency updates found." && exit 0 || echo "Dependencies updated."
+          git add Package.resolved
+          git commit -m "chore: update swift dependencies"
+          git push origin HEAD:update/swift-dependencies
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Create a Pull Request with the updates
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: update/swift-dependencies
+          title: 'chore: update swift dependencies'
+          body: |
+            Automated dependency update performed by GitHub Actions.
+          labels: dependencies
