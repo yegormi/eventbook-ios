@@ -7,6 +7,6 @@ on:
 
 jobs:
   dependencies:
-    uses: MarcoEidinger/swift-package-dependencies-check/.github/workflows/reusableWorkflow.yml@v2.5.0
+    uses: MarcoEidinger/swift-package-dependencies-check/.github/workflows/reusableWorkflow.yml@v2
     with:
       commit-message: 'chore: update package dependencies'
