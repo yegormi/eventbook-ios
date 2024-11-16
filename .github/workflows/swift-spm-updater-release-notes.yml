@@ -3,6 +3,8 @@ name: Swift Package Dependencies
 on: 
   schedule:
     - cron: '0 8 * * 1' # every monday AM 8:00 
+  workflow_dispatch: # Allows to manually trigger the script
+
 jobs:
   dependencies:
     uses: MarcoEidinger/swift-package-dependencies-check/.github/workflows/reusableWorkflow.yml@v2.5.0
