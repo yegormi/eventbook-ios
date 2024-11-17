@@ -61,9 +61,24 @@ A powerful, user-friendly iOS app for organizing, tracking, and managing events.
 
 ## Screenshots
 
-| Home Screen | Event Details | Explore |
-|-------------|---------------|---------|
-| ![Home](https://path-to-image.png) | ![Details](https://path-to-image.png) | ![Explore](https://path-to-image.png) |
+<details>
+  <summary>🖼️ Click to view the app gallery ✨</summary>
+  
+  <p align="center">
+    <img src="https://github.com/user-attachments/assets/25931b10-42bf-4c10-af62-c5b86376bd2f" width="49%" alt="Sign in">
+    <img src="https://github.com/user-attachments/assets/c82ed617-b274-42d9-aa03-8b3234eca0eb" width="49%" alt="Sign up">
+  </p>
+  
+  <p align="center">
+    <img src="https://github.com/user-attachments/assets/72456c51-0a25-4d82-998e-f74022aba598" width="49%" alt="Home">
+    <img src="https://github.com/user-attachments/assets/99601260-1579-4918-a97c-75b4def21d8c" width="49%" alt="Account">
+  </p>
+
+  <p align="center">
+    <img src="https://github.com/user-attachments/assets/5df64a8a-6933-4280-ad51-01444cba22cf" width="49%" alt="Settings - General">
+    <img src="https://github.com/user-attachments/assets/a70c0682-58ad-4f71-b233-4093e5cb73a4" width="49%" alt="Settings - Account">
+  </p>
+</details>
 
 ## Contributing
 
