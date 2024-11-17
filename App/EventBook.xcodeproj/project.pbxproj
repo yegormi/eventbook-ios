@@ -13,6 +13,7 @@
 		8C6FB2FD2CEA0D6A00A747A7 /* AppearanceClient in Frameworks */ = {isa = PBXBuildFile; productRef = 8C6FB2FC2CEA0D6A00A747A7 /* AppearanceClient */; };
 		8C6FB2FF2CEA0E0300A747A7 /* SharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 8C6FB2FE2CEA0E0300A747A7 /* SharedModels */; };
 		8C84EFB82CE11ECB00418827 /* Auth in Frameworks */ = {isa = PBXBuildFile; productRef = 8C84EFB72CE11ECB00418827 /* Auth */; };
+		8CA58F2B2CEA68DA00C06EFE /* APIClientLive in Frameworks */ = {isa = PBXBuildFile; productRef = 8CA58F2A2CEA68DA00C06EFE /* APIClientLive */; };
 		8CFBEFA42CDD3B6D00E15AF8 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 8CFBEFA32CDD3B6D00E15AF8 /* GoogleSignIn */; };
 		8CFBEFA62CDD3B6D00E15AF8 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8CFBEFA52CDD3B6D00E15AF8 /* GoogleSignInSwift */; };
 		EEA0214B2B9E67200098989F /* AppFeature in Frameworks */ = {isa = PBXBuildFile; productRef = EEA0214A2B9E67200098989F /* AppFeature */; };
@@ -38,6 +39,7 @@
 				8C6F32642CDE4C6C00C0394B /* FacebookLogin in Frameworks */,
 				8C6FB2FF2CEA0E0300A747A7 /* SharedModels in Frameworks */,
 				8CFBEFA42CDD3B6D00E15AF8 /* GoogleSignIn in Frameworks */,
+				8CA58F2B2CEA68DA00C06EFE /* APIClientLive in Frameworks */,
 				8C6FB2FD2CEA0D6A00A747A7 /* AppearanceClient in Frameworks */,
 				EEA0214B2B9E67200098989F /* AppFeature in Frameworks */,
 				8C596C2E2CDF997100A9E196 /* AppTrackingTransparency.framework in Frameworks */,
@@ -99,6 +101,7 @@
 				8C84EFB72CE11ECB00418827 /* Auth */,
 				8C6FB2FC2CEA0D6A00A747A7 /* AppearanceClient */,
 				8C6FB2FE2CEA0E0300A747A7 /* SharedModels */,
+				8CA58F2A2CEA68DA00C06EFE /* APIClientLive */,
 			);
 			productName = EventBook;
 			productReference = 8C6A65002CD93652004F42E5 /* EventBook.app */;
@@ -423,6 +426,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8C84EFB62CE11ECB00418827 /* XCRemoteSwiftPackageReference "supabase-swift" */;
 			productName = Auth;
+		};
+		8CA58F2A2CEA68DA00C06EFE /* APIClientLive */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = APIClientLive;
 		};
 		8CFBEFA32CDD3B6D00E15AF8 /* GoogleSignIn */ = {
 			isa = XCSwiftPackageProductDependency;
