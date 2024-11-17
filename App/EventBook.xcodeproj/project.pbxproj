@@ -10,6 +10,8 @@
 		8C596C2E2CDF997100A9E196 /* AppTrackingTransparency.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C596C2D2CDF997100A9E196 /* AppTrackingTransparency.framework */; };
 		8C6F32622CDE4C6C00C0394B /* FacebookCore in Frameworks */ = {isa = PBXBuildFile; productRef = 8C6F32612CDE4C6C00C0394B /* FacebookCore */; };
 		8C6F32642CDE4C6C00C0394B /* FacebookLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 8C6F32632CDE4C6C00C0394B /* FacebookLogin */; };
+		8C6FB2FD2CEA0D6A00A747A7 /* AppearanceClient in Frameworks */ = {isa = PBXBuildFile; productRef = 8C6FB2FC2CEA0D6A00A747A7 /* AppearanceClient */; };
+		8C6FB2FF2CEA0E0300A747A7 /* SharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 8C6FB2FE2CEA0E0300A747A7 /* SharedModels */; };
 		8C84EFB82CE11ECB00418827 /* Auth in Frameworks */ = {isa = PBXBuildFile; productRef = 8C84EFB72CE11ECB00418827 /* Auth */; };
 		8CFBEFA42CDD3B6D00E15AF8 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 8CFBEFA32CDD3B6D00E15AF8 /* GoogleSignIn */; };
 		8CFBEFA62CDD3B6D00E15AF8 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8CFBEFA52CDD3B6D00E15AF8 /* GoogleSignInSwift */; };
@@ -34,7 +36,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				8C6F32642CDE4C6C00C0394B /* FacebookLogin in Frameworks */,
+				8C6FB2FF2CEA0E0300A747A7 /* SharedModels in Frameworks */,
 				8CFBEFA42CDD3B6D00E15AF8 /* GoogleSignIn in Frameworks */,
+				8C6FB2FD2CEA0D6A00A747A7 /* AppearanceClient in Frameworks */,
 				EEA0214B2B9E67200098989F /* AppFeature in Frameworks */,
 				8C596C2E2CDF997100A9E196 /* AppTrackingTransparency.framework in Frameworks */,
 				8C6F32622CDE4C6C00C0394B /* FacebookCore in Frameworks */,
@@ -93,6 +97,8 @@
 				8C6F32612CDE4C6C00C0394B /* FacebookCore */,
 				8C6F32632CDE4C6C00C0394B /* FacebookLogin */,
 				8C84EFB72CE11ECB00418827 /* Auth */,
+				8C6FB2FC2CEA0D6A00A747A7 /* AppearanceClient */,
+				8C6FB2FE2CEA0E0300A747A7 /* SharedModels */,
 			);
 			productName = EventBook;
 			productReference = 8C6A65002CD93652004F42E5 /* EventBook.app */;
@@ -404,6 +410,14 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8C6F32602CDE4C6C00C0394B /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
 			productName = FacebookLogin;
+		};
+		8C6FB2FC2CEA0D6A00A747A7 /* AppearanceClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AppearanceClient;
+		};
+		8C6FB2FE2CEA0E0300A747A7 /* SharedModels */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SharedModels;
 		};
 		8C84EFB72CE11ECB00418827 /* Auth */ = {
 			isa = XCSwiftPackageProductDependency;

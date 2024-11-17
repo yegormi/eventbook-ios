@@ -27,5 +27,6 @@ public extension Color {
     static let purple900 = Color(.purple900)
 
     static let red500 = Color(.red500)
+    static let red600 = Color(.red600)
     static let textFieldBackground = Color(.textFieldBackground)
 }

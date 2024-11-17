@@ -1,9 +1,11 @@
+import AppearanceClient
 import AppFeature
 import AppTrackingTransparency
 import ComposableArchitecture
 import FacebookCore
 import GoogleSignIn
 import OSLog
+import SharedModels
 import Styleguide
 import Supabase
 import SwiftUI
@@ -13,10 +15,17 @@ private let logger = Logger(subsystem: "iOS", category: "App")
 final class AppDelegate: NSObject, UIApplicationDelegate {
     @Dependency(\.supabaseClient) var supabase
 
+    @Dependency(\.appearance) var appearance
+
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
-    ) -> Bool {
+    )
+        -> Bool
+    {
+        Task { try? await self.appearance.configure() }
+
+        // Facebook SDK
         ApplicationDelegate.shared.application(
             application,
             didFinishLaunchingWithOptions: launchOptions
@@ -70,7 +79,7 @@ struct EventBookApp: App {
 
     let store = Store(initialState: AppReducer.State()) {
         AppReducer()
-//         ._printChanges()
+            ._printChanges()
     }
 
     var body: some Scene {

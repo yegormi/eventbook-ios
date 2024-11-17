@@ -29,7 +29,7 @@ public struct TabsView: View {
                 )
                 .background(Color(uiColor: UIColor.systemBackground))
                 .navigationTitle("Home")
-                .toolbarTitleDisplayMode(.large)
+                .toolbarTitleDisplayMode(.inlineLarge)
             }
             .tag(Tabs.State.Tab.home)
             .tabItem {
@@ -42,7 +42,7 @@ public struct TabsView: View {
                 )
                 .background(Color(uiColor: UIColor.systemBackground))
                 .navigationTitle("Explore")
-                .toolbarTitleDisplayMode(.large)
+                .toolbarTitleDisplayMode(.inlineLarge)
             }
             .tag(Tabs.State.Tab.explore)
             .tabItem {
@@ -55,7 +55,7 @@ public struct TabsView: View {
                 )
                 .background(Color(uiColor: UIColor.systemBackground))
                 .navigationTitle("Favorites")
-                .toolbarTitleDisplayMode(.large)
+                .toolbarTitleDisplayMode(.inlineLarge)
             }
             .tag(Tabs.State.Tab.favorites)
             .tabItem {
@@ -68,18 +68,13 @@ public struct TabsView: View {
                 )
                 .background(Color(uiColor: UIColor.systemBackground))
                 .navigationTitle("Account")
-                .toolbarTitleDisplayMode(.large)
+                .toolbarTitleDisplayMode(.inlineLarge)
             }
             .tag(Tabs.State.Tab.account)
             .tabItem {
                 Label("Account", image: .accountTab)
             }
         }
-//        .introspect(.tabView, on: .iOS(.v17)) { tabBarController in
-//            for viewControllers in tabBarController.viewControllers ?? [] {
-//                viewControllers.tabBarItem.imageInsets = .init(top: 3, left: 0, bottom: -3, right: 0)
-//            }
-//        }
     }
 }
 

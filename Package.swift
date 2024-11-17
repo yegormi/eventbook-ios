@@ -13,6 +13,7 @@ let package = Package(
         .library(name: "AccountFeature", targets: ["AccountFeature"]),
         .library(name: "APIClient", targets: ["APIClient"]),
         .library(name: "APIClientLive", targets: ["APIClientLive"]),
+        .library(name: "AppearanceClient", targets: ["AppearanceClient"]),
         .library(name: "AppFeature", targets: ["AppFeature"]),
         .library(name: "AuthFeature", targets: ["AuthFeature"]),
         .library(name: "FacebookClient", targets: ["FacebookClient"]),
@@ -36,6 +37,7 @@ let package = Package(
         .package(url: "https://github.com/google/GoogleSignIn-iOS", from: "8.0.0"),
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "1.16.1"),
         .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.5.2"),
+        .package(url: "https://github.com/tgrapperon/swift-dependencies-additions", from: "1.1.1"),
         .package(url: "https://github.com/pointfreeco/swift-tagged", from: "0.10.0"),
         .package(url: "https://github.com/supabase/supabase-swift", from: "2.21.1"),
     ],
@@ -44,6 +46,7 @@ let package = Package(
             name: "AccountFeature",
             dependencies: [
                 "APIClientLive",
+                "AppearanceClient",
                 "SessionClient",
                 "SharedModels",
                 "SwiftUIHelpers",
@@ -69,6 +72,16 @@ let package = Package(
             ],
             plugins: [
                 .plugin(name: "OpenAPIGenerator", package: "swift-openapi-generator"),
+            ]
+        ),
+        .target(
+            name: "AppearanceClient",
+            dependencies: [
+                "SharedModels",
+                "SwiftHelpers",
+                .product(name: "Dependencies", package: "swift-dependencies"),
+                .product(name: "DependenciesMacros", package: "swift-dependencies"),
+                .product(name: "DependenciesAdditions", package: "swift-dependencies-additions"),
             ]
         ),
         .target(

@@ -13,3 +13,11 @@ extension Components.Schemas.UserDto {
         )
     }
 }
+
+extension UpdateUserRequest {
+    func toAPI() -> Components.Schemas.UpdateUserDto {
+        Components.Schemas.UpdateUserDto(
+            fullName: self.fullName
+        )
+    }
+}

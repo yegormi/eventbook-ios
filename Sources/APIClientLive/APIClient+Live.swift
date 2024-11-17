@@ -36,6 +36,11 @@ extension APIClient: DependencyKey {
                     try await client.getMe().ok.body.json.toDomain()
                 }
             },
+            updateCurrentUser: { request in
+                try await throwingUnderlyingError {
+                    _ = try await client.updateMe(body: .json(request.toAPI())).ok
+                }
+            },
             deleteCurrentUser: {
                 try await throwingUnderlyingError {
                     _ = try await client.deleteMe().noContent

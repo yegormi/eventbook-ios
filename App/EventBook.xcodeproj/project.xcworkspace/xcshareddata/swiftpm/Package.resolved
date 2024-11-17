@@ -1,5 +1,5 @@
 {
-  "originHash" : "d8cf3f6b173eff03d4bef2b843a067c4cb992751fde365f1e141e4569167ddaa",
+  "originHash" : "d529e0a995cacbbb0fdcba71dece278d9f89e778e325db9c33ad738ea4dc5d05",
   "pins" : [
     {
       "identity" : "app-check",
@@ -197,6 +197,15 @@
       "state" : {
         "revision" : "96eecd47660e8307877acb8c41cc5295ba7350a7",
         "version" : "1.5.2"
+      }
+    },
+    {
+      "identity" : "swift-dependencies-additions",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tgrapperon/swift-dependencies-additions",
+      "state" : {
+        "revision" : "7b1d88ec23f80b0b5d4832d51af7647fa5062d8e",
+        "version" : "1.1.1"
       }
     },
     {
