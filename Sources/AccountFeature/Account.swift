@@ -3,6 +3,7 @@ import ComposableArchitecture
 import Foundation
 import OSLog
 import SessionClient
+import SettingsFeature
 import SharedModels
 
 private let logger = Logger(subsystem: "AccountFeature", category: "Account")

@@ -21,6 +21,7 @@ let package = Package(
         .library(name: "HomeFeature", targets: ["HomeFeature"]),
         .library(name: "KeychainClient", targets: ["KeychainClient"]),
         .library(name: "SessionClient", targets: ["SessionClient"]),
+        .library(name: "SettingsFeature", targets: ["SettingsFeature"]),
         .library(name: "SharedModels", targets: ["SharedModels"]),
         .library(name: "SplashFeature", targets: ["SplashFeature"]),
         .library(name: "Styleguide", targets: ["Styleguide"]),
@@ -45,10 +46,11 @@ let package = Package(
         .target(
             name: "AccountFeature",
             dependencies: [
-                "APIClientLive",
-                "AppearanceClient",
+                "APIClient",
                 "SessionClient",
+                "SettingsFeature",
                 "SharedModels",
+                "Styleguide",
                 "SwiftUIHelpers",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
@@ -141,7 +143,7 @@ let package = Package(
         .target(
             name: "HomeFeature",
             dependencies: [
-                "APIClientLive",
+                "APIClient",
                 "SharedModels",
                 "Styleguide",
                 "SwiftHelpers",
@@ -169,6 +171,18 @@ let package = Package(
                 "SupabaseSwiftClient",
                 .product(name: "Dependencies", package: "swift-dependencies"),
                 .product(name: "DependenciesMacros", package: "swift-dependencies"),
+            ]
+        ),
+        .target(
+            name: "SettingsFeature",
+            dependencies: [
+                "APIClient",
+                "AppearanceClient",
+                "SessionClient",
+                "SharedModels",
+                "Styleguide",
+                "SwiftUIHelpers",
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
         ),
         .target(
