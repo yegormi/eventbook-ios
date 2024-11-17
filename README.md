@@ -62,14 +62,14 @@ A powerful, user-friendly iOS app for organizing, tracking, and managing events.
 ## Screenshots
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/25931b10-42bf-4c10-af62-c5b86376bd2f" width="20%" alt="Auth">
-  <img src="https://github.com/user-attachments/assets/72456c51-0a25-4d82-998e-f74022aba598" width="20%" alt="Home">
-  <img src="https://github.com/user-attachments/assets/99601260-1579-4918-a97c-75b4def21d8c" width="20%" alt="Account">
+  <img src="https://github.com/user-attachments/assets/25931b10-42bf-4c10-af62-c5b86376bd2f" width="33%" alt="Auth">
+  <img src="https://github.com/user-attachments/assets/72456c51-0a25-4d82-998e-f74022aba598" width="33%" alt="Home">
+  <img src="https://github.com/user-attachments/assets/99601260-1579-4918-a97c-75b4def21d8c" width="33%" alt="Account">
 </p>
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/5df64a8a-6933-4280-ad51-01444cba22cf" width="20%" alt="Settings - General">
-  <img src="https://github.com/user-attachments/assets/a70c0682-58ad-4f71-b233-4093e5cb73a4" width="20%" alt="Settings - Account">
+  <img src="https://github.com/user-attachments/assets/5df64a8a-6933-4280-ad51-01444cba22cf" width="49%" alt="Settings - General">
+  <img src="https://github.com/user-attachments/assets/a70c0682-58ad-4f71-b233-4093e5cb73a4" width="49%" alt="Settings - Account">
 </p>
 
 ## Contributing
