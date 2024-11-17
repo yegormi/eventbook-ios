@@ -27,7 +27,7 @@ public struct ProviderButton: View {
                 Spacer()
             }
         }
-        .buttonStyle(.service)
+        .buttonStyle(.provider)
     }
 }
 
