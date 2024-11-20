@@ -5,9 +5,9 @@ import SharedModels
 
 @DependencyClient
 public struct AppearanceClient: Sendable {
-    public var setAppearance: @Sendable (PhoneAppearance) async throws -> Void
+    public var setAppearance: @Sendable (PhoneAppearance) async -> Void
     public var currentAppearance: @Sendable () -> PhoneAppearance = { .system }
-    public var configure: @Sendable () async throws -> Void
+    public var configure: @Sendable () async -> Void
 }
 
 extension AppearanceClient: TestDependencyKey {

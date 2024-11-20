@@ -9,7 +9,7 @@ extension AppearanceClient: DependencyKey {
         setAppearance: { appearance in
             @Dependency(\.userDefaults) var userDefaults
             userDefaults.set(appearance.rawValue, forKey: "app.appearance")
-            try await applyAppearance(appearance)
+            await applyAppearance(appearance)
         },
         currentAppearance: {
             @Dependency(\.userDefaults) var userDefaults
@@ -18,7 +18,7 @@ extension AppearanceClient: DependencyKey {
         configure: {
             @Dependency(\.userDefaults) var userDefaults
             let appearance = getSavedAppearance(userDefaults)
-            try await applyAppearance(appearance)
+            await applyAppearance(appearance)
         }
     )
 }
@@ -35,13 +35,12 @@ private func getSavedAppearance(_ userDefaults: UserDefaults.Dependency) -> Phon
     return .system
 }
 
-private func applyAppearance(_ appearance: PhoneAppearance) async throws {
-    await MainActor.run {
-        let scenes = UIApplication.shared.connectedScenes
-        let windowScenes = scenes.first as? UIWindowScene
-        let window = windowScenes?.windows.first
-        window?.overrideUserInterfaceStyle = appearance.toUI()
-    }
+@MainActor
+private func applyAppearance(_ appearance: PhoneAppearance) async {
+    let scenes = UIApplication.shared.connectedScenes
+    let windowScenes = scenes.first as? UIWindowScene
+    let window = windowScenes?.windows.first
+    window?.overrideUserInterfaceStyle = appearance.toUI()
 }
 
 public extension PhoneAppearance {

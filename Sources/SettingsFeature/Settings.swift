@@ -105,7 +105,7 @@ public struct Settings: Reducer, Sendable {
 
                 return .run { send in
                     await send(.internal(.appearanceUpdate(Result {
-                        try await self.appearance.setAppearance(newAppearance)
+                        await self.appearance.setAppearance(newAppearance)
                     })))
                 }
 

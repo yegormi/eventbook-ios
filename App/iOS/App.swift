@@ -23,7 +23,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
     )
         -> Bool
     {
-        Task { try? await self.appearance.configure() }
+        Task { await self.appearance.configure() }
 
         // Facebook SDK
         ApplicationDelegate.shared.application(
