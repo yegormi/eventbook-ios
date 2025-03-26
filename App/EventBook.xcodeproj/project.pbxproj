@@ -390,7 +390,7 @@
 			repositoryURL = "https://github.com/supabase/supabase-swift";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 2.21.0;
+				minimumVersion = 2.26.0;
 			};
 		};
 		8CFBEFA22CDD3B6D00E15AF8 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {

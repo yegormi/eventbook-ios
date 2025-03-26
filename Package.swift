@@ -31,16 +31,16 @@ let package = Package(
         .library(name: "TabsFeature", targets: ["TabsFeature"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-openapi-generator", from: "1.4.0"),
-        .package(url: "https://github.com/apple/swift-openapi-runtime", from: "1.6.0"),
+        .package(url: "https://github.com/apple/swift-openapi-generator", from: "1.7.1"),
+        .package(url: "https://github.com/apple/swift-openapi-runtime", from: "1.8.1"),
         .package(url: "https://github.com/apple/swift-openapi-urlsession", from: "1.0.2"),
         .package(url: "https://github.com/facebook/facebook-ios-sdk", from: "17.4.0"),
         .package(url: "https://github.com/google/GoogleSignIn-iOS", from: "8.0.0"),
-        .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "1.16.1"),
-        .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.5.2"),
+        .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "1.18.0"),
+        .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.8.1"),
         .package(url: "https://github.com/tgrapperon/swift-dependencies-additions", from: "1.1.1"),
         .package(url: "https://github.com/pointfreeco/swift-tagged", from: "0.10.0"),
-        .package(url: "https://github.com/supabase/supabase-swift", from: "2.21.1"),
+        .package(url: "https://github.com/supabase/supabase-swift", from: "2.26.0"),
     ],
     targets: [
         .target(
