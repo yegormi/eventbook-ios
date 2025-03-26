@@ -37,12 +37,18 @@ paths:
       responses:
         '200':
           description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
         '401':
           description: ''
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiErrorDto'
+      security:
+        - bearer: []
     delete:
       operationId: deleteMe
       summary: Delete the current user
@@ -52,6 +58,813 @@ paths:
       responses:
         '204':
           description: ''
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+      security:
+        - bearer: []
+  /categories:
+    post:
+      operationId: createCategory
+      summary: Create a category
+      tags:
+        - category
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCategoryDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryDto'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+      security:
+        - bearer: []
+    get:
+      operationId: getAllCategories
+      summary: Get all categories
+      tags:
+        - category
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategoryDto'
+  /categories/{id}:
+    get:
+      operationId: getCategoryById
+      summary: Get a category by id
+      tags:
+        - category
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryDto'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+    put:
+      operationId: updateCategoryById
+      summary: Update a category by id
+      tags:
+        - category
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCategoryDto'
+      responses:
+        '200':
+          description: ''
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+      security:
+        - bearer: []
+    delete:
+      operationId: deleteCategoryById
+      summary: Delete a category by id
+      tags:
+        - category
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+      security:
+        - bearer: []
+  /events/{eventId}/ticket:
+    post:
+      operationId: createTicket
+      summary: Create a ticket
+      tags:
+        - ticket
+      parameters:
+        - name: eventId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketDto'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+      security:
+        - bearer: []
+    get:
+      operationId: getTicketByEventId
+      summary: Get ticket by event ID
+      tags:
+        - ticket
+      parameters:
+        - name: eventId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketDto'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+      security:
+        - bearer: []
+  /tickets/me:
+    get:
+      operationId: getMyTickets
+      summary: Get my tickets
+      tags:
+        - ticket
+      parameters:
+        - name: query
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: limit
+          required: true
+          in: query
+          schema:
+            type: number
+        - name: page
+          required: true
+          in: query
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTicketsResponseDto'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+      security:
+        - bearer: []
+  /tickets/{id}:
+    get:
+      operationId: getTicketById
+      summary: Get a ticket by ID
+      tags:
+        - ticket
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketDto'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+      security:
+        - bearer: []
+  /events:
+    post:
+      operationId: createEvent
+      summary: Create an event
+      tags:
+        - event
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEventDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventDto'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+      security:
+        - bearer: []
+    get:
+      operationId: getAllEvents
+      summary: Get all events
+      tags:
+        - event
+      parameters:
+        - name: query
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: limit
+          required: false
+          in: query
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetEventsResponseDto'
+  /events/nearby:
+    get:
+      operationId: getNearbyEvents
+      summary: Get all events nearby
+      tags:
+        - event
+      parameters:
+        - name: lat
+          required: true
+          in: query
+          schema:
+            type: number
+        - name: lng
+          required: true
+          in: query
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EventDto'
+  /events/autocomplete:
+    post:
+      operationId: autocompleteEvent
+      summary: Autocomplete event
+      tags:
+        - event
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AutocompleteEventRequestDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AutocompleteEventResponseDto'
+  /events/me:
+    get:
+      operationId: getMyEvents
+      summary: Get all events of the current user
+      tags:
+        - event
+      parameters:
+        - name: query
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: limit
+          required: false
+          in: query
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetEventsResponseDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+      security:
+        - bearer: []
+  /events/events/{id}/similar:
+    get:
+      operationId: getSimilarEvents
+      summary: Get all similar events
+      tags:
+        - event
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: query
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: limit
+          required: false
+          in: query
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetEventsResponseDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+      security:
+        - bearer: []
+  /events/{id}:
+    get:
+      operationId: getEventById
+      summary: Get an event by id
+      tags:
+        - event
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventDto'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+    put:
+      operationId: updateEventById
+      summary: Update an event by id
+      tags:
+        - event
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateEventDto'
+      responses:
+        '200':
+          description: ''
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+      security:
+        - bearer: []
+    delete:
+      operationId: deleteEventById
+      summary: Delete an event by id
+      tags:
+        - event
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+      security:
+        - bearer: []
+  /events/{eventId}/reviews:
+    post:
+      operationId: createReview
+      summary: Create a review
+      tags:
+        - review
+      parameters:
+        - name: eventId
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateReviewDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewDto'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+      security:
+        - bearer: []
+    get:
+      operationId: getReviewsByEventId
+      summary: Get reviews by event ID
+      tags:
+        - review
+      parameters:
+        - name: eventId
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: query
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: limit
+          required: true
+          in: query
+          schema:
+            type: number
+        - name: page
+          required: true
+          in: query
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetReviewsResponseDto'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+      security:
+        - bearer: []
+  /reviews/me:
+    get:
+      operationId: getMyReviews
+      summary: Get my reviews
+      tags:
+        - review
+      parameters:
+        - name: query
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: limit
+          required: true
+          in: query
+          schema:
+            type: number
+        - name: page
+          required: true
+          in: query
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetReviewsResponseDto'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+      security:
+        - bearer: []
+  /reviews/{id}:
+    patch:
+      operationId: updateReview
+      summary: Update a review
+      tags:
+        - review
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateReviewDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewDto'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+      security:
+        - bearer: []
+    get:
+      operationId: getReviewById
+      summary: Get a review by ID
+      tags:
+        - review
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewDto'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
+      security:
+        - bearer: []
+    delete:
+      operationId: deleteReview
+      summary: Delete a review
+      tags:
+        - review
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewDto'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorDto'
         '401':
           description: ''
           content:
@@ -121,6 +934,7 @@ components:
             - unauthorized
             - entity-not-found
             - email-not-unique
+            - entity-not-unique
         message:
           type: string
           description: A human-readable message describing the error
@@ -140,3 +954,326 @@ components:
           example: John Doe
           description: The full name of the user
           nullable: true
+    Icon:
+      type: string
+      enum:
+        - party
+        - disco
+        - competition
+        - festival
+        - conference
+        - workshop
+        - meeting
+    CreateCategoryDto:
+      type: object
+      properties:
+        name:
+          type: string
+        slug:
+          type: string
+        icon:
+          $ref: '#/components/schemas/Icon'
+        description:
+          type: string
+      required:
+        - name
+        - slug
+        - icon
+        - description
+    CategoryDto:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        slug:
+          type: string
+        icon:
+          $ref: '#/components/schemas/Icon'
+        description:
+          type: string
+      required:
+        - id
+        - name
+        - slug
+        - icon
+        - description
+    UpdateCategoryDto:
+      type: object
+      properties:
+        name:
+          type: string
+        slug:
+          type: string
+        icon:
+          $ref: '#/components/schemas/Icon'
+        description:
+          type: string
+    EventDto:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        date:
+          format: date-time
+          type: string
+        address:
+          type: string
+        lat:
+          type: number
+        lng:
+          type: number
+        author:
+          $ref: '#/components/schemas/UserDto'
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryDto'
+      required:
+        - id
+        - name
+        - description
+        - price
+        - date
+        - address
+        - lat
+        - lng
+        - author
+        - categories
+    TicketDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the ticket
+          example: 123e4567-e89b-12d3-a456-426614174000
+        event:
+          description: The event of the ticket
+          allOf:
+            - $ref: '#/components/schemas/EventDto'
+        owner:
+          description: The owner of the ticket
+          allOf:
+            - $ref: '#/components/schemas/UserDto'
+        createdAt:
+          format: date-time
+          type: string
+          description: The created at date of the ticket
+          example: '2021-01-01T00:00:00.000Z'
+      required:
+        - id
+        - event
+        - owner
+        - createdAt
+    GetTicketsResponseDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TicketDto'
+        total:
+          type: number
+        limit:
+          type: number
+        pagesCount:
+          type: number
+      required:
+        - data
+        - total
+        - limit
+        - pagesCount
+    CreateEventDto:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        date:
+          format: date-time
+          type: string
+        address:
+          type: string
+        lat:
+          type: number
+        lng:
+          type: number
+        categories:
+          description: Category slugs
+          type: array
+          items:
+            type: string
+      required:
+        - name
+        - description
+        - price
+        - date
+        - address
+        - lat
+        - lng
+        - categories
+    GetEventsResponseDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventDto'
+        total:
+          type: number
+        limit:
+          type: number
+        pagesCount:
+          type: number
+      required:
+        - data
+        - total
+        - limit
+        - pagesCount
+    AutocompleteEventRequestDto:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        categories:
+          type: array
+          items:
+            type: string
+    AutocompleteEventResponseDto:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryDto'
+    UpdateEventDto:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        date:
+          format: date-time
+          type: string
+        lat:
+          type: number
+        lng:
+          type: number
+        categories:
+          description: Category slugs
+          type: array
+          items:
+            type: string
+      required:
+        - categories
+    CreateReviewDto:
+      type: object
+      properties:
+        title:
+          type: string
+          description: The title of the review
+          example: This is a review
+        content:
+          type: string
+          description: The content of the review
+          example: This is a review
+        rating:
+          type: number
+          description: The rating of the review
+          example: 5
+      required:
+        - title
+        - content
+        - rating
+    ReviewDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the review
+          example: 123e4567-e89b-12d3-a456-426614174000
+        event:
+          description: The event of the ticket
+          allOf:
+            - $ref: '#/components/schemas/EventDto'
+        author:
+          description: The owner of the ticket
+          allOf:
+            - $ref: '#/components/schemas/UserDto'
+        title:
+          type: string
+          description: The title of the review
+          example: This is a review
+        content:
+          type: string
+          description: The content of the review
+          example: This is a review
+        rating:
+          type: number
+          description: The rating of the review
+          example: 5
+        createdAt:
+          format: date-time
+          type: string
+          description: The created at date of the ticket
+          example: '2021-01-01T00:00:00.000Z'
+      required:
+        - id
+        - event
+        - author
+        - title
+        - content
+        - rating
+        - createdAt
+    GetReviewsResponseDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReviewDto'
+        total:
+          type: number
+        limit:
+          type: number
+        pagesCount:
+          type: number
+      required:
+        - data
+        - total
+        - limit
+        - pagesCount
+    UpdateReviewDto:
+      type: object
+      properties:
+        title:
+          type: string
+          description: The title of the review
+          example: This is a review
+        content:
+          type: string
+          description: The content of the review
+          example: This is a review
+        rating:
+          type: number
+          description: The rating of the review
+          example: 5

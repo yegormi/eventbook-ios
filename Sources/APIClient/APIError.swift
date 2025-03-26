@@ -8,6 +8,7 @@ public struct APIErrorPayload: Equatable, Sendable {
         case invalidAccessToken
         case expiredAccessToken
         case entityNotFound
+        case entityNotUnique
         case incorrectPassword
         case emailNotUnique
     }
