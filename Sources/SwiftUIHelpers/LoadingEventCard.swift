@@ -24,7 +24,7 @@ public struct LoadingEventCard: View {
                 HStack(spacing: 8) {
                     RoundedRectangle(cornerRadius: 8)
                         .fill(Color.neutral400.opacity(0.5))
-                        .frame(width: 48, height: 12)
+                        .frame(width: 55, height: 14)
                         .shimmerEffect()
 
                     Image(systemName: "chevron.right")

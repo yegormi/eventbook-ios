@@ -9,7 +9,7 @@ struct EventCard: View {
     var body: some View {
         CardContainer {
             HStack(spacing: 0) {
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: 4) {
                     Text(self.event.name)
                         .font(.headline)
                         .foregroundStyle(Color.primary)
