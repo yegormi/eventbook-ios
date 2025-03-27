@@ -24,9 +24,10 @@ extension APIClient: DependencyKey {
             ),
             transport: URLSessionTransport(),
             middlewares: [
+                LoggingMiddleware(bodyLoggingConfiguration: .upTo(maxBytes: 10 * 1024 * 1024)),
                 ErrorMiddleware(),
                 AuthenticationMiddleware(),
-                LoggingMiddleware(bodyLoggingConfiguration: .upTo(maxBytes: 1024)),
+                RetryingMiddleware(delay: .exponentialBackoff(baseDelay: 1, multiplier: 2)),
             ]
         )
 
