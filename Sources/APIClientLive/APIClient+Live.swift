@@ -35,7 +35,11 @@ extension APIClient: DependencyKey {
             // User endpoints
             getCurrentUser: {
                 try await throwingUnderlyingError {
-                    try await client.getMe().ok.body.json.toDomain()
+                    try await client.getMe()
+                        .ok
+                        .body
+                        .json
+                        .toDomain()
                 }
             },
             updateCurrentUser: { request in
@@ -52,17 +56,32 @@ extension APIClient: DependencyKey {
             // Category endpoints
             createCategory: { request in
                 try await throwingUnderlyingError {
-                    try await client.createCategory(body: .json(request.toAPI())).ok.body.json.toDomain()
+                    try await client
+                        .createCategory(body: .json(request.toAPI()))
+                        .ok
+                        .body
+                        .json
+                        .toDomain()
                 }
             },
             getAllCategories: {
                 try await throwingUnderlyingError {
-                    try await client.getAllCategories().ok.body.json.map { $0.toDomain() }
+                    try await client
+                        .getAllCategories()
+                        .ok
+                        .body
+                        .json
+                        .map { $0.toDomain() }
                 }
             },
             getCategoryById: { id in
                 try await throwingUnderlyingError {
-                    try await client.getCategoryById(path: .init(id: id)).ok.body.json.toDomain()
+                    try await client
+                        .getCategoryById(path: .init(id: id))
+                        .ok
+                        .body
+                        .json
+                        .toDomain()
                 }
             },
             updateCategoryById: { id, request in
@@ -79,7 +98,12 @@ extension APIClient: DependencyKey {
             // Event endpoints
             createEvent: { request in
                 try await throwingUnderlyingError {
-                    try await client.createEvent(body: .json(request.toAPI())).ok.body.json.toDomain()
+                    try await client
+                        .createEvent(body: .json(request.toAPI()))
+                        .ok
+                        .body
+                        .json
+                        .toDomain()
                 }
             },
             getAllEvents: { params in
@@ -90,17 +114,31 @@ extension APIClient: DependencyKey {
                             page: params.page,
                             limit: params.limit
                         )
-                    ).ok.body.json.toDomain()
+                    )
+                    .ok
+                    .body
+                    .json
+                    .toDomain()
                 }
             },
             getNearbyEvents: { lat, lng in
                 try await throwingUnderlyingError {
-                    try await client.getNearbyEvents(query: .init(lat: lat, lng: lng)).ok.body.json.map { $0.toDomain() }
+                    try await client
+                        .getNearbyEvents(query: .init(lat: lat, lng: lng))
+                        .ok
+                        .body
+                        .json
+                        .map { $0.toDomain() }
                 }
             },
             autocompleteEvent: { request in
                 try await throwingUnderlyingError {
-                    try await client.autocompleteEvent(body: .json(request.toAPI())).ok.body.json.toDomain()
+                    try await client
+                        .autocompleteEvent(body: .json(request.toAPI()))
+                        .ok
+                        .body
+                        .json
+                        .toDomain()
                 }
             },
             getMyEvents: { params in
@@ -111,7 +149,11 @@ extension APIClient: DependencyKey {
                             page: params.page,
                             limit: params.limit
                         )
-                    ).ok.body.json.toDomain()
+                    )
+                    .ok
+                    .body
+                    .json
+                    .toDomain()
                 }
             },
             getSimilarEvents: { id, params in
@@ -123,12 +165,21 @@ extension APIClient: DependencyKey {
                             page: params.page,
                             limit: params.limit
                         )
-                    ).ok.body.json.toDomain()
+                    )
+                    .ok
+                    .body
+                    .json
+                    .toDomain()
                 }
             },
             getEventById: { id in
                 try await throwingUnderlyingError {
-                    try await client.getEventById(path: .init(id: id)).ok.body.json.toDomain()
+                    try await client
+                        .getEventById(path: .init(id: id))
+                        .ok
+                        .body
+                        .json
+                        .toDomain()
                 }
             },
             updateEventById: { id, request in
@@ -145,12 +196,22 @@ extension APIClient: DependencyKey {
             // Ticket endpoints
             createTicket: { eventId in
                 try await throwingUnderlyingError {
-                    try await client.createTicket(path: .init(eventId: eventId)).ok.body.json.toDomain()
+                    try await client
+                        .createTicket(path: .init(eventId: eventId))
+                        .ok
+                        .body
+                        .json
+                        .toDomain()
                 }
             },
             getTicketByEventId: { eventId in
                 try await throwingUnderlyingError {
-                    try await client.getTicketByEventId(path: .init(eventId: eventId)).ok.body.json.toDomain()
+                    try await client
+                        .getTicketByEventId(path: .init(eventId: eventId))
+                        .ok
+                        .body
+                        .json
+                        .toDomain()
                 }
             },
             getMyTickets: { params in
@@ -161,12 +222,21 @@ extension APIClient: DependencyKey {
                             limit: params.limit,
                             page: params.page
                         )
-                    ).ok.body.json.toDomain()
+                    )
+                    .ok
+                    .body
+                    .json
+                    .toDomain()
                 }
             },
             getTicketById: { id in
                 try await throwingUnderlyingError {
-                    try await client.getTicketById(path: .init(id: id)).ok.body.json.toDomain()
+                    try await client
+                        .getTicketById(path: .init(id: id))
+                        .ok
+                        .body
+                        .json
+                        .toDomain()
                 }
             },
 
@@ -176,7 +246,11 @@ extension APIClient: DependencyKey {
                     try await client.createReview(
                         path: .init(eventId: eventId),
                         body: .json(request.toAPI())
-                    ).ok.body.json.toDomain()
+                    )
+                    .ok
+                    .body
+                    .json
+                    .toDomain()
                 }
             },
             getReviewsByEventId: { eventId, params in
@@ -188,7 +262,11 @@ extension APIClient: DependencyKey {
                             limit: params.limit,
                             page: params.page
                         )
-                    ).ok.body.json.toDomain()
+                    )
+                    .ok
+                    .body
+                    .json
+                    .toDomain()
                 }
             },
             getMyReviews: { params in
@@ -199,7 +277,11 @@ extension APIClient: DependencyKey {
                             limit: params.limit,
                             page: params.page
                         )
-                    ).ok.body.json.toDomain()
+                    )
+                    .ok
+                    .body
+                    .json
+                    .toDomain()
                 }
             },
             updateReview: { id, request in
@@ -207,17 +289,31 @@ extension APIClient: DependencyKey {
                     try await client.updateReview(
                         path: .init(id: id),
                         body: .json(request.toAPI())
-                    ).ok.body.json.toDomain()
+                    )
+                    .ok
+                    .body
+                    .json
+                    .toDomain()
                 }
             },
             getReviewById: { id in
                 try await throwingUnderlyingError {
-                    try await client.getReviewById(path: .init(id: id)).ok.body.json.toDomain()
+                    try await client
+                        .getReviewById(path: .init(id: id))
+                        .ok
+                        .body
+                        .json
+                        .toDomain()
                 }
             },
             deleteReview: { id in
                 try await throwingUnderlyingError {
-                    try await client.deleteReview(path: .init(id: id)).ok.body.json.toDomain()
+                    try await client
+                        .deleteReview(path: .init(id: id))
+                        .ok
+                        .body
+                        .json
+                        .toDomain()
                 }
             }
         )
