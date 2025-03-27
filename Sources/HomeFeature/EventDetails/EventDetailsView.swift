@@ -140,9 +140,6 @@ public struct EventDetailsView: View {
                         }
                     }
 
-                    Divider()
-                        .padding(.vertical, 8)
-
                     // Event description
                     Text("About Event")
                         .font(.system(size: 18, weight: .bold))
@@ -163,9 +160,6 @@ public struct EventDetailsView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
 
-                    Divider()
-                        .padding(.vertical, 8)
-
                     // Price and Attend button
                     VStack(spacing: 16) {
                         HStack {
@@ -182,17 +176,10 @@ public struct EventDetailsView: View {
                             Spacer()
                         }
 
-                        Button {
+                        Button("Attend") {
                             send(.attendButtonTapped)
-                        } label: {
-                            Text("Attend")
-                                .font(.system(size: 16, weight: .bold))
-                                .frame(maxWidth: .infinity)
-                                .padding(.vertical, 16)
-                                .background(Color.blue)
-                                .foregroundColor(.white)
-                                .cornerRadius(12)
                         }
+                        .buttonStyle(.primary(size: .fullWidth))
                     }
 
                     // Map preview
