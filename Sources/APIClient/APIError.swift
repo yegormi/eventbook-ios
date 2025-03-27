@@ -4,12 +4,8 @@ public struct APIErrorPayload: Equatable, Sendable {
     public enum Code: Equatable, Sendable {
         case internalError
         case unauthorized
-        case noAccessToken
-        case invalidAccessToken
-        case expiredAccessToken
         case entityNotFound
         case entityNotUnique
-        case incorrectPassword
         case emailNotUnique
     }
 

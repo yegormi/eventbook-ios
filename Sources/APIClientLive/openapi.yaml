@@ -295,12 +295,12 @@ paths:
           required: true
           in: query
           schema:
-            type: number
+            type: integer
         - name: page
           required: true
           in: query
           schema:
-            type: number
+            type: integer
       responses:
         '200':
           description: ''
@@ -404,12 +404,12 @@ paths:
           required: false
           in: query
           schema:
-            type: number
+            type: integer
         - name: limit
           required: false
           in: query
           schema:
-            type: number
+            type: integer
       responses:
         '200':
           description: ''
@@ -479,12 +479,12 @@ paths:
           required: false
           in: query
           schema:
-            type: number
+            type: integer
         - name: limit
           required: false
           in: query
           schema:
-            type: number
+            type: integer
       responses:
         '200':
           description: ''
@@ -521,12 +521,12 @@ paths:
           required: false
           in: query
           schema:
-            type: number
+            type: integer
         - name: limit
           required: false
           in: query
           schema:
-            type: number
+            type: integer
       responses:
         '200':
           description: ''
@@ -700,12 +700,12 @@ paths:
           required: true
           in: query
           schema:
-            type: number
+            type: integer
         - name: page
           required: true
           in: query
           schema:
-            type: number
+            type: integer
       responses:
         '200':
           description: ''
@@ -743,12 +743,12 @@ paths:
           required: true
           in: query
           schema:
-            type: number
+            type: integer
         - name: page
           required: true
           in: query
           schema:
-            type: number
+            type: integer
       responses:
         '200':
           description: ''
@@ -1080,11 +1080,11 @@ components:
           items:
             $ref: '#/components/schemas/TicketDto'
         total:
-          type: number
+          type: integer
         limit:
-          type: number
+          type: integer
         pagesCount:
-          type: number
+          type: integer
       required:
         - data
         - total
@@ -1130,11 +1130,11 @@ components:
           items:
             $ref: '#/components/schemas/EventDto'
         total:
-          type: number
+          type: integer
         limit:
-          type: number
+          type: integer
         pagesCount:
-          type: number
+          type: integer
       required:
         - data
         - total
@@ -1197,7 +1197,7 @@ components:
           description: The content of the review
           example: This is a review
         rating:
-          type: number
+          type: integer
           description: The rating of the review
           example: 5
       required:
@@ -1228,7 +1228,7 @@ components:
           description: The content of the review
           example: This is a review
         rating:
-          type: number
+          type: integer
           description: The rating of the review
           example: 5
         createdAt:
@@ -1252,11 +1252,11 @@ components:
           items:
             $ref: '#/components/schemas/ReviewDto'
         total:
-          type: number
+          type: integer
         limit:
-          type: number
+          type: integer
         pagesCount:
-          type: number
+          type: integer
       required:
         - data
         - total
@@ -1274,6 +1274,6 @@ components:
           description: The content of the review
           example: This is a review
         rating:
-          type: number
+          type: integer
           description: The rating of the review
           example: 5

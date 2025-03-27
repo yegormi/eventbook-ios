@@ -23,7 +23,11 @@ public struct User: Codable, Sendable, Equatable {
 }
 
 public extension User {
-    static var mock: Self {
-        User(id: "mock")
-    }
+    static let mock = Self(
+        id: "mock-user-id",
+        email: "user@example.com",
+        fullName: "Mock User",
+        phoneNumber: "+1234567890",
+        photoURL: URL(string: "https://example.com/avatar.jpg")
+    )
 }
