@@ -123,7 +123,9 @@ extension RetryingMiddleware: ClientMiddleware {
         baseURL: URL,
         operationID: String,
         next: (HTTPRequest, HTTPBody?, URL) async throws -> (HTTPResponse, HTTPBody?)
-    ) async throws -> (HTTPResponse, HTTPBody?) {
+    )
+        async throws -> (HTTPResponse, HTTPBody?)
+    {
         /// Skip retry logic if policy is set to never retry
         guard case let .upToAttempts(count: maxAttemptCount) = policy else {
             return try await next(request, body, baseURL)
