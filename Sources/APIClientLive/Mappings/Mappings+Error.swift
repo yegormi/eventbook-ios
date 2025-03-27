@@ -14,6 +14,7 @@ extension Components.Schemas.ApiErrorDto.codePayload {
         case .unauthorized: .unauthorized
         case .email_hyphen_not_hyphen_unique: .emailNotUnique
         case .entity_hyphen_not_hyphen_found: .entityNotFound
+        case .entity_hyphen_not_hyphen_unique: .entityNotUnique
         }
     }
 }

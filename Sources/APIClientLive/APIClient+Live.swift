@@ -24,16 +24,22 @@ extension APIClient: DependencyKey {
             ),
             transport: URLSessionTransport(),
             middlewares: [
+                LoggingMiddleware(bodyLoggingConfiguration: .upTo(maxBytes: 10 * 1024 * 1024)),
                 ErrorMiddleware(),
                 AuthenticationMiddleware(),
-                LoggingMiddleware(bodyLoggingConfiguration: .upTo(maxBytes: 1024)),
+                RetryingMiddleware(delay: .exponentialBackoff(baseDelay: 1, multiplier: 2)),
             ]
         )
 
         return Self(
+            // User endpoints
             getCurrentUser: {
                 try await throwingUnderlyingError {
-                    try await client.getMe().ok.body.json.toDomain()
+                    try await client.getMe()
+                        .ok
+                        .body
+                        .json
+                        .toDomain()
                 }
             },
             updateCurrentUser: { request in
@@ -44,6 +50,270 @@ extension APIClient: DependencyKey {
             deleteCurrentUser: {
                 try await throwingUnderlyingError {
                     _ = try await client.deleteMe().noContent
+                }
+            },
+
+            // Category endpoints
+            createCategory: { request in
+                try await throwingUnderlyingError {
+                    try await client
+                        .createCategory(body: .json(request.toAPI()))
+                        .ok
+                        .body
+                        .json
+                        .toDomain()
+                }
+            },
+            getAllCategories: {
+                try await throwingUnderlyingError {
+                    try await client
+                        .getAllCategories()
+                        .ok
+                        .body
+                        .json
+                        .map { $0.toDomain() }
+                }
+            },
+            getCategoryById: { id in
+                try await throwingUnderlyingError {
+                    try await client
+                        .getCategoryById(path: .init(id: id))
+                        .ok
+                        .body
+                        .json
+                        .toDomain()
+                }
+            },
+            updateCategoryById: { id, request in
+                try await throwingUnderlyingError {
+                    _ = try await client.updateCategoryById(path: .init(id: id), body: .json(request.toAPI())).ok
+                }
+            },
+            deleteCategoryById: { id in
+                try await throwingUnderlyingError {
+                    _ = try await client.deleteCategoryById(path: .init(id: id)).ok
+                }
+            },
+
+            // Event endpoints
+            createEvent: { request in
+                try await throwingUnderlyingError {
+                    try await client
+                        .createEvent(body: .json(request.toAPI()))
+                        .ok
+                        .body
+                        .json
+                        .toDomain()
+                }
+            },
+            getAllEvents: { params in
+                try await throwingUnderlyingError {
+                    try await client.getAllEvents(
+                        query: .init(
+                            query: params.query,
+                            page: params.page,
+                            limit: params.limit
+                        )
+                    )
+                    .ok
+                    .body
+                    .json
+                    .toDomain()
+                }
+            },
+            getNearbyEvents: { lat, lng in
+                try await throwingUnderlyingError {
+                    try await client
+                        .getNearbyEvents(query: .init(lat: lat, lng: lng))
+                        .ok
+                        .body
+                        .json
+                        .map { $0.toDomain() }
+                }
+            },
+            autocompleteEvent: { request in
+                try await throwingUnderlyingError {
+                    try await client
+                        .autocompleteEvent(body: .json(request.toAPI()))
+                        .ok
+                        .body
+                        .json
+                        .toDomain()
+                }
+            },
+            getMyEvents: { params in
+                try await throwingUnderlyingError {
+                    try await client.getMyEvents(
+                        query: .init(
+                            query: params.query,
+                            page: params.page,
+                            limit: params.limit
+                        )
+                    )
+                    .ok
+                    .body
+                    .json
+                    .toDomain()
+                }
+            },
+            getSimilarEvents: { id, params in
+                try await throwingUnderlyingError {
+                    try await client.getSimilarEvents(
+                        path: .init(id: id),
+                        query: .init(
+                            query: params.query,
+                            page: params.page,
+                            limit: params.limit
+                        )
+                    )
+                    .ok
+                    .body
+                    .json
+                    .toDomain()
+                }
+            },
+            getEventById: { id in
+                try await throwingUnderlyingError {
+                    try await client
+                        .getEventById(path: .init(id: id))
+                        .ok
+                        .body
+                        .json
+                        .toDomain()
+                }
+            },
+            updateEventById: { id, request in
+                try await throwingUnderlyingError {
+                    _ = try await client.updateEventById(path: .init(id: id), body: .json(request.toAPI())).ok
+                }
+            },
+            deleteEventById: { id in
+                try await throwingUnderlyingError {
+                    _ = try await client.deleteEventById(path: .init(id: id)).ok
+                }
+            },
+
+            // Ticket endpoints
+            createTicket: { eventId in
+                try await throwingUnderlyingError {
+                    try await client
+                        .createTicket(path: .init(eventId: eventId))
+                        .ok
+                        .body
+                        .json
+                        .toDomain()
+                }
+            },
+            getTicketByEventId: { eventId in
+                try await throwingUnderlyingError {
+                    try await client
+                        .getTicketByEventId(path: .init(eventId: eventId))
+                        .ok
+                        .body
+                        .json
+                        .toDomain()
+                }
+            },
+            getMyTickets: { params in
+                try await throwingUnderlyingError {
+                    try await client.getMyTickets(
+                        query: .init(
+                            query: params.query,
+                            limit: params.limit,
+                            page: params.page
+                        )
+                    )
+                    .ok
+                    .body
+                    .json
+                    .toDomain()
+                }
+            },
+            getTicketById: { id in
+                try await throwingUnderlyingError {
+                    try await client
+                        .getTicketById(path: .init(id: id))
+                        .ok
+                        .body
+                        .json
+                        .toDomain()
+                }
+            },
+
+            // Review endpoints
+            createReview: { eventId, request in
+                try await throwingUnderlyingError {
+                    try await client.createReview(
+                        path: .init(eventId: eventId),
+                        body: .json(request.toAPI())
+                    )
+                    .ok
+                    .body
+                    .json
+                    .toDomain()
+                }
+            },
+            getReviewsByEventId: { eventId, params in
+                try await throwingUnderlyingError {
+                    try await client.getReviewsByEventId(
+                        path: .init(eventId: eventId),
+                        query: .init(
+                            query: params.query,
+                            limit: params.limit,
+                            page: params.page
+                        )
+                    )
+                    .ok
+                    .body
+                    .json
+                    .toDomain()
+                }
+            },
+            getMyReviews: { params in
+                try await throwingUnderlyingError {
+                    try await client.getMyReviews(
+                        query: .init(
+                            query: params.query,
+                            limit: params.limit,
+                            page: params.page
+                        )
+                    )
+                    .ok
+                    .body
+                    .json
+                    .toDomain()
+                }
+            },
+            updateReview: { id, request in
+                try await throwingUnderlyingError {
+                    try await client.updateReview(
+                        path: .init(id: id),
+                        body: .json(request.toAPI())
+                    )
+                    .ok
+                    .body
+                    .json
+                    .toDomain()
+                }
+            },
+            getReviewById: { id in
+                try await throwingUnderlyingError {
+                    try await client
+                        .getReviewById(path: .init(id: id))
+                        .ok
+                        .body
+                        .json
+                        .toDomain()
+                }
+            },
+            deleteReview: { id in
+                try await throwingUnderlyingError {
+                    try await client
+                        .deleteReview(path: .init(id: id))
+                        .ok
+                        .body
+                        .json
+                        .toDomain()
                 }
             }
         )
