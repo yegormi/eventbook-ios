@@ -33,9 +33,17 @@ public struct HomeView: View {
             .transition(.opacity)
             .animation(.default, value: self.store.events)
         }
-        .contentMargins(16, for: .scrollContent)
+        .contentMargins(.all, 16, for: .scrollContent)
         .refreshable {
             await send(.refreshEvents).finish()
+        }
+        .navigationDestination(
+            item: self.$store.scope(
+                state: \.destination?.eventDetails,
+                action: \.destination.eventDetails
+            )
+        ) { store in
+            EventDetailsView(store: store)
         }
         .onFirstAppear {
             send(.onFirstAppear)
@@ -120,7 +128,9 @@ public struct HomeView: View {
 }
 
 #Preview {
-    HomeView(store: Store(initialState: Home.State()) {
-        Home()
-    })
+    NavigationStack {
+        HomeView(store: Store(initialState: Home.State()) {
+            Home()
+        })
+    }
 }

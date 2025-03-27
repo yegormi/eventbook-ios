@@ -10,6 +10,8 @@ private let logger = Logger(subsystem: "HomeFeature", category: "Home")
 public struct Home: Reducer, Sendable {
     @ObservableState
     public struct State: Equatable, Sendable {
+        @Presents var destination: Destination.State?
+
         struct PageSettings: Equatable {
             var currentPage: Int
             var hasMorePages: Bool
@@ -26,6 +28,7 @@ public struct Home: Reducer, Sendable {
 
     public enum Action: ViewAction {
         case delegate(Delegate)
+        case destination(PresentationAction<Destination.Action>)
         case `internal`(Internal)
         case view(View)
 
@@ -50,6 +53,11 @@ public struct Home: Reducer, Sendable {
         }
     }
 
+    @Reducer(state: .equatable, .sendable)
+    public enum Destination {
+        case eventDetails(EventDetails)
+    }
+
     @Dependency(\.apiClient) var api
     @Dependency(\.uuid) var uuid
     @Dependency(\.mainQueue) var mainQueue
@@ -70,6 +78,13 @@ public struct Home: Reducer, Sendable {
         Reduce { state, action in
             switch action {
             case .delegate:
+                return .none
+
+            case .destination(.presented(.eventDetails(.delegate(.backButtonTapped)))):
+                state.destination = nil
+                return .none
+
+            case .destination:
                 return .none
 
             case let .internal(.eventsResponse(result)):
@@ -107,7 +122,8 @@ public struct Home: Reducer, Sendable {
                 return self.loadNextPage(&state)
 
             case let .view(.eventTapped(event)):
-                return .send(.delegate(.eventSelected(event)))
+                state.destination = .eventDetails(EventDetails.State(event: event))
+                return .none
 
             case .view(.searchCleared):
                 state.searchQuery = ""
@@ -121,6 +137,7 @@ public struct Home: Reducer, Sendable {
                 return .send(.internal(.refreshEventsList))
             }
         }
+        .ifLet(\.$destination, action: \.destination)
     }
 
     // MARK: - Private Methods
