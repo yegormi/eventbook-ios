@@ -148,9 +148,20 @@ public struct EventDetailsView: View {
                         .font(.system(size: 18, weight: .bold))
                         .padding(.bottom, 4)
 
-                    Text(self.store.event.description)
-                        .font(.system(size: 16))
-                        .foregroundStyle(Color.primary)
+                    if
+                        let htmlText = Text.html(
+                            self.store.event.description,
+                            font: .body,
+                            textColor: .primary,
+                            linkColor: .blue
+                        )
+                    {
+                        htmlText
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    } else {
+                        HTMLText(htmlContent: self.store.event.description)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
 
                     Divider()
                         .padding(.vertical, 8)
