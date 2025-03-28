@@ -186,7 +186,7 @@ public struct EventDetailsView: View {
                     self.locationMapPreview
                 }
             }
-            .padding(.horizontal, 16)
+            .padding(16)
         }
         .navigationTitle(self.store.event.name)
         .navigationBarTitleDisplayMode(.inline)
