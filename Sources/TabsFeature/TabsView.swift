@@ -30,7 +30,7 @@ public struct TabsView: View {
                 )
                 .background(Color(uiColor: UIColor.systemBackground))
                 .navigationTitle("Home")
-                .toolbarTitleDisplayMode(.inlineLarge)
+                .navigationBarTitleDisplayMode(.large)
             }
             .tag(Tabs.State.Tab.home)
             .tabItem {
@@ -43,7 +43,7 @@ public struct TabsView: View {
                 )
                 .background(Color(uiColor: UIColor.systemBackground))
                 .navigationTitle("Explore")
-                .toolbarTitleDisplayMode(.inlineLarge)
+                .navigationBarTitleDisplayMode(.large)
             }
             .tag(Tabs.State.Tab.explore)
             .tabItem {
@@ -56,7 +56,7 @@ public struct TabsView: View {
                 )
                 .background(Color(uiColor: UIColor.systemBackground))
                 .navigationTitle("Favorites")
-                .toolbarTitleDisplayMode(.inlineLarge)
+                .navigationBarTitleDisplayMode(.large)
             }
             .tag(Tabs.State.Tab.favorites)
             .tabItem {
@@ -69,7 +69,7 @@ public struct TabsView: View {
                 )
                 .background(Color(uiColor: UIColor.systemBackground))
                 .navigationTitle("Account")
-                .toolbarTitleDisplayMode(.inlineLarge)
+                .navigationBarTitleDisplayMode(.large)
             }
             .tag(Tabs.State.Tab.account)
             .tabItem {

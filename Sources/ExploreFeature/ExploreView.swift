@@ -36,6 +36,18 @@ public struct ExploreView: View {
         ) { store in
             EventDetailsView(store: store)
         }
+        .sheet(
+            item: self.$store.scope(
+                state: \.destination?.eventPreview,
+                action: \.destination.eventPreview
+            )
+        ) { store in
+            NavigationStack {
+                EventPreviewView(store: store)
+                    .presentationDetents([.medium, .large])
+                    .presentationDragIndicator(.hidden)
+            }
+        }
         .alert(
             self.$store.scope(
                 state: \.destination?.alert,
@@ -97,22 +109,19 @@ public struct ExploreView: View {
         }
         .ignoresSafeArea(edges: .vertical)
         .overlay(alignment: .topTrailing) {
-            VStack(spacing: 12) {
-                // Location address
+            HStack(spacing: 0) {
                 if let address = store.currentAddress {
                     Text(address)
                         .font(.system(size: 14, weight: .medium))
                         .padding(8)
                         .background(Color(.systemBackground).opacity(0.9))
                         .clipShape(RoundedRectangle(cornerRadius: 8))
-                        .padding(.top, 50)
-                        .padding(.horizontal, 16)
                         .transition(.opacity)
                 }
 
-                // Location and refresh buttons
+                Spacer()
+
                 HStack(spacing: 8) {
-                    // Recenter map button
                     Button {
                         send(.recenterMap)
                     } label: {
@@ -125,7 +134,6 @@ public struct ExploreView: View {
                             .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
                     }
 
-                    // Refresh events button
                     Button {
                         send(.refreshButtonTapped)
                     } label: {
@@ -138,9 +146,8 @@ public struct ExploreView: View {
                             .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
                     }
                 }
-                .padding(.top, 12)
-                .padding(.trailing, 16)
             }
+            .padding()
         }
         .overlay(alignment: .center) {
             if self.store.isLoading {
@@ -254,9 +261,9 @@ public struct ExploreView: View {
                     EventCard(
                         event: event,
                         isSelected: event.id == self.store.selectedEvent?.id
-                    )                        {
-                            send(.eventAnnotationTapped(event))
-                        }
+                    ) {
+                        send(.eventAnnotationTapped(event))
+                    }
                     .frame(width: 240, height: 160)
                 }
             }
@@ -291,7 +298,7 @@ struct EventMarker: View {
                     )
 
                 if let category = event.categories.first {
-                    Image(systemName: self.categoryIconName(for: category.icon))
+                    Image(systemName: category.icon.sfSymbolName)
                         .font(.system(size: 16))
                         .foregroundColor(.white)
                 } else {
@@ -369,7 +376,7 @@ struct EventCard: View {
                     // Category tag
                     if let category = event.categories.first {
                         HStack(spacing: 4) {
-                            Image(systemName: self.categoryIconName(for: category.icon))
+                            Image(systemName: category.icon.sfSymbolName)
                                 .font(.system(size: 10))
 
                             Text(category.name)
@@ -400,18 +407,6 @@ struct EventCard: View {
             )
         }
         .buttonStyle(.plain)
-    }
-
-    private func categoryIconName(for icon: CategoryIcon) -> String {
-        switch icon {
-        case .party: "party.popper.fill"
-        case .disco: "music.note.list"
-        case .competition: "trophy.fill"
-        case .festival: "sparkles"
-        case .conference: "person.3.fill"
-        case .workshop: "hammer.fill"
-        case .meeting: "calendar.badge.clock"
-        }
     }
 }
 

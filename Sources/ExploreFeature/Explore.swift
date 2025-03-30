@@ -86,6 +86,7 @@ public struct Explore: Reducer, Sendable {
     @Reducer(state: .equatable, .sendable)
     public enum Destination {
         case eventDetails(EventDetails)
+        case eventPreview(EventPreview)
         case alert(AlertState<Never>)
     }
 
@@ -112,6 +113,20 @@ public struct Explore: Reducer, Sendable {
 
             case .destination(.presented(.eventDetails(.delegate(.backButtonTapped)))):
                 state.destination = nil
+                return .none
+
+            case .destination(.presented(.eventPreview(.delegate(.viewDetailsButtonTapped)))):
+                if let selectedEvent = state.selectedEvent {
+                    state.destination = .eventDetails(EventDetails.State(event: selectedEvent))
+                }
+                return .none
+
+            case .destination(.presented(.eventPreview(.delegate(.dismissButtonTapped)))):
+                state.destination = nil
+                return .none
+
+            case .destination(.dismiss):
+                state.selectedEvent = nil
                 return .none
 
             case .destination:
@@ -253,7 +268,8 @@ public struct Explore: Reducer, Sendable {
 
             case let .view(.eventAnnotationTapped(event)):
                 state.selectedEvent = event
-                state.destination = .eventDetails(EventDetails.State(event: event))
+                // Show preview sheet instead of full details
+                state.destination = .eventPreview(EventPreview.State(event: event))
                 return .none
 
             case .view(.recenterMap):
