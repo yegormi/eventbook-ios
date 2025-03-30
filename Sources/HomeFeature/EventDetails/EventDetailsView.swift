@@ -167,7 +167,7 @@ public struct EventDetailsView: View {
                 HStack(spacing: 8) {
                     ForEach(self.store.event.categories, id: \.id) { category in
                         HStack(spacing: 4) {
-                            Image(systemName: self.iconForCategory(category.icon))
+                            Image(systemName: category.icon.sfSymbolName)
                                 .font(.system(size: 12))
                                 .foregroundStyle(Color.primary)
 
@@ -255,7 +255,6 @@ public struct EventDetailsView: View {
                             send(.similarEventTapped(event))
                         } label: {
                             SimilarEventCard(event: event)
-                                .frame(width: 280)
                         }
                         .buttonStyle(.tappable)
                     }
@@ -264,16 +263,10 @@ public struct EventDetailsView: View {
                         ProgressView()
                             .frame(width: 50)
                     } else if self.store.similarEventsPageSettings.hasMorePages {
-                        Button {
+                        Button("Load More") {
                             send(.loadMoreSimilarEvents)
-                        } label: {
-                            Text("Load More")
-                                .font(.system(size: 16, weight: .medium))
-                                .foregroundStyle(Color.accentColor)
-                                .frame(width: 100, height: 120)
-                                .background(Color.gray.opacity(0.1))
-                                .cornerRadius(12)
                         }
+                        .buttonStyle(.secondary(size: .small))
                     }
                 }
                 .padding(.horizontal, 16)
@@ -380,27 +373,6 @@ public struct EventDetailsView: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
     }
-
-    // MARK: - Helper Methods
-
-    private func iconForCategory(_ icon: CategoryIcon) -> String {
-        switch icon {
-        case .party:
-            "party.popper.fill"
-        case .disco:
-            "music.note.list"
-        case .competition:
-            "trophy.fill"
-        case .festival:
-            "sparkles"
-        case .conference:
-            "person.3.fill"
-        case .workshop:
-            "hammer.fill"
-        case .meeting:
-            "calendar.badge.clock"
-        }
-    }
 }
 
 // MARK: - Supporting Views
@@ -411,30 +383,6 @@ struct SimilarEventCard: View {
     var body: some View {
         CardContainer {
             VStack(alignment: .leading, spacing: 8) {
-                ZStack(alignment: .topLeading) {
-                    Rectangle()
-                        .fill(Color.gray.opacity(0.2))
-                        .aspectRatio(16 / 9, contentMode: .fill)
-                        .frame(height: 120)
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
-
-                    // Category tag
-                    if let category = event.categories.first {
-                        HStack(spacing: 4) {
-                            Image(systemName: self.categoryIcon(category.icon))
-                                .font(.system(size: 12))
-                            Text(category.name)
-                                .font(.system(size: 12, weight: .medium))
-                        }
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(Color.black.opacity(0.7))
-                        .foregroundStyle(Color.white)
-                        .clipShape(Capsule())
-                        .padding(8)
-                    }
-                }
-
                 VStack(alignment: .leading, spacing: 4) {
                     Text(self.event.name)
                         .font(.system(size: 16, weight: .semibold))
@@ -446,24 +394,26 @@ struct SimilarEventCard: View {
                 }
 
                 HStack {
+                    if let category = event.categories.first {
+                        HStack(spacing: 4) {
+                            Image(systemName: category.icon.sfSymbolName)
+                                .font(.system(size: 12))
+                            Text(category.name)
+                                .font(.system(size: 12, weight: .medium))
+                        }
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(Color.black.opacity(0.7))
+                        .foregroundStyle(Color.white)
+                        .clipShape(Capsule())
+                    }
                     Spacer()
                     Text("Learn more")
                         .font(.system(size: 14, weight: .medium))
                         .foregroundStyle(Color.accentColor)
                 }
             }
-        }
-    }
-
-    private func categoryIcon(_ icon: CategoryIcon) -> String {
-        switch icon {
-        case .party: "party.popper.fill"
-        case .disco: "music.note.list"
-        case .competition: "trophy.fill"
-        case .festival: "sparkles"
-        case .conference: "person.3.fill"
-        case .workshop: "hammer.fill"
-        case .meeting: "calendar.badge.clock"
+            .frame(width: 200)
         }
     }
 }
