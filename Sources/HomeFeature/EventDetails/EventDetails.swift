@@ -1,8 +1,10 @@
 import APIClient
 import ComposableArchitecture
 import Foundation
+import MapKit
 import OSLog
 import SharedModels
+import UIKit
 
 private let logger = Logger(subsystem: "EventDetailsFeature", category: "EventDetails")
 
@@ -65,6 +67,7 @@ public struct EventDetails: Reducer, Sendable {
 
     @Dependency(\.apiClient) var api
     @Dependency(\.mainQueue) var mainQueue
+    @Dependency(\.openURL) var openURL
 
     public init() {}
 
@@ -140,8 +143,40 @@ public struct EventDetails: Reducer, Sendable {
                 }
 
             case .view(.showLocationButtonTapped):
-                // Here you could implement map navigation
-                return .none
+                // Open Maps app with directions to the event location
+                return .run { [lat = state.event.lat, lng = state.event.lng, name = state.event.name] _ in
+                    let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lng)
+
+                    // Use Apple Maps first (URLComponents approach ensures proper URL encoding)
+                    var components = URLComponents(string: "http://maps.apple.com/")
+                    components?.queryItems = [
+                        URLQueryItem(name: "q", value: name),
+                        URLQueryItem(name: "ll", value: "\(coordinate.latitude),\(coordinate.longitude)"),
+                        URLQueryItem(name: "dirflg", value: "d"), // For directions
+                    ]
+
+                    if let url = components?.url, await self.openURL(url) {
+                        // Successfully opened Apple Maps
+                        return
+                    }
+
+                    // Fallback to Google Maps if Apple Maps can't be opened
+                    let googleMapsURL =
+                        URL(string: "comgooglemaps://?q=\(coordinate.latitude),\(coordinate.longitude)&directionsmode=driving")
+                    if let googleMapsURL, await self.openURL(googleMapsURL) {
+                        // Successfully opened Google Maps
+                        return
+                    }
+
+                    // Web fallback if neither app is installed
+                    let googleWebURL =
+                        URL(
+                            string: "https://www.google.com/maps/search/?api=1&query=\(coordinate.latitude),\(coordinate.longitude)"
+                        )
+                    if let googleWebURL {
+                        _ = await self.openURL(googleWebURL)
+                    }
+                }
 
             case .view(.addReviewTapped):
                 state.destination = .addReview(AddReview.State(eventId: state.event.id))

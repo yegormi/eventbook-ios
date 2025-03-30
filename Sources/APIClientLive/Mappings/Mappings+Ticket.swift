@@ -19,7 +19,7 @@ extension Components.Schemas.GetTicketsResponseDto {
             data: self.data.map { $0.toDomain() },
             total: self.total,
             limit: self.limit,
-            pagesCount: self.pagesCount
+            pagesCount: self.pagesCount ?? 0
         )
     }
 }

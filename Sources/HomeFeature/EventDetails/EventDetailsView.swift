@@ -1,5 +1,6 @@
 import ComposableArchitecture
 import Foundation
+import MapKit
 import SharedModels
 import Styleguide
 import SwiftUI
@@ -126,11 +127,6 @@ public struct EventDetailsView: View {
                 .foregroundStyle(Color.primary)
                 .padding(.top, 16)
 
-            // Event brief description
-            Text("Some disco") // This would be from your model
-                .font(.system(size: 16))
-                .foregroundStyle(Color.gray)
-
             // Event date and time
             HStack {
                 Image(systemName: "calendar")
@@ -190,52 +186,10 @@ public struct EventDetailsView: View {
 
                 HTMLText(htmlContent: self.store.event.description)
                     .frame(maxWidth: .infinity, alignment: .leading)
-
-//                if let htmlText = Text.html(
-//                    self.store.event.description,
-//                    font: .body,
-//                    textColor: .primary,
-//                    linkColor: .blue
-//                ) {
-//                    htmlText
-//                        .frame(maxWidth: .infinity, alignment: .leading)
-//                } else {
-//                    HTMLText(htmlContent: self.store.event.description)
-//                        .frame(maxWidth: .infinity, alignment: .leading)
-//                }
             }
             .padding(.top, 8)
 
-            // Location map
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Location")
-                    .font(.system(size: 18, weight: .bold))
-
-                ZStack {
-                    // Map placeholder
-                    Rectangle()
-                        .fill(Color.gray.opacity(0.2))
-                        .frame(height: 180)
-                        .cornerRadius(12)
-
-                    Image(systemName: "mappin.circle.fill")
-                        .font(.system(size: 40))
-                        .foregroundColor(.red)
-
-                    Button {
-                        send(.showLocationButtonTapped)
-                    } label: {
-                        Rectangle()
-                            .fill(Color.clear)
-                            .frame(height: 180)
-                    }
-                }
-
-                Text(self.store.event.address)
-                    .font(.system(size: 14))
-                    .foregroundStyle(Color.gray)
-            }
-            .padding(.top, 16)
+            self.mapView
         }
         .padding(.horizontal, 16)
     }
