@@ -72,8 +72,11 @@ public struct AccountView: View {
 
     private func avatarCell(for user: SharedModels.User) -> some View {
         HStack(spacing: 12) {
-            self.userAvatar(for: user)
-                .frame(width: 70, height: 70)
+            CircleAvatarView(
+                model: user,
+                photoURL: user.photoURL,
+                size: 70
+            )
             VStack(alignment: .leading, spacing: 5) {
                 Text(user.fullName ?? "No username provided")
                     .font(.system(size: 20, weight: .semibold))

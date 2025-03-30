@@ -343,15 +343,11 @@ public struct EventDetailsView: View {
     private func reviewCard(_ review: Review) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                // User avatar/image
-                Circle()
-                    .fill(Color.gray.opacity(0.2))
-                    .frame(width: 40, height: 40)
-                    .overlay {
-                        Text(String(review.author.fullName?.prefix(1) ?? "?"))
-                            .font(.system(size: 16, weight: .bold))
-                            .foregroundStyle(Color.gray)
-                    }
+                CircleAvatarView(
+                    model: review.author,
+                    photoURL: review.author.photoURL,
+                    size: 40
+                )
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(review.author.fullName ?? "Anonymous")
