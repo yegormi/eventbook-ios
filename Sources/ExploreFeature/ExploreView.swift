@@ -90,9 +90,16 @@ public struct ExploreView: View {
 
     private var mapView: some View {
         ZStack(alignment: .bottom) {
-            // Map with events
             if let mapRegion = store.mapRegion {
-                self.mapContent(region: mapRegion)
+                Group {
+                    if #available(iOS 17.0, *) {
+                        // iOS 17+ Map implementation
+                        modernMapView(region: mapRegion)
+                    } else {
+                        // iOS 16 and earlier Map implementation
+                        self.legacyMapView(region: mapRegion)
+                    }
+                }
             } else {
                 // Placeholder while waiting for location
                 Color(.systemBackground)
@@ -107,7 +114,6 @@ public struct ExploreView: View {
                 self.eventCardsPanel
             }
         }
-        .ignoresSafeArea(edges: .vertical)
         .overlay(alignment: .topTrailing) {
             HStack(spacing: 0) {
                 if let address = store.currentAddress {
@@ -123,7 +129,7 @@ public struct ExploreView: View {
 
                 HStack(spacing: 8) {
                     Button {
-                        send(.recenterMap)
+                        send(.recenterMap, animation: .smooth)
                     } label: {
                         Image(systemName: "location.fill")
                             .font(.system(size: 18, weight: .bold))
@@ -161,57 +167,47 @@ public struct ExploreView: View {
         }
     }
 
-    @ViewBuilder
-    private func mapContent(region: Explore.State.MapRegion) -> some View {
-        if #available(iOS 17.0, *) {
-            // iOS 17+ Map implementation
-            Map(initialPosition: .region(MKCoordinateRegion(
-                center: region.center,
-                span: MKCoordinateSpan(
-                    latitudeDelta: region.span.latitudeDelta,
-                    longitudeDelta: region.span.longitudeDelta
-                )
-            ))) {
-                // User's location marker
-                if let location = store.currentLocation {
-                    Marker("Your location", coordinate: CLLocationCoordinate2D(
-                        latitude: location.latitude,
-                        longitude: location.longitude
-                    ))
-                    .tint(.blue)
-                }
+    @available(iOS 17.0, *)
+    private func modernMapView(region _: Explore.State.MapRegion) -> some View {
+        Map(position: self.$store.cameraPosition) {
+            // User's location marker
+            if let location = store.currentLocation {
+                Marker("Your location", coordinate: CLLocationCoordinate2D(
+                    latitude: location.latitude,
+                    longitude: location.longitude
+                ))
+                .tint(.blue)
+            }
 
-                // Event markers
-                ForEach(store.nearbyEvents) { event in
-                    Annotation(
-                        event.name,
-                        coordinate: CLLocationCoordinate2D(latitude: event.lat, longitude: event.lng),
-                        anchor: .bottom
-                    ) {
-                        EventMarker(
-                            event: event,
-                            isSelected: event.id == store.selectedEvent?.id
-                        )
-                        .onTapGesture {
-                            send(.eventAnnotationTapped(event))
-                        }
+            // Event markers
+            ForEach(self.store.nearbyEvents) { event in
+                Annotation(
+                    event.name,
+                    coordinate: CLLocationCoordinate2D(latitude: event.lat, longitude: event.lng),
+                    anchor: .bottom
+                ) {
+                    EventMarker(
+                        event: event,
+                        isSelected: event.id == self.store.selectedEvent?.id
+                    )
+                    .onTapGesture {
+                        send(.eventAnnotationTapped(event), animation: .smooth)
                     }
                 }
             }
-            .mapControls {
-                MapCompass()
-                MapScaleView()
-            }
-            .onChange(of: region) { _, newRegion in
-                send(.regionChanged(
-                    newRegion.center,
-                    newRegion.span.latitudeDelta,
-                    newRegion.span.longitudeDelta
-                ))
-            }
-        } else {
-            // iOS 16 and earlier Map implementation
-            self.legacyMapView(region: region)
+        }
+        .mapStyle(.standard)
+        .mapControls {
+            MapCompass()
+            MapScaleView()
+        }
+        // Track changes from user interaction
+        .onMapCameraChange { context in
+            send(.regionChanged(
+                context.camera.centerCoordinate,
+                context.region.span.latitudeDelta,
+                context.region.span.longitudeDelta
+            ))
         }
     }
 
@@ -246,7 +242,7 @@ public struct ExploreView: View {
                     isSelected: event.id == self.store.selectedEvent?.id
                 )
                 .onTapGesture {
-                    send(.eventAnnotationTapped(event))
+                    send(.eventAnnotationTapped(event), animation: .smooth)
                 }
             }
         }
@@ -262,20 +258,13 @@ public struct ExploreView: View {
                         event: event,
                         isSelected: event.id == self.store.selectedEvent?.id
                     ) {
-                        send(.eventAnnotationTapped(event))
+                        send(.eventAnnotationTapped(event), animation: .smooth)
                     }
-                    .frame(width: 240, height: 160)
+                    .frame(width: 240, height: 120)
                 }
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 12)
         }
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(Color(.systemBackground))
-                .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: -5)
-        )
-        .frame(height: 200)
+        .frame(height: 150)
     }
 }
 
@@ -318,18 +307,6 @@ struct EventMarker: View {
         .scaleEffect(self.isSelected ? 1.2 : 1.0)
         .animation(.spring(response: 0.3), value: self.isSelected)
     }
-
-    private func categoryIconName(for icon: CategoryIcon) -> String {
-        switch icon {
-        case .party: "party.popper.fill"
-        case .disco: "music.note.list"
-        case .competition: "trophy.fill"
-        case .festival: "sparkles"
-        case .conference: "person.3.fill"
-        case .workshop: "hammer.fill"
-        case .meeting: "calendar.badge.clock"
-        }
-    }
 }
 
 struct EventCard: View {
@@ -339,85 +316,64 @@ struct EventCard: View {
 
     var body: some View {
         Button(action: self.onTap) {
-            VStack(alignment: .leading, spacing: 8) {
-                // Event name
-                Text(self.event.name)
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(.primary)
-                    .lineLimit(1)
-
-                // Event date and location
-                HStack(spacing: 6) {
-                    Image(systemName: "calendar")
-                        .font(.system(size: 12))
-                        .foregroundColor(.gray)
-
-                    Text(self.event.date.formatted(date: .numeric, time: .shortened))
-                        .font(.system(size: 12))
-                        .foregroundColor(.gray)
-                }
-
-                Text(self.event.address)
-                    .font(.system(size: 12))
-                    .foregroundColor(.gray)
-                    .lineLimit(2)
-
-                Spacer()
-
-                // Price and category
-                HStack {
-                    // Price
-                    Text("\(Int(self.event.price)) UAH")
-                        .font(.system(size: 14, weight: .semibold))
+            CardContainer {
+                VStack(alignment: .leading, spacing: 8) {
+                    // Event name
+                    Text(self.event.name)
+                        .font(.system(size: 16, weight: .semibold))
                         .foregroundColor(.primary)
+                        .lineLimit(1)
+
+                    // Event date and location
+                    HStack(spacing: 6) {
+                        Image(systemName: "calendar")
+                            .font(.system(size: 12))
+                            .foregroundColor(.gray)
+
+                        Text(self.event.date.formatted(date: .numeric, time: .shortened))
+                            .font(.system(size: 12))
+                            .foregroundColor(.gray)
+                    }
+
+                    Text(self.event.address)
+                        .font(.system(size: 12))
+                        .foregroundColor(.gray)
+                        .lineLimit(2)
 
                     Spacer()
 
-                    // Category tag
-                    if let category = event.categories.first {
-                        HStack(spacing: 4) {
-                            Image(systemName: category.icon.sfSymbolName)
-                                .font(.system(size: 10))
+                    // Price and category
+                    HStack {
+                        // Price
+                        Text("\(Int(self.event.price)) UAH")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundColor(.primary)
 
-                            Text(category.name)
-                                .font(.system(size: 10, weight: .medium))
+                        Spacer()
+
+                        // Category tag
+                        if let category = event.categories.first {
+                            HStack(spacing: 4) {
+                                Image(systemName: category.icon.sfSymbolName)
+                                    .font(.system(size: 10))
+
+                                Text(category.name)
+                                    .font(.system(size: 10, weight: .medium))
+                            }
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(Color.black.opacity(0.1))
+                            .foregroundColor(.primary)
+                            .cornerRadius(12)
                         }
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(Color.black.opacity(0.1))
-                        .foregroundColor(.primary)
-                        .cornerRadius(12)
                     }
                 }
             }
-            .padding(12)
-            .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color(.systemBackground))
-                    .shadow(
-                        color: self.isSelected ? Color.accentColor.opacity(0.5) : Color.black.opacity(0.1),
-                        radius: self.isSelected ? 6 : 4,
-                        x: 0,
-                        y: 2
-                    )
-            )
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(self.isSelected ? Color.accentColor : Color.clear, lineWidth: 2)
+                    .strokeBorder(self.isSelected ? Color.accentColor : Color.clear, lineWidth: 2)
             )
         }
         .buttonStyle(.plain)
-    }
-}
-
-// MARK: - Preview
-
-struct ExploreView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            ExploreView(store: Store(initialState: Explore.State()) {
-                Explore()
-            })
-        }
     }
 }

@@ -1,3 +1,4 @@
+@preconcurrency import _MapKit_SwiftUI
 import APIClient
 import ComposableArchitecture
 import CoreLocation
@@ -25,6 +26,7 @@ public struct Explore: Reducer, Sendable {
         var isTrackingLocation = false
         var selectedEvent: Event?
         var mapRegion: MapRegion?
+        var cameraPosition: MapCameraPosition = .automatic
 
         var isLocationEnabled: Bool {
             switch self.authorizationStatus {
@@ -112,6 +114,7 @@ public struct Explore: Reducer, Sendable {
                 return .none
 
             case .destination(.presented(.eventDetails(.delegate(.backButtonTapped)))):
+                state.selectedEvent = nil
                 state.destination = nil
                 return .none
 
@@ -122,6 +125,7 @@ public struct Explore: Reducer, Sendable {
                 return .none
 
             case .destination(.presented(.eventPreview(.delegate(.dismissButtonTapped)))):
+                state.selectedEvent = nil
                 state.destination = nil
                 return .none
 
@@ -268,7 +272,10 @@ public struct Explore: Reducer, Sendable {
 
             case let .view(.eventAnnotationTapped(event)):
                 state.selectedEvent = event
-                // Show preview sheet instead of full details
+                state.cameraPosition = .camera(.init(centerCoordinate: CLLocationCoordinate2D(
+                    latitude: event.lat,
+                    longitude: event.lng
+                ), distance: 5000))
                 state.destination = .eventPreview(EventPreview.State(event: event))
                 return .none
 
@@ -282,6 +289,11 @@ public struct Explore: Reducer, Sendable {
                         ),
                         span: State.MapSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
                     )
+                    state.cameraPosition = .camera(.init(centerCoordinate: CLLocationCoordinate2D(
+                        latitude: location.latitude,
+                        longitude: location.longitude
+                    ), distance: 5000))
+
                     return self.getNearbyEvents(for: location, in: &state)
                 }
                 return .none
