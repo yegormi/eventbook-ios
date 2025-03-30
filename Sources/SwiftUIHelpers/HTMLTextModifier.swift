@@ -1,8 +1,8 @@
 import Foundation
 import SwiftUI
 
-// swiftlint:disable function_body_length
 public extension String {
+    // swiftlint:disable function_body_length
     func htmlToAttributedString(
         defaultFont: UIFont = .systemFont(ofSize: 16),
         textColor: UIColor = .label,
@@ -78,8 +78,8 @@ public extension String {
             print("Error converting HTML to AttributedString: \(error)")
             return nil
         }
+        // swiftlint:enable function_body_length
     }
-    // swiftlint:enable function_body_length
 
     func hexString(from color: UIColor) -> String {
         // swiftlint:disable identifier_name
