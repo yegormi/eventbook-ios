@@ -11,8 +11,8 @@ private let logger = Logger(subsystem: "SettingsFeature", category: "Settings")
 @Reducer
 public struct Settings: Reducer, Sendable {
     @ObservableState
-    public struct State: Equatable {
-        public enum Tab: Equatable {
+    public struct State: Equatable, Sendable {
+        public enum Tab: Equatable, Sendable {
             case general, account, security
         }
 

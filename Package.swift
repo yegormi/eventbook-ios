@@ -16,6 +16,7 @@ let package = Package(
         .library(name: "AppearanceClient", targets: ["AppearanceClient"]),
         .library(name: "AppFeature", targets: ["AppFeature"]),
         .library(name: "AuthFeature", targets: ["AuthFeature"]),
+        .library(name: "EventDetailsFeature", targets: ["EventDetailsFeature"]),
         .library(name: "FacebookClient", targets: ["FacebookClient"]),
         .library(name: "GoogleClient", targets: ["GoogleClient"]),
         .library(name: "HomeFeature", targets: ["HomeFeature"]),
@@ -47,6 +48,7 @@ let package = Package(
             name: "AccountFeature",
             dependencies: [
                 "APIClient",
+                "EventDetailsFeature",
                 "SessionClient",
                 "SettingsFeature",
                 "SharedModels",
@@ -119,6 +121,20 @@ let package = Package(
             ]
         ),
         .target(
+            name: "EventDetailsFeature",
+            dependencies: [
+                "APIClient",
+                "SharedModels",
+                "Styleguide",
+                "SwiftHelpers",
+                "SwiftUIHelpers",
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+            ],
+            resources: [
+                .process("Resources")
+            ]
+        ),
+        .target(
             name: "FacebookClient",
             dependencies: [
                 "SharedModels",
@@ -144,6 +160,7 @@ let package = Package(
             name: "HomeFeature",
             dependencies: [
                 "APIClient",
+                "EventDetailsFeature",
                 "SharedModels",
                 "Styleguide",
                 "SwiftHelpers",
@@ -220,7 +237,9 @@ let package = Package(
         .target(
             name: "SwiftUIHelpers",
             dependencies: [
+                "SharedModels",
                 "Styleguide",
+                "SwiftHelpers",
             ],
             resources: [
                 .process("Resources")

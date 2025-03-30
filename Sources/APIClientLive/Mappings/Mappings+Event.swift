@@ -74,7 +74,8 @@ extension Components.Schemas.GetEventsResponseDto {
             data: self.data.map { $0.toDomain() },
             total: self.total,
             limit: self.limit,
-            pagesCount: self.pagesCount
+            // TODO: pagesCount should be always returned, fix after API is done
+            pagesCount: self.pagesCount ?? 0
         )
     }
 }
