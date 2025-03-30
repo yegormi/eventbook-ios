@@ -1,5 +1,6 @@
 import APIClient
 import ComposableArchitecture
+import EventDetailsFeature
 import Foundation
 import OSLog
 import SharedModels
@@ -12,7 +13,7 @@ public struct Home: Reducer, Sendable {
     public struct State: Equatable, Sendable {
         @Presents var destination: Destination.State?
 
-        struct PageSettings: Equatable {
+        struct PageSettings: Equatable, Sendable {
             var currentPage: Int
             var hasMorePages: Bool
         }
@@ -21,7 +22,6 @@ public struct Home: Reducer, Sendable {
         var events = IdentifiedArrayOf<Event>()
         var isLoading = false
         var searchQuery = ""
-        var isSearchActive = false
 
         public init() {}
     }
@@ -147,7 +147,7 @@ public struct Home: Reducer, Sendable {
         state.isLoading = true
 
         let params = GetEventsParams(
-            query: state.searchQuery.isEmpty ? nil : state.searchQuery,
+            query: state.searchQuery,
             page: state.pageSettings.currentPage,
             limit: 10
         )

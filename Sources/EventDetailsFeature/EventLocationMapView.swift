@@ -68,10 +68,12 @@ struct EventLocationMapView: View {
 
     // Legacy map implementation for iOS 16 and earlier
     private var legacyMapView: some View {
-        Map(coordinateRegion: self.$region, annotationItems: [LocationPin(
-            coordinate: self.coordinate,
-            title: self.name
-        )]) { pin in
+        Map(coordinateRegion: self.$region, annotationItems: [
+            LocationPin(
+                coordinate: self.coordinate,
+                title: self.name
+            ),
+        ]) { pin in
             MapAnnotation(coordinate: pin.coordinate) {
                 VStack(spacing: 0) {
                     Text(pin.title)

@@ -1,12 +1,15 @@
 import SharedModels
 import Styleguide
 import SwiftUI
-import SwiftUIHelpers
 
-struct EventCard: View {
-    let event: Event
+public struct EventCard: View {
+    public let event: Event
 
-    var body: some View {
+    public init(event: Event) {
+        self.event = event
+    }
+
+    public var body: some View {
         CardContainer {
             HStack(spacing: 0) {
                 VStack(alignment: .leading, spacing: 4) {

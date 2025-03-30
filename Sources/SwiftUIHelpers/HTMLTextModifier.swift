@@ -1,19 +1,18 @@
 import Foundation
 import SwiftUI
 
+// swiftlint:disable function_body_length
 public extension String {
     func htmlToAttributedString(
         defaultFont: UIFont = .systemFont(ofSize: 16),
         textColor: UIColor = .label,
         linkColor: UIColor = .systemBlue
     ) -> NSAttributedString? {
-        // Define CSS styles for consistent rendering
         let fontFamily = defaultFont.familyName
         let fontSize = defaultFont.pointSize
         let textColorHex = self.hexString(from: textColor)
         let linkColorHex = self.hexString(from: linkColor)
 
-        // Create a style that handles bullet points, bold text, etc.
         let css = """
         <style>
             body {
@@ -47,7 +46,6 @@ public extension String {
         </style>
         """
 
-        // Wrapping in complete HTML document
         let modifiedHtml = """
         <!DOCTYPE html>
         <html>
@@ -69,7 +67,6 @@ public extension String {
         ]
 
         do {
-            // Convert the HTML string to NSAttributedString
             let attributedString = try NSAttributedString(
                 data: data,
                 options: options,
@@ -82,13 +79,15 @@ public extension String {
             return nil
         }
     }
+    // swiftlint:enable function_body_length
 
-    // Helper function to convert UIColor to hex
     func hexString(from color: UIColor) -> String {
+        // swiftlint:disable identifier_name
         var r: CGFloat = 0
         var g: CGFloat = 0
         var b: CGFloat = 0
         var a: CGFloat = 0
+        // swiftlint:enable identifier_name
 
         color.getRed(&r, green: &g, blue: &b, alpha: &a)
 
@@ -101,7 +100,6 @@ public extension String {
     }
 }
 
-// Extension to use the HTML-formatted AttributedString in SwiftUI
 public extension Text {
     static func html(
         _ htmlString: String,
@@ -109,7 +107,6 @@ public extension Text {
         textColor: Color = .primary,
         linkColor: Color = .blue
     ) -> Text? {
-        // Convert SwiftUI Font to UIFont (approximate conversion)
         let uiFont = switch font {
         case .largeTitle:
             UIFont.preferredFont(forTextStyle: .largeTitle)
@@ -137,7 +134,6 @@ public extension Text {
             UIFont.preferredFont(forTextStyle: .body)
         }
 
-        // Get the attributed string with HTML formatting
         guard
             let attributedString = htmlString.htmlToAttributedString(
                 defaultFont: uiFont,
@@ -153,7 +149,6 @@ public extension Text {
     }
 }
 
-// View modifier for convenient HTML text display
 struct HTMLTextModifier: ViewModifier {
     let htmlContent: String
     let font: Font
@@ -171,7 +166,6 @@ struct HTMLTextModifier: ViewModifier {
         {
             htmlText
         } else {
-            // Fallback to plain text if HTML conversion fails
             Text(self.htmlContent)
                 .font(self.font)
                 .foregroundColor(self.textColor)
@@ -216,13 +210,6 @@ struct HTMLAttributedTextExample: View {
                 htmlText
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
-
-            Divider()
-
-            // Alternative usage with view modifier
-            Text("")
-                .htmlText(self.htmlContent, font: .body, linkColor: .blue)
-                .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding()
     }

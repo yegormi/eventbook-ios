@@ -22,7 +22,7 @@ public struct EventDetails: Reducer, Sendable {
         var similarEventsPageSettings = PageSettings(currentPage: 1, hasMorePages: false)
         var reviewsPageSettings = PageSettings(currentPage: 1, hasMorePages: false)
 
-        struct PageSettings: Equatable {
+        struct PageSettings: Equatable, Sendable {
             var currentPage: Int
             var hasMorePages: Bool
         }

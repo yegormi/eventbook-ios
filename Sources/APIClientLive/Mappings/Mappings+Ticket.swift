@@ -19,6 +19,7 @@ extension Components.Schemas.GetTicketsResponseDto {
             data: self.data.map { $0.toDomain() },
             total: self.total,
             limit: self.limit,
+            // TODO: pagesCount should be always returned, fix after API is done
             pagesCount: self.pagesCount ?? 0
         )
     }

@@ -7,7 +7,7 @@ import SwiftUI
 @Reducer
 public struct SettingsGeneral: Reducer, Sendable {
     @ObservableState
-    public struct State: Equatable {
+    public struct State: Equatable, Sendable {
         var user: User
         var selectedAppearance: PhoneAppearance
 

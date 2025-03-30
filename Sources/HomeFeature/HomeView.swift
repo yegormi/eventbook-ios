@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import EventDetailsFeature
 import Foundation
 import SharedModels
 import Styleguide
