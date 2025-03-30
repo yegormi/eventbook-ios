@@ -1,5 +1,6 @@
 import AccountFeature
 import ComposableArchitecture
+import ExploreFeature
 import HomeFeature
 import SwiftUI
 

@@ -135,6 +135,21 @@ let package = Package(
             ]
         ),
         .target(
+            name: "ExploreFeature",
+            dependencies: [
+                "APIClient",
+                "EventDetailsFeature",
+                "GeocodeClient",
+                "LocationClient",
+                "SessionClient",
+                "SharedModels",
+                "Styleguide",
+                "SwiftHelpers",
+                "SwiftUIHelpers",
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+            ]
+        ),
+        .target(
             name: "FacebookClient",
             dependencies: [
                 "SharedModels",
@@ -144,6 +159,14 @@ let package = Package(
                 .product(name: "FacebookCore", package: "facebook-ios-sdk"),
                 .product(name: "FacebookLogin", package: "facebook-ios-sdk"),
                 .product(name: "Tagged", package: "swift-tagged"),
+            ]
+        ),
+        .target(
+            name: "GeocodeClient",
+            dependencies: [
+                "LocationClient",
+                .product(name: "Dependencies", package: "swift-dependencies"),
+                .product(name: "DependenciesMacros", package: "swift-dependencies"),
             ]
         ),
         .target(
@@ -176,6 +199,14 @@ let package = Package(
             dependencies: [
                 .product(name: "Dependencies", package: "swift-dependencies"),
                 .product(name: "Tagged", package: "swift-tagged"),
+            ]
+        ),
+        .target(
+            name: "LocationClient",
+            dependencies: [
+                "SharedModels",
+                .product(name: "Dependencies", package: "swift-dependencies"),
+                .product(name: "DependenciesMacros", package: "swift-dependencies"),
             ]
         ),
         .target(
@@ -249,6 +280,7 @@ let package = Package(
             name: "TabsFeature",
             dependencies: [
                 "AccountFeature",
+                "ExploreFeature",
                 "HomeFeature",
                 "Styleguide",
                 "SwiftHelpers",
