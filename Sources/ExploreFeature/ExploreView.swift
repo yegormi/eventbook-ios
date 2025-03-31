@@ -25,9 +25,8 @@ public struct ExploreView: View {
                 self.locationPermissionView
             }
         }
-        .onAppear {
-            send(.onAppear)
-        }
+        .task { await send(.onTask).finish() }
+        .onFirstAppear { send(.onFirstAppear) }
         .navigationDestination(
             item: self.$store.scope(
                 state: \.destination?.eventDetails,

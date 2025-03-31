@@ -76,7 +76,8 @@ public struct Explore: Reducer, Sendable {
 
         public enum View: BindableAction {
             case binding(BindingAction<Explore.State>)
-            case onAppear
+            case onTask
+            case onFirstAppear
             case refreshButtonTapped
             case eventAnnotationTapped(Event)
             case recenterMap
@@ -244,13 +245,11 @@ public struct Explore: Reducer, Sendable {
             case .view(.binding):
                 return .none
 
-            case .view(.onAppear):
-                // Check location authorization status
-                return .run { send in
-                    await send(.internal(.authorizationStatusUpdate(
-                        self.requestLocationPermission()
-                    )))
-                }
+            case .view(.onTask):
+                return .none
+
+            case .view(.onFirstAppear):
+                return self.initialSetup(&state)
 
             case .view(.refreshButtonTapped):
                 guard let location = state.currentLocation else {
@@ -373,6 +372,26 @@ public struct Explore: Reducer, Sendable {
         .run { _ in
             guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else { return }
             await self.openURL(settingsUrl)
+        }
+    }
+
+    private func initialSetup(_ state: inout State) -> Effect<Action> {
+        .run { [state] send in
+            await withDiscardingTaskGroup { group in
+                group.addTask {
+                    for await _ in NotificationCenter.default
+                        .notifications(named: UIApplication.didBecomeActiveNotification)
+                    {
+                        await send(.internal(.didBecomeActive))
+                    }
+                }
+
+                group.addTask {
+                    await send(.internal(.authorizationStatusUpdate(
+                        self.requestLocationPermission()
+                    )))
+                }
+            }
         }
     }
 }
