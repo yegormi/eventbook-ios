@@ -36,6 +36,7 @@ public struct AddReview: Reducer, Sendable {
     }
 
     @Dependency(\.apiClient) var api
+    @Dependency(\.dismiss) var dismiss
 
     public init() {}
 
@@ -51,7 +52,7 @@ public struct AddReview: Reducer, Sendable {
                 return .none
 
             case .view(.cancelButtonTapped):
-                return .send(.delegate(.cancelled))
+                return .run { _ in await self.dismiss() }
 
             case .view(.submitButtonTapped):
                 let request = CreateReviewRequest(

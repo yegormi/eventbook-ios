@@ -80,7 +80,7 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateCategoryDto'
       responses:
-        '200':
+        '201':
           description: ''
           content:
             application/json:
@@ -227,7 +227,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        '201':
           description: ''
           content:
             application/json:
@@ -369,7 +369,7 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateEventDto'
       responses:
-        '200':
+        '201':
           description: ''
           content:
             application/json:
@@ -660,7 +660,7 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateReviewDto'
       responses:
-        '200':
+        '201':
           description: ''
           content:
             application/json:
@@ -1089,6 +1089,7 @@ components:
         - data
         - total
         - limit
+        - pagesCount
     CreateEventDto:
       type: object
       properties:
@@ -1138,6 +1139,7 @@ components:
         - data
         - total
         - limit
+        - pagesCount
     AutocompleteEventRequestDto:
       type: object
       properties:
@@ -1259,6 +1261,7 @@ components:
         - data
         - total
         - limit
+        - pagesCount
     UpdateReviewDto:
       type: object
       properties:

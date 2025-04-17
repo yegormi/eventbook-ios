@@ -77,10 +77,13 @@ public struct EventDetailsView: View {
 
                 Spacer()
 
-                Button("Attend") {
-                    send(.attendButtonTapped)
+                if self.store.isAuthor.negation {
+                    Button("Attend") {
+                        send(.attendButtonTapped)
+                    }
+                    .buttonStyle(.primary(size: .small))
+                    .disabled(self.store.hasTicket)
                 }
-                .buttonStyle(.primary(size: .small))
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 12)

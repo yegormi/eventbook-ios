@@ -58,7 +58,7 @@ extension APIClient: DependencyKey {
                 try await throwingUnderlyingError {
                     try await client
                         .createCategory(body: .json(request.toAPI()))
-                        .ok
+                        .created
                         .body
                         .json
                         .toDomain()
@@ -100,7 +100,7 @@ extension APIClient: DependencyKey {
                 try await throwingUnderlyingError {
                     try await client
                         .createEvent(body: .json(request.toAPI()))
-                        .ok
+                        .created
                         .body
                         .json
                         .toDomain()
@@ -198,7 +198,7 @@ extension APIClient: DependencyKey {
                 try await throwingUnderlyingError {
                     try await client
                         .createTicket(path: .init(eventId: eventId))
-                        .ok
+                        .created
                         .body
                         .json
                         .toDomain()
@@ -247,7 +247,7 @@ extension APIClient: DependencyKey {
                         path: .init(eventId: eventId),
                         body: .json(request.toAPI())
                     )
-                    .ok
+                    .created
                     .body
                     .json
                     .toDomain()

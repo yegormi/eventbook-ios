@@ -3,7 +3,9 @@ import ComposableArchitecture
 import Foundation
 import MapKit
 import OSLog
+import SessionClient
 import SharedModels
+import SwiftHelpers
 import UIKit
 
 private let logger = Logger(subsystem: "EventDetailsFeature", category: "EventDetails")
@@ -17,10 +19,19 @@ public struct EventDetails: Reducer, Sendable {
         var event: Event
         var similarEvents = IdentifiedArrayOf<Event>()
         var reviews = IdentifiedArrayOf<Review>()
+        var ticket: Ticket?
         var isLoadingSimilarEvents = false
         var isLoadingReviews = false
         var similarEventsPageSettings = PageSettings(currentPage: 1, hasMorePages: false)
         var reviewsPageSettings = PageSettings(currentPage: 1, hasMorePages: false)
+        
+        var isAuthor: Bool {
+            @Dependency(\.session) var session
+            guard let currentUserId = session.currentUser()?.id else { return false }
+            return event.author.id == currentUserId
+        }
+        
+        var hasTicket: Bool { ticket.isNotNil }
 
         struct PageSettings: Equatable, Sendable {
             var currentPage: Int
@@ -45,6 +56,7 @@ public struct EventDetails: Reducer, Sendable {
         public enum Internal {
             case similarEventsResponse(Result<PaginatedResponse<Event>, Error>)
             case reviewsResponse(Result<PaginatedResponse<Review>, Error>)
+            case ticketResponse(Result<Ticket, Error>)
         }
 
         public enum View: Equatable, BindableAction {
@@ -117,6 +129,15 @@ public struct EventDetails: Reducer, Sendable {
                     logger.error("Failed to fetch reviews: \(error)")
                 }
                 return .none
+                
+            case let .internal(.ticketResponse(result)):
+                switch result {
+                case let .success(ticket):
+                    state.ticket = ticket
+                case let .failure(error):
+                    logger.error("Failed to fetch ticket: \(error)")
+                }
+                return .none
 
             case .view(.binding):
                 return .none
@@ -124,7 +145,8 @@ public struct EventDetails: Reducer, Sendable {
             case .view(.onAppear):
                 return .merge(
                     self.loadSimilarEvents(state: &state),
-                    self.loadReviews(state: &state)
+                    self.loadReviews(state: &state),
+                    self.loadTicketIfNeeded(state: &state)
                 )
 
             case .view(.backButtonTapped):
@@ -191,7 +213,8 @@ public struct EventDetails: Reducer, Sendable {
                 state.reviewsPageSettings = State.PageSettings(currentPage: 1, hasMorePages: false)
                 return .merge(
                     self.loadSimilarEvents(state: &state),
-                    self.loadReviews(state: &state)
+                    self.loadReviews(state: &state),
+                    self.loadTicketIfNeeded(state: &state)
                 )
 
             case .view(.loadMoreSimilarEvents):
@@ -240,6 +263,14 @@ public struct EventDetails: Reducer, Sendable {
         return .run { [eventId = state.event.id] send in
             await send(.internal(.reviewsResponse(Result {
                 try await self.api.getReviewsByEventId(eventId, params)
+            })))
+        }
+    }
+    
+    private func loadTicketIfNeeded(state: inout State) -> Effect<Action> {
+        return .run { [eventId = state.event.id] send in
+            await send(.internal(.ticketResponse(Result {
+                try await self.api.getTicketByEventId(eventId)
             })))
         }
     }

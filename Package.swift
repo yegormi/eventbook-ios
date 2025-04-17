@@ -124,6 +124,7 @@ let package = Package(
             name: "EventDetailsFeature",
             dependencies: [
                 "APIClient",
+                "SessionClient",
                 "SharedModels",
                 "Styleguide",
                 "SwiftHelpers",
