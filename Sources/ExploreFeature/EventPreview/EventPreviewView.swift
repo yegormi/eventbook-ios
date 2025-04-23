@@ -16,7 +16,7 @@ public struct EventPreviewView: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
-                VStack(spacing: 20) {
+                VStack(alignment: .leading, spacing: 20) {
                     // Event details
                     VStack(alignment: .leading, spacing: 16) {
                         // Event name
