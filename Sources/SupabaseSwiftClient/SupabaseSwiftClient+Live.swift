@@ -21,8 +21,8 @@ extension SupabaseSwiftClient: DependencyKey {
     public static var liveValue: SupabaseSwiftClient {
         let supabase = SupabaseClient(
             // swiftlint:disable:next force_unwrapping
-            supabaseURL: URL(string: "https://mfzcojdomumihvxmzuwk.supabase.co")!,
-            supabaseKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1memNvamRvbXVtaWh2eG16dXdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ1NzA0MjEsImV4cCI6MjA2MDE0NjQyMX0.fiInimC7sMPQsUFNb5sDl3ua-ZiTO04LAkGtekA_p-g"
+            supabaseURL: URL(string: "https://jtwklvfkycdfrzpzoceb.supabase.co")!,
+            supabaseKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp0d2tsdmZreWNkZnJ6cHpvY2ViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgyMDI2NjUsImV4cCI6MjA2Mzc3ODY2NX0.PtEtMSg4cP-X053a2k6mACtOYJjciBi6OK990GZ3yRs"
         )
 
         return SupabaseSwiftClient(
